@@ -1,23 +1,29 @@
-import logo from '../images/logo.svg';
+import React from 'react';
+import Button from '@material-ui/core/Button';
+import { makeStyles } from '@material-ui/core/styles';
 import '../styles/App.css';
 
+const useStyles = makeStyles((theme) => ({
+  joinButton: {
+    backgroundColor: '#EB5757',
+    color: 'white',
+  },
+}));
+
 function App() {
+  const classes = useStyles();
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+      <div className="App-banner">
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          A Fully Connected, Centralized BU.
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <Button className={classes.joinButton}>
+          Join Today
+        </Button>
+      </div>
+      <br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
     </div>
   );
 }

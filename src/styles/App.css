@@ -15,12 +15,11 @@
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  background-image: url(../images/rhett.jpeg);
-  background-repeat: no-repeat;
-  background-size: auto;
-  min-height: 100vh;
+.App-banner {
+  background: linear-gradient( rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4) ), url('../images/rhett.jpeg');
+  background-position: center center;
+  background-size: cover;
+  min-height: 75vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -40,4 +39,9 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.join-button {
+  background-color: #EB5757;
+  color: 'white';
 }
