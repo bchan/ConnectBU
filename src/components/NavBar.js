@@ -28,7 +28,7 @@ export default function NavBar() {
 
   return (
     <div className={classes.root}>
-      <AppBar className={classes.bar} position="static">
+      <AppBar className={classes.bar}> 
         <Toolbar>
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
             <MenuIcon />
