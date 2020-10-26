@@ -2,12 +2,24 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './components/App';
+import NavBar from './components/NavBar';
 import reportWebVitals from './reportWebVitals';
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+
+const routing = (
+  <Router>
+    <NavBar />
+    <Switch>
+      <Route path="/">
+        <App />
+      </Route>
+    </Switch>
+  </Router>
+);
+
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  routing,
   document.getElementById('root')
 );
 
