@@ -18,6 +18,8 @@
 .App-header {
   background-color: #282c34;
   background-image: url(../images/rhett.jpeg);
+  background-repeat: no-repeat;
+  background-size: auto;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
