@@ -7,6 +7,11 @@ const useStyles = makeStyles((theme) => ({
   joinButton: {
     backgroundColor: '#EB5757',
     color: 'white',
+    '&:hover': {
+      backgroundColor: '#b03e3e',
+      color: 'white'
+    },
+    textTransform: 'none'
   },
 }));
 
