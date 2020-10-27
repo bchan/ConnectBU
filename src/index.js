@@ -5,6 +5,7 @@ import App from './components/App';
 import NavBar from './components/NavBar';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import BotBar from './components/BotBar'
 
 const routing = (
   <Router>
@@ -14,6 +15,7 @@ const routing = (
         <App />
       </Route>
     </Switch>
+    <BotBar />
   </Router>
 );
 
