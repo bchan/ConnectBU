@@ -2,33 +2,8 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import { useStyles } from '../styles/App.styles';
 import '../styles/App.css';
-
-const useStyles = makeStyles((theme) => ({
-  joinButton: {
-    backgroundColor: '#EB5757',
-    color: 'white',
-    '&:hover': {
-      backgroundColor: '#B03E3E',
-      color: 'white'
-    },
-    textTransform: 'none'
-  },
-  sectionHeader: {
-    color: '#EB5757',
-  },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: 'left',
-    color: theme.palette.text.primary,
-    height: '100%'
-  },
-  container: {
-    maxWidth: '100%'
-  }
-}));
 
 function App() {
   const classes = useStyles();

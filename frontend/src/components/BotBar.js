@@ -1,26 +1,10 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { useStyles } from '../styles/BotBar.styles';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import { BiSearch } from 'react-icons/bi';
 import { GoGear }  from 'react-icons/go';
 import { BiSupport } from 'react-icons/bi';
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-      flexGrow: 1,
-    },
-    bar: {
-      background: 'transparent',
-      boxShadow: 'none',
-    },
-    menuButton: {
-      marginRight: theme.spacing(2),
-    },
-    title: {
-      flexGrow: 1,
-    },
-  }));
 
 export default function BotBar() {
   const classes = useStyles();
