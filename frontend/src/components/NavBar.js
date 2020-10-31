@@ -59,7 +59,7 @@ export default function NavBar() {
     <List className={classes.list}>
       {menuItems.map((element) => {
         return (
-          <ListItem button component={Link} to={element.path} onClick={() => {toggleDrawer(false)}}>
+          <ListItem button key={element.title} component={Link} to={element.path} onClick={() => {toggleDrawer(false)}}>
             <ListItemIcon>
               {element.icon}
             </ListItemIcon>

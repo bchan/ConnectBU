@@ -27,7 +27,7 @@ function App() {
 
       <br />
 
-      <Grid container spacing={2} justify="center" alignItems="stretch" zeroMinWidth className={classes.container}>
+      <Grid container spacing={2} justify="center" alignItems="stretch" className={classes.container}>
         <Grid item xs={10} sm={5}>
           <div className={classes.paper}>
             <h2>Clubs</h2>
