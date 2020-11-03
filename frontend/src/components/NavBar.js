@@ -100,8 +100,8 @@ export default function NavBar() {
                 // onFailure={responseGoogle}
                 cookiePolicy={'single_host_origin'}
                 style={{disabled: 'false'}}
-                render={() => (
-                  <Button color="inherit">Login</Button>
+                render={(renderProps) => (
+                  <Button color="inherit" onClick={renderProps.onClick}>Login</Button>
                 )}
             />
         </Toolbar>
