@@ -8,6 +8,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import { useScrollTrigger } from '@material-ui/core';
 import { useStyles } from '../styles/NavBar.styles';
 import { Link } from 'react-router-dom';
+import GoogleLogin from 'react-google-login';
 
 // Drawer Imports
 import Drawer from '@material-ui/core/Drawer';
@@ -92,7 +93,17 @@ export default function NavBar() {
           <Typography variant="h6" className={classes.title}>
             ConnectBU
           </Typography>
-          <Button color="inherit">Login</Button>
+          <GoogleLogin 
+                clientId="575450034905-v02tn4l35jt2s3mhd46impe7pb79cc18.apps.googleusercontent.com"
+                // buttonText="Sign In with BU Account"
+                // onSuccess={responseGoogle}
+                // onFailure={responseGoogle}
+                cookiePolicy={'single_host_origin'}
+                style={{disabled: 'false'}}
+                render={() => (
+                  <Button color="inherit">Login</Button>
+                )}
+            />
         </Toolbar>
       </AppBar>
     </div>
