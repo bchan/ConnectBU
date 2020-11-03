@@ -23,7 +23,7 @@ import ContactSupportIcon from '@material-ui/icons/ContactSupport';
 
 export default function NavBar() {
   const classes = useStyles();
-  const trigger = useScrollTrigger(
+  let trigger = useScrollTrigger(
     {
       disableHysteresis: true,
       threshold: 100
@@ -75,6 +75,10 @@ export default function NavBar() {
 
   let toggleDrawer = (open) => {
     setState({isDrawerOpen: open});
+  }
+
+  if (window.location.pathname !== '/') {
+    trigger = true;
   }
 
   return (
