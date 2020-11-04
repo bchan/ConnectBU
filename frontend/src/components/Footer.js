@@ -22,7 +22,7 @@ export default function Footer() {
     },
     {
       name: 'Help',
-      link: '/',
+      link: '/support',
     },
   ]
 
