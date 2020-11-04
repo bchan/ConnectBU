@@ -25,7 +25,7 @@ export default function Footer() {
           <Grid item xs={8} sm={2} className={classes.gridItem} component={Link} to={"/"}>
             Team
           </Grid>
-          <Grid item xs={8} sm={2} className={classes.gridItem} component={Link} to={"/"}>
+          <Grid item xs={8} sm={2} className={classes.gridItem} component={Link} to={"/support"}>
             Help
           </Grid>
           <Grid item xs={12} sm={12}>

@@ -5,6 +5,7 @@ import App from './components/App';
 import NavBar from './components/NavBar';
 import Footer from './components/Footer';
 import Login from './components/Login';
+import Support from './components/Support';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 // import BotBar from './components/BotBar'
@@ -18,6 +19,9 @@ const routing = (
       </Route>
       <Route path="/login">
         <Login />
+      </Route>
+      <Route path="/support">
+        <Support />
       </Route>
     </Switch>
     <Footer />
