@@ -29,7 +29,7 @@ export default function Footer() {
   return (
     <footer className={classes.footer}>
       <Container maxWidth="xl" className={classes.container}>
-        <Divider className={classes.divider} />
+        {/* <Divider className={classes.divider} /> */}
         <Grid container spacing={3} justify="center" alignItems="stretch" className={classes.grid}>
 
           {links.map((element) => {

@@ -2,7 +2,10 @@ import { makeStyles } from '@material-ui/core';
 
 export const useStyles = makeStyles((theme) => ({
   footer: {
-    padding: theme.spacing(6, 0),
+    marginTop: '40px',
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(8),
+    backgroundColor: '#f5f6f7',
   },
   container: {
     textAlign: 'center',
@@ -21,10 +24,11 @@ export const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
     height: '100%',
     textDecoration: 'none',
-    fontSize: 14
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   copyright: {
     color: theme.palette.text.secondary,
-    fontSize: 11,
+    fontSize: 13,
   }
 }));
