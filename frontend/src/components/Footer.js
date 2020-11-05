@@ -1,6 +1,5 @@
 import React from 'react';
 import Container from '@material-ui/core/Container';
-import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import { Link } from 'react-router-dom';
 import { useStyles } from '../styles/Footer.styles';
@@ -29,7 +28,6 @@ export default function Footer() {
   return (
     <footer className={classes.footer}>
       <Container maxWidth="xl" className={classes.container}>
-        {/* <Divider className={classes.divider} /> */}
         <Grid container spacing={3} justify="center" alignItems="stretch" className={classes.grid}>
 
           {links.map((element) => {
