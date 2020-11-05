@@ -34,7 +34,7 @@ export default function Footer() {
 
           {links.map((element) => {
             return (
-              <Grid item xs={8} sm={2}>
+              <Grid item xs={8} sm={2} key={element.name}>
                 <Link to={element.link} className={classes.gridItem}>{element.name}</Link>
               </Grid>
             )
