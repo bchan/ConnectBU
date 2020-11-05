@@ -10,26 +10,30 @@ import Support from './components/Support';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 // import BotBar from './components/BotBar'
+import store from './redux/store';
+import { Provider } from 'react-redux';
 
 const routing = (
-  <Router>
-    <NavBar />
-    <Switch>
-      <Route exact path="/">
-        <App />
-      </Route>
-      <Route path="/login">
-        <Login />
-      </Route>
-      <Route path="/support">
-        <Support />
-      </Route>
-      <Route path="/signup">
-        <Signup />
-      </Route>
-    </Switch>
-    <Footer />
-  </Router>
+  <Provider store={store}>
+    <Router>
+      <NavBar />
+      <Switch>
+        <Route exact path="/">
+          <App />
+        </Route>
+        <Route path="/login">
+          <Login />
+        </Route>
+        <Route path="/support">
+          <Support />
+        </Route>
+        <Route path="/signup">
+          <Signup />
+        </Route>
+      </Switch>
+      <Footer />
+    </Router>
+  </Provider>
 );
 
 

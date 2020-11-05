@@ -21,6 +21,10 @@ import DescriptionIcon from '@material-ui/icons/Description';
 import PeopleIcon from '@material-ui/icons/People';
 import ContactSupportIcon from '@material-ui/icons/ContactSupport';
 
+// Redux
+import { useSelector, useDispatch } from 'react-redux';
+import { login, logout, selectLoginState } from '../redux/loginSlice';
+
 export default function NavBar() {
   const classes = useStyles();
   let trigger = useScrollTrigger(
@@ -32,6 +36,9 @@ export default function NavBar() {
   const [state, setState] = React.useState({
     isDrawerOpen: false,
   });
+
+  const isLoggedIn = useSelector(selectLoginState);
+  const dispatch = useDispatch();
 
   const menuItems = [
     {
