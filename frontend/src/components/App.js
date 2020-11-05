@@ -3,6 +3,7 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import { useStyles } from '../styles/App.styles';
+import { Link } from 'react-router-dom';
 import '../styles/App.css';
 
 function App() {
@@ -14,8 +15,8 @@ function App() {
         <p>
           A Fully Connected, Centralized BU.
         </p>
-        <Button className={classes.joinButton}>
-          Join Today
+        <Button className={classes.joinButton} component={Link} to={"/signup"}> 
+          Join Today 
         </Button>
       </div>
 

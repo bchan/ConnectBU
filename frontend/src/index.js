@@ -5,6 +5,7 @@ import App from './components/App';
 import NavBar from './components/NavBar';
 import Footer from './components/Footer';
 import Login from './components/Login';
+import Signup from './components/Signup';
 import Support from './components/Support';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
@@ -22,6 +23,9 @@ const routing = (
       </Route>
       <Route path="/support">
         <Support />
+      </Route>
+      <Route path="/signup">
+        <Signup />
       </Route>
     </Switch>
     <Footer />

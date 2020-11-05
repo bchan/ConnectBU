@@ -1,26 +1,12 @@
 import React from 'react';
 import BackgroundImage from '../images/halloween.jpg';
 import { makeStyles } from '@material-ui/core/styles';
-/*const useStyles = makeStyles((theme) => ({
-    root: {
-    //   backgroundImage: `url(${BackgroundImage})`,
-      background: 'linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),' + `url(${BackgroundImage})`,
-    //   height: '72vh',
-      textAlign: 'center',
-      padding: '450px 0',
-    },
-  }));
-  
-*/
+import { useStyles } from '../styles/App.styles';
 export default function Support() {
-    //const classes = useStyles();
-
-    //function test(res) {
-      //  console.log(res);
-    //}
+    const classes = useStyles();
 
     return (
-        <div className="App">
+        <div className={classes.root}>
        
        <p style={{
         'white-space': 'pre-wrap'
