@@ -67,6 +67,20 @@ export default function Signup()  {
       const flatClubs = {
         options: club.map((option) => option.title),
       };
+      const Interests = {
+        options: Interest,
+        getOptionLabel: (option) => option.title,
+      };
+      const flatInterests = {
+        options: club.map((option) => option.title),
+      };
+      const Closses = {
+        options: closses,
+        getOptionLabel: (option) => option.title,
+      };
+      const flatClosses = {
+        options: club.map((option) => option.title),
+      };
     return (
         
         <div>
@@ -164,6 +178,63 @@ export default function Signup()  {
                 />
 
             </Grid>
+
+            <Grid item xs={10} sm={5}>
+                    <div className={classes.paper}>
+
+                     <h2>Step 3: Tell us more about your Classes & Interest</h2>
+
+                     </div>
+            </Grid>
+
+            <Grid item xs={12} sm={7}
+                 container
+                direction="row"
+                justify="space-between"
+                 alignItems="center">
+                <Grid item xs={10} sm={5}>
+                    <div className={classes.paper}>
+
+                     <h2>Classes</h2>
+
+                     </div>
+                </Grid>
+                <Autocomplete
+                     {...Closses}
+                     id="Classes"
+                    style={{ width: 300 }}
+                    debug
+                    renderInput={(params) => <TextField {...params} label="Classes" margin="normal" />}
+        
+                />
+
+            </Grid>
+
+            <Grid item xs={12} sm={7}
+                 container
+                direction="row"
+                justify="space-between"
+                 alignItems="center">
+                <Grid item xs={10} sm={5}>
+                    <div className={classes.paper}>
+
+                     <h2>Interest</h2>
+
+                     </div>
+                </Grid>
+                <Autocomplete
+                     {...Interests}
+                     id="Interests"
+                    style={{ width: 300 }}
+                    debug
+                    renderInput={(params) => <TextField {...params} label="Interests" margin="normal" />}
+        
+                />
+
+            </Grid>
+
+ 
+
 
             
             
@@ -903,31 +974,28 @@ const club = [
     { title: 'Zen Mindfulness Community'},
 ];
 
+const Interest = [
+    { title: 'Swimming'},
+    { title: 'Football'},
+    { title: 'Soccer'},
+    { title: 'Walking'},
+    { title: 'Running'},
+    { title: 'Watching Movies'},
+    { title: 'Watching TV shows'},
+    { title: 'Basketball'},
+    { title: 'Baseball'},
+];
+
+const closses = [
+    { title: 'EC 103'},
+    { title: 'EC 327'},
+    { title: 'EC 330'},
+    { title: 'EC 311'},
+    { title: 'EC 500'},
+    { title: 'EC 413'},
+    { title: 'EC 447'},
 
 
-/*
-<Grid item xs={10} sm={50}>
-          <div className={classes.paper}>
-            <h2>Age</h2>
+];
 
-          </div>
-            </Grid>
 
-<FormControl className={classes.formControl}>
-        
-<InputLabel id="major">Major</InputLabel>
-
-<Select
-  labelId="major"
-  id="major"
-  value={Major}
-  onChange={handleChange}
-  
->
-  <MenuItem value={"Electrical Engineering"}>Electrical Engineering</MenuItem>
-  <MenuItem value={"Mechanical Engineering"}>Mechanical Engineering</MenuItem>
-  <MenuItem value={"Computer Engineering"}>Computer Engineering</MenuItem>
-  
-</Select>
-</FormControl>
-*/
