@@ -59,7 +59,7 @@ export default function NavBar() {
     {
       title: 'Support',
       icon: <ContactSupportIcon />,
-      path: '/',
+      path: '/support',
     },
   ]
 
