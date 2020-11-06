@@ -40,11 +40,11 @@ const useStyles = makeStyles((theme) => ({
 export default function Signup()  {
     const classes = useStyles();
     //const [Major, setMajor] = React.useState('');
-  
+
   //  const handleChange = (event) => {
     //  setMajor(event.target.value);
     //};
-    
+
     const Majors = {
         options: major,
         getOptionLabel: (option) => option.title,
@@ -82,7 +82,7 @@ export default function Signup()  {
         options: club.map((option) => option.title),
       };
     return (
-        
+
         <div>
 
             <p style={{
@@ -120,7 +120,7 @@ export default function Signup()  {
                     style={{ width: 300 }}
                     debug
                     renderInput={(params) => <TextField {...params} label="Major" margin="normal" />}
-        
+
                 />
 
             </Grid>
@@ -143,7 +143,7 @@ export default function Signup()  {
                     style={{ width: 300 }}
                     debug
                     renderInput={(params) => <TextField {...params} label="Minor" margin="normal" />}
-        
+
                 />
 
             </Grid>
@@ -152,6 +152,7 @@ export default function Signup()  {
                     <div className={classes.paper}>
 
                      <h2>Step 2: Tell us more about your Extracurricular Activities</h2>
+
 
                      </div>
             </Grid>
@@ -174,9 +175,8 @@ export default function Signup()  {
                     style={{ width: 300 }}
                     debug
                     renderInput={(params) => <TextField {...params} label="Club" margin="normal" />}
-        
-                />
 
+                />
             </Grid>
 
             <Grid item xs={10} sm={5}>
@@ -205,7 +205,7 @@ export default function Signup()  {
                     style={{ width: 300 }}
                     debug
                     renderInput={(params) => <TextField {...params} label="Classes" margin="normal" />}
-        
+
                 />
 
             </Grid>
@@ -228,18 +228,25 @@ export default function Signup()  {
                     style={{ width: 300 }}
                     debug
                     renderInput={(params) => <TextField {...params} label="Interests" margin="normal" />}
-        
+
                 />
 
             </Grid>
+            <Grid item xs={14} sm={9}>
+                  <div className={classes.paper}>
 
- 
+                   <h2>Note that you can always add more information later!</h2>
 
 
-            
-            
+                   </div>
+            </Grid>
 
-        
+
+
+
+
+
+
       </div>
     );
   }
@@ -997,5 +1004,3 @@ const closses = [
 
 
 ];
-
-
