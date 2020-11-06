@@ -62,7 +62,7 @@ function App() {
           </div>
         </Grid>
         <Grid item xs={12} sm={12}>
-          <Button variant="outlined" color="secondary">
+          <Button variant="outlined" color="secondary" component={Link} to={"/search"}>
             Search
           </Button>
         </Grid>

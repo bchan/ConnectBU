@@ -7,6 +7,7 @@ import Footer from './components/Footer';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import Support from './components/Support';
+import HomeLI from './components/Home_LI'
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 // import BotBar from './components/BotBar'
@@ -29,6 +30,9 @@ const routing = (
         </Route>
         <Route path="/signup">
           <Signup />
+        </Route>
+        <Route path="/search">
+          <HomeLI />
         </Route>
       </Switch>
       <Footer />

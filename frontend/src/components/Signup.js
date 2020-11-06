@@ -139,6 +139,7 @@ export default function Signup()  {
 
                      <h2>Step 2: Tell us more about your Extracurricular Activities</h2>
 
+
                      </div>
             </Grid>
 
@@ -162,8 +163,16 @@ export default function Signup()  {
                     renderInput={(params) => <TextField {...params} label="Club" margin="normal" />}
         
                 />
-
             </Grid>
+
+              <Grid item xs={14} sm={9}>
+                    <div className={classes.paper}>
+
+                     <h2>Note that you can always add more information later!</h2>
+
+
+                     </div>
+              </Grid>
 
             
             
