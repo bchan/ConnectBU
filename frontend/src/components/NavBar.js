@@ -52,9 +52,9 @@ export default function NavBar() {
       path: '/',
     },
     {
-      title: 'Community',
+      title: 'About Us',
       icon: <PeopleIcon />,
-      path: '/',
+      path: '/aboutus',
     },
     {
       title: 'Support',

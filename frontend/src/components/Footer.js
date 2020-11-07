@@ -17,7 +17,7 @@ export default function Footer() {
     },
     {
       name: 'Team',
-      link: '/',
+      link: '/aboutus',
     },
     {
       name: 'Help',

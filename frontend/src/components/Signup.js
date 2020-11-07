@@ -1,19 +1,4 @@
-/*import React,{useState} from 'react';
-import BackgroundImage from '../images/halloween.jpg';
-import { makeStyles } from '@material-ui/core/styles';
-import Dropdown from 'react-dropdown';
-import 'react-dropdown/style.css';
-import { useStyles } from '../styles/App.styles';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import DropdownButton from 'react-bootstrap/DropdownButton';
-import Button from '@material-ui/core/Button';
-import { Link } from 'react-router-dom';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-*/
+
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
