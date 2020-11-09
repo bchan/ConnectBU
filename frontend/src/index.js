@@ -6,6 +6,7 @@ import NavBar from './components/NavBar';
 import Footer from './components/Footer';
 import Login from './components/Login';
 import Signup from './components/Signup';
+import Profile from './components/Profile';
 import Support from './components/Support';
 import HomeLI from './components/Home_LI'
 import reportWebVitals from './reportWebVitals';
@@ -33,6 +34,9 @@ const routing = (
         </Route>
         <Route path="/search">
           <HomeLI />
+        </Route>
+        <Route path="/profile">
+          <Profile />
         </Route>
       </Switch>
       <Footer />

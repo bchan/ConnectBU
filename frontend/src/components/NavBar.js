@@ -114,6 +114,9 @@ export default function NavBar() {
           <Typography variant="h6" className={classes.title}>
             Connect<a style={{color: '#CC0000'}}>BU</a>
           </Typography>
+          <Button className={classes.profileButton} component={Link} to={"/profile"}>
+            Profile
+          </Button>
           <GoogleLogin 
                 clientId="575450034905-v02tn4l35jt2s3mhd46impe7pb79cc18.apps.googleusercontent.com"
                 // buttonText="Sign In with BU Account"
