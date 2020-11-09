@@ -1,6 +1,8 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+import { Link } from 'react-router-dom';
+import Button from '@material-ui/core/Button';
 
 import pic from '../images/image.jpg';
 
@@ -12,10 +14,11 @@ const useStyles = makeStyles((theme) => ({
   boxes: {
     border: "1px solid grey", 
     padding: 30, 
-    width: "60%", 
+    width: "70%",
     borderRadius: 10, 
     backgroundColor: "rgb(255,255,255)", 
-    marginBottom: 20
+    marginBottom: 10,
+    marginTop: 10
   },
   image: {
     width: '20%', 
@@ -29,6 +32,15 @@ const useStyles = makeStyles((theme) => ({
     borderColor: "grey", 
     marginTop: 10, 
     marginBottom: 20
+  },
+  editButton: {
+    backgroundColor: '#EB5757',
+    color: 'white',
+    '&:hover': {
+      backgroundColor: '#B03E3E',
+      color: 'white'
+    },
+    marginLeft: 10
   }
 }));
 
@@ -57,6 +69,10 @@ export default function Signup()  {
           </Grid>
 
         </Grid>
+
+        <Button className={classes.editButton} component={Link}>
+          Edit Profile
+        </Button>
 
 
         <Grid
