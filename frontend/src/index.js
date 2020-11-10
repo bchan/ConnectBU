@@ -6,6 +6,7 @@ import NavBar from './components/NavBar';
 import Footer from './components/Footer';
 import Login from './components/Login';
 import Signup from './components/Signup';
+import Profile from './components/Profile';
 import Support from './components/Support';
 import HomeLI from './components/Home_LI'
 import AboutUs from './components/About_us'
@@ -37,6 +38,9 @@ const routing = (
         </Route>
         <Route path="/aboutus">
           <AboutUs />
+        </Route>
+        <Route path="/profile">
+          <Profile />
         </Route>
       </Switch>
       <Footer />

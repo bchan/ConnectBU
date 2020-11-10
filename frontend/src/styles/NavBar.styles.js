@@ -31,5 +31,14 @@ export const useStyles = makeStyles((theme) => ({
     list: {
       width: 225,
     },
+    profileButton: {
+      backgroundColor: '#EB5757',
+      color: 'white',
+      '&:hover': {
+        backgroundColor: '#B03E3E',
+        color: 'white'
+      },
+      marginRight: 10
+    }
   }));
   
