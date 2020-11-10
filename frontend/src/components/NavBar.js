@@ -10,7 +10,6 @@ import { useScrollTrigger } from '@material-ui/core';
 import { useStyles } from '../styles/NavBar.styles';
 import { Link } from 'react-router-dom';
 import GoogleLogin from 'react-google-login';
-
 // Drawer Imports
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
@@ -21,12 +20,9 @@ import HomeIcon from '@material-ui/icons/Home';
 import DescriptionIcon from '@material-ui/icons/Description';
 import PeopleIcon from '@material-ui/icons/People';
 import ContactSupportIcon from '@material-ui/icons/ContactSupport';
-
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
 import { login, logout, selectLoginState } from '../redux/loginSlice';
-
-
 const menuItems = [
   {
     title: 'Home',
@@ -49,7 +45,6 @@ const menuItems = [
     path: '/support',
   },
 ]
-
 export default function NavBar() {
   const location = useLocation();
   const classes = useStyles();
@@ -62,35 +57,9 @@ export default function NavBar() {
   const [state, setState] = React.useState({
     isDrawerOpen: false,
   });
-
   const isLoggedIn = useSelector(selectLoginState);
   const dispatch = useDispatch();
-
-  const menuItems = [
-    {
-      title: 'Home',
-      icon: <HomeIcon />,
-      path: '/',
-    },
-    {
-      title: 'Features',
-      icon: <DescriptionIcon />,
-      path: '/',
-    },
-    {
-      title: 'About Us',
-      icon: <PeopleIcon />,
-      path: '/aboutus',
-    },
-    {
-      title: 'Support',
-      icon: <ContactSupportIcon />,
-      path: '/support',
-    },
-  ]
-  //const shouldUseScroll = location.pathname === '/';
-  //>>>>>>> a44185df6eed20e110e312404475bef99da9acda
-
+  const shouldUseScroll = location.pathname === '/';
   const menuList = (
     <List className={classes.list}>
       {menuItems.map((element) => {
@@ -107,21 +76,17 @@ export default function NavBar() {
       })}
     </List>
   )
-
   let toggleDrawer = (open) => {
     setState({isDrawerOpen: open});
   }
-
   let responseSuccess = (event) => {
     dispatch(login());
   }
-
   let responseError = (event) => {
     if (event.error !== "popup_closed_by_user") {
       alert(event.error);
     }
   }
-
   return (
     <div className={classes.root}>
       <Drawer
@@ -130,7 +95,7 @@ export default function NavBar() {
       >
         {menuList}
       </Drawer>
-      <AppBar className={(!shouldUseScroll)? classes.solidBar : (trigger)? classes.scrolledBar : classes.bar} elevation={0}>
+      <AppBar className={(!shouldUseScroll)? classes.solidBar : (trigger)? classes.scrolledBar : classes.bar} elevation={0}> 
         <Toolbar>
           <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={() => {toggleDrawer(true)}}>
             <MenuIcon />
@@ -138,10 +103,6 @@ export default function NavBar() {
           <Typography variant="h6" className={classes.title}>
             Connect<a style={{color: '#CC0000'}}>BU</a>
           </Typography>
-
-         </Toolbar> 
-         <GoogleLogin
-
           <Button className={classes.profileButton} component={Link} to={"/profile"}>
             Profile
           </Button>
@@ -155,8 +116,8 @@ export default function NavBar() {
                 render={(renderProps) => (
                   <Button color="inherit" onClick={renderProps.onClick}  >Login</Button>
                 )}
-            >
-       </GoogleLogin> //</AppBar></Toolbar>
+            />
+        </Toolbar>
       </AppBar>
     </div>
   );
