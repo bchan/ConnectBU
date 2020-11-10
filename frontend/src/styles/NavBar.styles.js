@@ -13,11 +13,14 @@ export const useStyles = makeStyles((theme) => ({
       })
     },
     scrolledBar: {
-      backgroundColor: '#EB5757',
+      backgroundColor: '#1D2B36',
       transition: theme.transitions.create(['background-color'], {
         easing: theme.transitions.easing.easeOut,
         duration: theme.transitions.duration.standard
       })
+    },
+    solidBar: {
+      backgroundColor: '#1D2B36',
     },
     menuButton: {
       marginRight: theme.spacing(2),
