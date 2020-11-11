@@ -1,6 +1,9 @@
 import React from 'react';
 import { useStyles } from '../styles/Support.styles';
-import { Container, Paper, Divider, Typography } from '@material-ui/core';
+import Container from '@material-ui/core/Container';
+import Paper from '@material-ui/core/Paper';
+import Divider from '@material-ui/core/Divider';
+import Typography from '@material-ui/core/Typography';
 
 export default function Support() {
   const classes = useStyles();
@@ -21,32 +24,36 @@ export default function Support() {
   
 
   return (
-    <Container className={classes.container}>
-      <Typography style={{fontFamily: 'Open Sans', fontSize: 32, fontWeight: 'light'}}>
-        Frequently Asked Questions (FAQ)
-      </Typography>
-      <Divider className={classes.divider} />
+    <div className={classes.container}>
+      <Container>
+        <Typography className={classes.header}>
+          Frequently Asked Questions (FAQ)
+        </Typography>
+        <Divider className={classes.divider} />
 
-      {
-        questionAnswers.map((element) => {
-          return (
-            <Paper variant="outlined" className={classes.qaElement}>
-              <Typography>
-                {"Q: " + element.question}
-              </Typography>
-              <Typography>
-                {"A: " + element.answer}
-              </Typography>
-            </Paper>
-          )
-        })
-      }
+        {
+          questionAnswers.map((element) => {
+            return (
+              <Paper variant="outlined" className={classes.qaElement}>
+                <Typography>
+                  <b>{"Q: "}</b>
+                  {element.question}
+                </Typography>
+                <Typography>
+                  <b>{"A: "}</b>
+                  {element.answer}
+                </Typography>
+              </Paper>
+            )
+          })
+        }
 
-      <p style={{
-        'white-space': 'pre-wrap'
-      }}>{"For any more questions, feel free to contact us through: "}</p>
-        <h1 style={{ color: 'red' }}>connectbu2021@gmail.com</h1>
+        <p style={{
+          'white-space': 'pre-wrap'
+        }}>{"For any more questions, feel free to contact us through: "}</p>
+          <h1 style={{ color: 'red' }}>connectbu2021@gmail.com</h1>
 
-    </Container>
+      </Container>
+    </div>
   )
 }

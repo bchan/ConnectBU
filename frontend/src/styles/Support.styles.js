@@ -2,7 +2,9 @@ import { makeStyles } from '@material-ui/core/styles';
 
 export const useStyles = makeStyles((theme) => ({
     container: {
-        marginTop: '90px',
+        backgroundColor: 'rgb(240,240,240)',
+        paddingTop: '90px',
+        paddingBottom: '90px'
     },
     divider: {
         marginTop: '20px',

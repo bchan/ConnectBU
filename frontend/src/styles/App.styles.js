@@ -20,6 +20,7 @@ export const useStyles = makeStyles((theme) => ({
       height: '100%'
     },
     container: {
-      maxWidth: '100%'
+      maxWidth: '100%',
+      paddingBottom: '100px'
     }
   }));

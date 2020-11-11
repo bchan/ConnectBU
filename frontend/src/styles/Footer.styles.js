@@ -2,10 +2,9 @@ import { makeStyles } from '@material-ui/core';
 
 export const useStyles = makeStyles((theme) => ({
   footer: {
-    marginTop: '40px',
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(8),
-    backgroundColor: '#f5f6f7',
+    backgroundColor: '#1D2B36',
   },
   container: {
     textAlign: 'center',
@@ -21,14 +20,14 @@ export const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
   },
   gridItem: {
-    color: theme.palette.text.secondary,
+    color: '#d1d1d1',
     height: '100%',
     textDecoration: 'none',
     fontSize: 16,
     fontWeight: 'bold',
   },
   copyright: {
-    color: theme.palette.text.secondary,
+    color: '#d1d1d1',
     fontSize: 13,
   }
 }));
