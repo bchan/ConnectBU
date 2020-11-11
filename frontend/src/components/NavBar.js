@@ -20,9 +20,19 @@ import HomeIcon from '@material-ui/icons/Home';
 import DescriptionIcon from '@material-ui/icons/Description';
 import PeopleIcon from '@material-ui/icons/People';
 import ContactSupportIcon from '@material-ui/icons/ContactSupport';
+
+import InputBase from '@material-ui/core/InputBase';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+
+// Icons
+import BlockIcon from '@material-ui/icons/Block';
+
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
 import { login, logout, selectLoginState } from '../redux/loginSlice';
+
 const menuItems = [
   {
     title: 'Home',
@@ -44,6 +54,26 @@ const menuItems = [
     icon: <ContactSupportIcon />,
     path: '/support',
   },
+  {
+    title: 'Profile',
+    icon: <BlockIcon />,
+    path: '/profile',
+  },
+  {
+    title: 'Sign Up',
+    icon: <BlockIcon />,
+    path: '/signup',
+  },
+  {
+    title: 'Search',
+    icon: <BlockIcon />,
+    path: '/search',
+  },
+  {
+    title: 'About Us',
+    icon: <BlockIcon />,
+    path: '/aboutus',
+  }
 ]
 export default function NavBar() {
   const location = useLocation();
@@ -57,9 +87,34 @@ export default function NavBar() {
   const [state, setState] = React.useState({
     isDrawerOpen: false,
   });
+  const [anchorEl, setAnchorEl] = React.useState(null);
   const isLoggedIn = useSelector(selectLoginState);
   const dispatch = useDispatch();
+
   const shouldUseScroll = location.pathname === '/';
+  
+  let toggleDrawer = (open) => {
+    setState({isDrawerOpen: open});
+  }
+
+  let responseSuccess = (event) => {
+    dispatch(login());
+  }
+
+  let responseError = (event) => {
+    if (event.error !== "popup_closed_by_user") {
+      alert(event.error);
+    }
+  }
+
+  let handleSettingsClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  }
+
+  let handleSettingsClose = () => {
+    setAnchorEl(null);
+  }
+
   const menuList = (
     <List className={classes.list}>
       {menuItems.map((element) => {
@@ -76,17 +131,51 @@ export default function NavBar() {
       })}
     </List>
   )
-  let toggleDrawer = (open) => {
-    setState({isDrawerOpen: open});
+
+  let loginElement;
+  if (isLoggedIn) {
+    loginElement = (
+      <div>
+      <IconButton
+        aria-label="more"
+        aria-controls="long-menu"
+        aria-haspopup="true"
+        color="inherit"
+        onClick={handleSettingsClick}
+      >
+        <MoreVertIcon />
+      </IconButton>
+      <Menu
+        id="long-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={anchorEl !== null}
+        onClose={handleSettingsClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+        transformOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <MenuItem onClick={handleSettingsClose}>
+          {"Settings"}
+        </MenuItem>
+      </Menu>
+      </div>
+    );
+  } else {
+    loginElement = (
+      <GoogleLogin 
+        clientId="575450034905-v02tn4l35jt2s3mhd46impe7pb79cc18.apps.googleusercontent.com"
+        // buttonText="Sign In with BU Account"
+        onSuccess={responseSuccess}
+        onFailure={responseError}
+        cookiePolicy={'single_host_origin'}
+        style={{disabled: 'false'}}
+        render={(renderProps) => (
+          <Button color="inherit" onClick={renderProps.onClick}  >Login</Button>
+        )}
+      />
+    );
   }
-  let responseSuccess = (event) => {
-    dispatch(login());
-  }
-  let responseError = (event) => {
-    if (event.error !== "popup_closed_by_user") {
-      alert(event.error);
-    }
-  }
+
   return (
     <div className={classes.root}>
       <Drawer
@@ -103,20 +192,10 @@ export default function NavBar() {
           <Typography variant="h6" className={classes.title}>
             Connect<a style={{color: '#CC0000'}}>BU</a>
           </Typography>
-          <Button className={classes.profileButton} component={Link} to={"/profile"}>
+          {/* <Button className={classes.profileButton} component={Link} to={"/profile"}>
             Profile
-          </Button>
-          <GoogleLogin 
-                clientId="575450034905-v02tn4l35jt2s3mhd46impe7pb79cc18.apps.googleusercontent.com"
-                // buttonText="Sign In with BU Account"
-                onSuccess={responseSuccess}
-                onFailure={responseError}
-                cookiePolicy={'single_host_origin'}
-                style={{disabled: 'false'}}
-                render={(renderProps) => (
-                  <Button color="inherit" onClick={renderProps.onClick}  >Login</Button>
-                )}
-            />
+          </Button> */}
+          {loginElement}
         </Toolbar>
       </AppBar>
     </div>
