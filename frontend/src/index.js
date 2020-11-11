@@ -1,15 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './components/App';
+import App from './pages/App';
 import NavBar from './components/NavBar';
 import Footer from './components/Footer';
-import Login from './components/Login';
-import Signup from './components/Signup';
-import Profile from './components/Profile';
-import Support from './components/Support';
-import HomeLI from './components/Home_LI'
-import AboutUs from './components/About_us'
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import Profile from './pages/Profile';
+import Support from './pages/Support';
+import HomeLI from './pages/Home_LI'
+import AboutUs from './pages/About_us'
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 // import BotBar from './components/BotBar'
