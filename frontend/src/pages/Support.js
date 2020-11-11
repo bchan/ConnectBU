@@ -25,7 +25,7 @@ export default function Support() {
 
   return (
     <div className={classes.container}>
-      <Container>
+      <Container maxWidth="xl">
         <Typography className={classes.header}>
           Frequently Asked Questions (FAQ)
         </Typography>
