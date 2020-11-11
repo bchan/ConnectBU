@@ -10,6 +10,7 @@ import { useScrollTrigger } from '@material-ui/core';
 import { useStyles } from '../styles/NavBar.styles';
 import { Link } from 'react-router-dom';
 import GoogleLogin from 'react-google-login';
+
 // Drawer Imports
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
@@ -21,7 +22,7 @@ import DescriptionIcon from '@material-ui/icons/Description';
 import PeopleIcon from '@material-ui/icons/People';
 import ContactSupportIcon from '@material-ui/icons/ContactSupport';
 
-import InputBase from '@material-ui/core/InputBase';
+// Right Menu
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
@@ -151,11 +152,13 @@ export default function NavBar() {
         keepMounted
         open={anchorEl !== null}
         onClose={handleSettingsClose}
-        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
         transformOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
         <MenuItem onClick={handleSettingsClose}>
           {"Settings"}
+        </MenuItem>
+        <MenuItem onClick={() => {dispatch(logout()); handleSettingsClose()}}>
+          {"Logout"}
         </MenuItem>
       </Menu>
       </div>
@@ -170,7 +173,7 @@ export default function NavBar() {
         cookiePolicy={'single_host_origin'}
         style={{disabled: 'false'}}
         render={(renderProps) => (
-          <Button color="inherit" onClick={renderProps.onClick}  >Login</Button>
+          <Button color="inherit" onClick={renderProps.onClick}>Login</Button>
         )}
       />
     );
@@ -190,7 +193,7 @@ export default function NavBar() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            Connect<a style={{color: '#CC0000'}}>BU</a>
+            Connect<span style={{color: '#CC0000'}}>BU</span>
           </Typography>
           {/* <Button className={classes.profileButton} component={Link} to={"/profile"}>
             Profile
