@@ -30,22 +30,25 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: theme.spacing(1),
       },
     screen: {
-        paddingLeft: 50, 
+        paddingLeft: 40, 
+        paddingRight: 40, 
+        paddingTop: 1, 
+        paddingBottom: 1, 
         backgroundColor: "rgb(240,240,240)"
       },
     boxes: {
         border: "1px solid grey", 
         padding: 30, 
         width: "70%",
-        borderRadius: 10, 
+        borderRadius: 20, 
         backgroundColor: "rgb(255,255,255)", 
-        marginBottom: 10,
+        marginBottom: 20,
         marginTop: 10
     },
     formControl: {
      margin: theme.spacing(5),
      marginTop: theme.spacing(-2),
-     marginLeft: theme.spacing(20),
+     marginLeft: theme.spacing(30),
      marginBottom: theme.spacing(12),
      minWidth: 150,
      },
@@ -77,12 +80,13 @@ function getSteps() {
   function getStepContent(step) {
     switch (step) {
       case 0:
-        return ( 'STEP1'
+        return ( <h1>Step 1: Tell us more about you</h1>
         )
       case 1:
-        return 'Step 2: Tell us more about your Extracurricular Activities';
+        return <h1>Step 2: Tell us more about your Education</h1>
+       // 'Step 2: Tell us more about your Extracurricular Activities';
       case 2:
-        return 'Step 3: Tell us more about your Interest';
+        return <h1>Step 3: Tell us more about your Extracurricular Activities</h1>
       default:
         return 'Unknown step';
     }
@@ -118,6 +122,15 @@ export default function Signup()  {
       const flatClubs = {
         options: club.map((option) => option.title),
       };
+      const Research = {
+        options: research,
+        getOptionLabel: (option) => option.title,
+      };
+
+      const flatResearch = {
+        options: research.map((option) => option.title),
+      };
+      
       const Interests = {
         options: Interest,
         getOptionLabel: (option) => option.title,
@@ -188,15 +201,15 @@ export default function Signup()  {
      <div className={classes.root}>
         <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
         <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
-     <Stepper nonLinear activeStep={activeStep}>
-       {steps.map((label, index) => (
-         <Step key={label}>
-           <StepButton onClick={handleStep(index)} completed={completed[index]}>
-             {label}
-           </StepButton>
-         </Step>
-       ))}
-     </Stepper>
+        <Stepper nonLinear activeStep={activeStep}>
+          {steps.map((label, index) => (
+            <Step key={label}>
+              <StepButton onClick={handleStep(index)} completed={completed[index]}>
+                {label}
+              </StepButton>
+            </Step>
+          ))}
+        </Stepper>
      <div>
        {allStepsCompleted() ? (
          <div>
@@ -211,7 +224,76 @@ export default function Signup()  {
 
            {
             {
-          '0':             <Grid
+          '1':             
+          <Grid
+              container
+              direction="row"
+              justify="flex-start"
+              //alignItems="center"
+              className={classes.boxes}>
+              
+              <Grid 
+                  direction="column"
+                  justify="flex-start">
+                    <div className={classes.screen}>
+                    <h2>Major</h2>
+                    <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
+                    <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
+                    <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
+
+
+                    <h2>Minor</h2>
+                    <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
+                    <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
+                    <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
+
+
+                    <h2>Classes</h2>
+                    </div>
+              </Grid>
+              <Grid item xs={30} sm={20}>
+                        <div className={classes.formControl}>
+
+                        
+                        <Autocomplete
+                        {...Majors}
+                        id="Major"
+                        style={{ width: 300 }}
+                        debug
+                        renderInput={(params) => <TextField {...params} label="Major" margin="normal" />}
+
+                        />
+                        </div>
+                        <div className={classes.formControl}>
+
+                        
+                            <Autocomplete
+                            {...Minors}
+                            id="Minor"
+                            style={{ width: 300 }}
+                            debug
+                            renderInput={(params) => <TextField {...params} label="Minor" margin="normal" />}
+
+                            />
+                          </div>
+                          <div className={classes.formControl}>
+
+                        
+                              <Autocomplete
+                              {...Closses}
+                              id="Classes"
+                              style={{ width: 300 }}
+                              debug
+                              renderInput={(params) => <TextField {...params} label="Classes" margin="normal" />}
+
+                              />
+                            </div>
+                </Grid>
+
+
+        </Grid>,
+          '2': 
+          <Grid
           container
           direction="row"
           justify="flex-start"
@@ -219,66 +301,65 @@ export default function Signup()  {
           className={classes.boxes}>
           
           <Grid 
-          direction="column"
-          justify="flex-start">
-            <div className={classes.screen}>
-            <h2>Major</h2>
-            <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
-            <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
-            <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
+              direction="column"
+              justify="flex-start">
+                <div className={classes.screen}>
+                <h2>Clubs</h2>
+                <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
+                <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
+                <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
 
 
-            <h2>Minor</h2>
-            <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
-            <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
-            <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
+                <h2>Research</h2>
+                <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
+                <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
+                <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
 
 
-            <h2>Classes</h2>
-            </div>
+                <h2>Interest</h2>
+                </div>
           </Grid>
-          <Grid item xs={10} sm={10}>
+          <Grid item xs={30} sm={30}>
                     <div className={classes.formControl}>
 
-                     
-                     <Autocomplete
-                     {...Majors}
-                     id="Major"
+                    
+                    <Autocomplete
+                    {...Clubs}
+                    id="Clubs"
                     style={{ width: 300 }}
                     debug
-                    renderInput={(params) => <TextField {...params} label="Major" margin="normal" />}
+                    renderInput={(params) => <TextField {...params} label="Clubs" margin="normal" />}
 
                     />
-                     </div>
-                     <div className={classes.formControl}>
+                    </div>
+                    <div className={classes.formControl}>
 
-                     
+                    
                         <Autocomplete
-                        {...Minors}
+                        {...Research}
                         id="Minor"
                         style={{ width: 300 }}
                         debug
-                        renderInput={(params) => <TextField {...params} label="Minor" margin="normal" />}
+                        renderInput={(params) => <TextField {...params} label="Research Group" margin="normal" />}
 
                         />
                       </div>
                       <div className={classes.formControl}>
 
-                     
+                    
                           <Autocomplete
-                          {...Closses}
-                          id="Classes"
+                          {...Interests}
+                          id="Interest"
                           style={{ width: 300 }}
                           debug
-                          renderInput={(params) => <TextField {...params} label="Classes" margin="normal" />}
+                          renderInput={(params) => <TextField {...params} label="Interest" margin="normal" />}
 
                           />
-                          </div>
+                        </div>
             </Grid>
 
 
-        </Grid>,
-          '1': <p style={{'white-space': 'pre-wrap'}}>{"STEP 2 HA"}</p>
+    </Grid>,
             }[activeStep]
              }
 
@@ -1065,6 +1146,18 @@ const closses = [
     { title: 'EC 500'},
     { title: 'EC 413'},
     { title: 'EC 447'},
+
+
+];
+
+const research = [
+  { title: 'robotics lab'},
+  { title: 'IMB'},
+  { title: 'kinsy group'},
+  { title: 'EC 311'},
+  { title: 'EC 500'},
+  { title: 'EC 413'},
+  { title: 'EC 447'},
 
 
 ];
