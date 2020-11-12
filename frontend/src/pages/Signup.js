@@ -14,10 +14,22 @@ import Step from '@material-ui/core/Step';
 import StepButton from '@material-ui/core/StepButton';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import { CountryDropdown, RegionDropdown, CountryRegionData } from 'react-country-region-selector';
 
 const useStyles = makeStyles((theme) => ({
+  
     root: {
         width: '100%',
+        paddingLeft: 10, 
+        paddingRight: 10, 
+        paddingTop: 30, 
+        paddingBottom: 1, 
+      },
+      rootText: {
+        '& > *': {
+          margin: theme.spacing(1),
+          width: '25ch',
+        },
       },
       button: {
         marginRight: theme.spacing(1),
@@ -74,7 +86,7 @@ const useStyles = makeStyles((theme) => ({
       }
 }));
 function getSteps() {
-    return ['Education', 'Extracurricular Activities', 'Interest'];
+    return ['General Information', 'Education', 'Extracurricular Activities'];
   }
   
   function getStepContent(step) {
@@ -145,6 +157,14 @@ export default function Signup()  {
       const flatClosses = {
         options: club.map((option) => option.title),
       };
+      const Countries = {
+        options: countries,
+        getOptionLabel: (option) => option.title,
+      };
+
+      const flatCountries = {
+        options: countries.map((option) => option.title),
+      };
       const [activeStep, setActiveStep] = React.useState(0);
     const [completed, setCompleted] = React.useState({});
     const steps = getSteps();
@@ -168,8 +188,7 @@ export default function Signup()  {
     const handleNext = () => {
         const newActiveStep =
         isLastStep() && !allStepsCompleted()
-            ? // It's the last step, but not all steps have been completed,
-            // find the first step that has been completed
+            ? 
             steps.findIndex((step, i) => !(i in completed))
             : activeStep + 1;
         setActiveStep(newActiveStep);
@@ -224,6 +243,64 @@ export default function Signup()  {
 
            {
             {
+          '0':
+          <Grid
+              container
+              direction="row"
+              justify="flex-start"
+              //alignItems="center"
+              className={classes.boxes}>
+              
+              <Grid 
+                  direction="column"
+                  justify="flex-start">
+                    <div className={classes.screen}>
+                    <h2>First Name</h2>
+                    <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
+                    <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
+                    <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
+
+
+                    <h2>BU ID</h2>
+                    <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
+                    <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
+                    <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
+
+
+                    <h2>Country</h2>
+                    </div>
+              </Grid>
+              <Grid item xs={30} sm={20}>
+                        <div className={classes.formControl}>
+
+                        
+                        <form className={classes.root} noValidate autoComplete="off">
+                           <TextField id="standard-basic" label="First Name" variant="outlined" />
+                           <TextField id="standard-basic" label="Last Name" variant="outlined" />
+                         </form>
+                        </div>
+                        <div className={classes.formControl}>
+
+                        
+                        <TextField id="standard-basic" label="Your BU ID" variant="outlined"/>
+                          </div>
+                          <div className={classes.formControl}>
+
+                        
+                              <Autocomplete
+                              {...Countries}
+                              id="Countries"
+                              style={{ width: 300 }}
+                              debug
+                              renderInput={(params) => <TextField {...params} label="Where Are You From?" margin="normal" />}
+
+                              />
+                            </div>
+                </Grid>
+
+
+        </Grid>,
+
           '1':             
           <Grid
               container
@@ -385,7 +462,7 @@ export default function Signup()  {
                  </Typography>
                ) : (
                  <Button variant="contained" color="primary" onClick={handleComplete}>
-                   {completedSteps() === totalSteps() - 1 ? 'Finish' : 'Complete Step'}
+                   {completedSteps() === totalSteps() - 1 ? 'Join ConnectBU' : 'Complete Step'}
                  </Button>
                ))}
            </div>
@@ -1161,177 +1238,219 @@ const research = [
 
 
 ];
-/*   
-        <div className={classes.screen}>
 
-            <p style={{
-                'white-space': 'pre-wrap'
-                }}>{"\n"}
-            </p>
-            <p style={{
-                'white-space': 'pre-wrap'
-                }}>{"\n"}
-            </p>
-
-            <Grid item xs={10} sm={10}>
-                    <div className={classes.paper}>
-
-                     <h1>Step 1: Tell us more about your education</h1>
-
-                     </div>
-            </Grid>
-            <Grid
-          container
-          direction="row"
-          justify="flex-start"
-          alignItems="center"
-          className={classes.boxes}>
-          
-          <Grid justify="flex-start">
-            <h2>Major</h2>
-
-          </Grid>
-          <Grid item xs={8} sm={8}>
-                    <div className={classes.formControl}>
-
-                     
-                     <Autocomplete
-                     {...Majors}
-                     id="Major"
-                    style={{ width: 300 }}
-                    debug
-                    renderInput={(params) => <TextField {...params} label="Major" margin="normal" />}
-
-                    />
-                     </div>
-            </Grid>
-
-        </Grid>
-
-
-
-
-            <Grid item xs={12} sm={7}
-                 container
-                direction="row"
-                justify="space-between"
-                 alignItems="center">
-                <Grid item xs={10} sm={5}>
-                    <div className={classes.paper}>
-
-                     <h2>Minor</h2>
-
-                     </div>
-                </Grid>
-                <Autocomplete
-                     {...Minors}
-                     id="Minor"
-                    style={{ width: 300 }}
-                    debug
-                    renderInput={(params) => <TextField {...params} label="Minor" margin="normal" />}
-
-                />
-
-            </Grid>
-
-            <Grid item xs={10} sm={5}>
-                    <div className={classes.paper}>
-
-                     <h2>Step 2: Tell us more about your Extracurricular Activities</h2>
-
-
-                     </div>
-            </Grid>
-
-            <Grid item xs={12} sm={7}
-                 container
-                direction="row"
-                justify="space-between"
-                 alignItems="center">
-                <Grid item xs={10} sm={5}>
-                    <div className={classes.paper}>
-
-                     <h2>Clubs</h2>
-
-                     </div>
-                </Grid>
-                <Autocomplete
-                     {...Clubs}
-                     id="Club"
-                    style={{ width: 300 }}
-                    debug
-                    renderInput={(params) => <TextField {...params} label="Club" margin="normal" />}
-
-                />
-            </Grid>
-
-            <Grid item xs={10} sm={5}>
-                    <div className={classes.paper}>
-
-                     <h2>Step 3: Tell us more about your Classes & Interest</h2>
-
-                     </div>
-            </Grid>
-
-            <Grid item xs={12} sm={7}
-                 container
-                direction="row"
-                justify="space-between"
-                 alignItems="center">
-                <Grid item xs={10} sm={5}>
-                    <div className={classes.paper}>
-
-                     <h2>Classes</h2>
-
-                     </div>
-                </Grid>
-                <Autocomplete
-                     {...Closses}
-                     id="Classes"
-                    style={{ width: 300 }}
-                    debug
-                    renderInput={(params) => <TextField {...params} label="Classes" margin="normal" />}
-
-                />
-
-            </Grid>
-
-            <Grid item xs={12} sm={7}
-                 container
-                direction="row"
-                justify="space-between"
-                 alignItems="center">
-                <Grid item xs={10} sm={5}>
-                    <div className={classes.paper}>
-
-                     <h2>Interest</h2>
-
-                     </div>
-                </Grid>
-                <Autocomplete
-                     {...Interests}
-                     id="Interests"
-                    style={{ width: 300 }}
-                    debug
-                    renderInput={(params) => <TextField {...params} label="Interests" margin="normal" />}
-
-                />
-
-            </Grid>
-            <Grid item xs={14} sm={9}>
-                  <div className={classes.paper}>
-
-                   <h2>Note that you can always add more information later!</h2>
-
-
-                   </div>
-            </Grid>
-
-
-
-
-
-
-
-      </div>
-      */
+const countries = [
+  { title: 'Afghanistan'},
+  { title: 'Albania'},
+  { title: 'Algeria'},
+  { title: 'Andorra'},
+  { title: 'Angola'},
+  { title: 'Antigua and Barbuda'},
+  { title: 'Argentina'},
+  { title: 'Armenia'},
+  { title: 'Australia'},
+  { title: 'Austria'},
+  { title: 'Austrian Empire'},
+  { title: 'Azerbaijan'},
+  { title: 'Baden'},
+  { title: 'Bahamas'},
+  { title: 'Bahrain'},
+  { title: 'Bangladesh'},
+  { title: 'Barbados'},
+  { title: 'Bavaria'},
+  { title: 'Belarus'},
+  { title: 'Belgium'},
+  { title: 'Belize'},
+  { title: 'Benin (Dahomey)'},
+  { title: 'Bolivia'},
+  { title: 'Bosnia and Herzegovina'},
+  { title: 'Botswana'},
+  { title: 'Brazil'},
+  { title: 'Brunei'},
+  { title: 'Brunswick and Lüneburg'},
+  { title: 'Bulgaria'},
+  { title: 'Burkina Faso (Upper Volta)'},
+  { title: 'Burma'},
+  { title: 'Burundi'},
+  { title: 'Cabo Verde'},
+  { title: 'Cambodia'},
+  { title: 'Cameroon'},
+  { title: 'Canada'},
+  { title: 'Cayman Islands'},
+  { title: 'Central African Republic'},
+  { title: 'Central American Federation'},
+  { title: 'chad'},
+  { title: 'Chile'},
+  { title: 'China'},
+  { title: 'Colombia'},
+  { title: 'Comoros'},
+  { title: 'Congo Free State'},
+  { title: 'Costa Rica'},
+  { title: 'Cote d’Ivoire (Ivory Coast)'},
+  { title: 'Croatia'},
+  { title: 'Cuba'},
+  { title: 'Cyprus'},
+  { title: 'Czechia'},
+  { title: 'Czechoslovakia'},
+  { title: 'Democratic Republic of the Congo'},
+  { title: 'Denmark'},
+  { title: 'Djibouti'},
+  { title: 'Dominica'},
+  { title: 'Dominican Republic'},
+  { title: 'Duchy of Parma'},
+  { title: 'East Germany (German Democratic Republic)'},
+  { title: 'Ecuador'},
+  { title: 'Egypt'},
+  { title: 'El Salvador'},
+  { title: 'Equatorial Guinea'},
+  { title: 'Eritrea'},
+  { title: 'Estonia'},
+  { title: 'Eswatini'},
+  { title: 'Ethiopia'},
+  { title: 'Fiji'},
+  { title: 'Finland'},
+  { title: 'France'},
+  { title: 'Gabon'},
+  { title: 'Gambia'},
+  { title: 'Georgia'},
+  { title: 'Germany'},
+  { title: 'Ghsns'},
+  { title: 'Grand Duchy of Tuscany'},
+  { title: 'Greece'},
+  { title: 'Grenada'},
+  { title: 'Guatemala'},
+  { title: 'Guinea'},
+  { title: 'Guinea-Bissau'},
+  { title: 'Guyana'},
+  { title: 'Haiti'},
+  { title: 'Hanover'},
+  { title: 'Hanseatic Republics'},
+  { title: 'Hawaii'},
+  { title: 'Hesse'},
+  { title: 'Holy See'},
+  { title: 'Honduras'},
+  { title: 'Hungary'},
+  { title: 'Iceland'},
+  { title: 'India'},
+  { title: 'Indonesia'},
+  { title: 'Iran'},
+  { title: 'Iraq'},
+  { title: 'Ireland'},
+  { title: 'Israel'},
+  { title: 'Italy'},
+  { title: 'Jamaica'},
+  { title: 'Japan'},
+  { title: 'Jordan'},
+  { title: 'Kazakhstan'},
+  { title: 'Kenya'},
+  { title: 'Kingdom of Serbia/Yugoslavia'},
+  { title: 'Kiribati'},
+  { title: 'Korea'},
+  { title: 'Kosovo'},
+  { title: 'Kuwait'},
+  { title: 'Kyrgyzstan'},
+  { title: 'Laos'},
+  { title: 'Latvia'},
+  { title: 'Lebanon'},
+  { title: 'Lesotho'},
+  { title: 'Lew Chew (Loochoo)'},
+  { title: 'Liberia'},
+  { title: 'Libya'},
+  { title: 'Liechtenstein'},
+  { title: 'Lithuania'},
+  { title: 'Luxembourg'},
+  { title: 'Madagascar'},
+  { title: 'Malawi'},
+  { title: 'Malaysia'},
+  { title: 'Maldives'},
+  { title: 'Mali'},
+  { title: 'Malta'},
+  { title: 'Marshall Islands'},
+  { title: 'Mauritania'},
+  { title: 'Mauritius'},
+  { title: 'Mecklenburg-Schwerin'},
+  { title: 'Mecklenburg-Strelitz'},
+  { title: 'Mexico'},
+  { title: 'Micronesia'},
+  { title: 'Moldova'},
+  { title: 'Monaco'},
+  { title: 'Mongolia'},
+  { title: 'Montenegro'},
+  { title: 'Morocco'},
+  { title: 'Mozambique'},
+  { title: 'Namibia'},
+  { title: 'Nassau'},
+  { title: 'Nauru'},
+  { title: 'Nepal'},
+  { title: 'Netherlands'},
+  { title: 'New Zealand'},
+  { title: 'Nicaragua'},
+  { title: 'Niger'},
+  { title: 'Nigeria'},
+  { title: 'North Macedonia'},
+  { title: 'Norway'},
+  { title: 'Oldenburg'},
+  { title: 'Oman'},
+  { title: 'Orange Free State'},
+  { title: 'Pakistan'},
+  { title: 'Palau'},
+  { title: 'Panama'},
+  { title: 'Papal States'},
+  { title: 'Papua New Guinea'},
+  { title: 'Paraguay'},
+  { title: 'Peru'},
+  { title: 'Philippines'},
+  { title: 'Piedmont-Sardinia'},
+  { title: 'Poland'},
+  { title: 'Portugal'},
+  { title: 'Qatar'},
+  { title: 'Saint Kitts and Nevis'},
+  { title: 'Saint Lucia'},
+  { title: 'Saint Vincent and the Grenadines'},
+  { title: 'Samoa'},
+  { title: 'San Marino'},
+  { title: 'Sao Tome and Principe'},
+  { title: 'Saudi Arabia'},
+  { title: 'Senegal'},
+  { title: 'Serbia'},
+  { title: 'Seychelles'},
+  { title: 'Sierra Leone'},
+  { title: 'Singapore'},
+  { title: 'Slovakia'},
+  { title: 'Slovenia'},
+  { title: 'Solomon Islands'},
+  { title: 'Somalia'},
+  { title: 'South Africa'},
+  { title: 'South Sudan'},
+  { title: 'Spain'},
+  { title: 'Sri Lanka'},
+  { title: 'Suriname'},
+  { title: 'Sweden'},
+  { title: 'Switzerland'},
+  { title: 'Syria'},
+  { title: 'Tajikistan'},
+  { title: 'Tanzania'},
+  { title: 'Thailand'},
+  { title: 'Timor-Leste'},
+  { title: 'Togo'},
+  { title: 'Tonga'},
+  { title: 'Trinidad and Tobago'},
+  { title: 'Tunisia'},
+  { title: 'Turkey'},
+  { title: 'Turkmenistan'},
+  { title: 'Tuvalu'},
+  { title: 'Uganda'},
+  { title: 'Ukraine'},
+  { title: 'United Arab Emirates'},
+  { title: 'United Kingdom'},
+  { title: 'Unites States of America'},
+  { title: 'Uruguay'},
+  { title: 'Uzbekistan'},
+  { title: 'Vanuatu'},
+  { title: 'Venezuela'},
+  { title: 'Vietnam'},
+  { title: 'Yemen'},
+  { title: 'Zambia'},
+  { title: 'Zimbabwe'},
+ 
+];
