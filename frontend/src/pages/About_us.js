@@ -1,11 +1,12 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import { Link } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
+
 
 import pic1 from '../images/Hussain.jpg';
-import pic2 from '../images/Yousuf.jpg';
+import pic2 from '../images/Yousuf.png';
 import pic3 from '../images/Ben.jpg';
 import pic4 from '../images/Nadim.jpg';
 import pic5 from '../images/Damani.jpg';
@@ -13,21 +14,23 @@ import pic5 from '../images/Damani.jpg';
 const useStyles = makeStyles((theme) => ({
   screen: {
     paddingLeft: 50, 
-    backgroundColor: "rgb(240,240,240)"
+    //backgroundColor: "rgb(240,240,240)"
   },
   boxes: {
-    border: "1px solid grey", 
-    padding: 30, 
-    width: "70%",
-    borderRadius: 10, 
-    backgroundColor: "rgb(255,255,255)", 
+    //border: "1px solid grey", 
+    padding: 20, 
+    width: "80%",
+    height: 450,
+    width: 200,
+    //borderRadius: 1, 
+    //backgroundColor: "rgb(255,255,255)", 
     marginBottom: 10,
     marginTop: 10
   },
   image: {
-    width: '20%', 
+    width: '80%', 
     borderRadius: '80%', 
-    marginRight: 50
+    marginRight: 30
   }, 
   separation: {
     width: "100%", 
@@ -45,8 +48,16 @@ const useStyles = makeStyles((theme) => ({
       color: 'white'
     },
     marginLeft: 10
-  }
+  },
+  root: {
+    flexGrow: 1,
+  },
+
+  control: {
+    padding: theme.spacing(2),
+  },
 }));
+
 
 
 export default function Signup()  {
@@ -54,101 +65,114 @@ export default function Signup()  {
 
   return (
 
+
       <div className={classes.screen}>
 
         <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
         <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
+        <Typography component="div" variant="body1">
+            <Box color="primary.main" m={3} fontSize={50} marginLeft={65}>Meet Our Team</Box>
 
-        <Grid
-          container
-          direction="row"
-          justify="flex-start"
-          alignItems="center"
+          </Typography>
+        <Grid 
+        
+        container
+        direction="row"
+        justify="space-around">
+
+        <Grid 
+        
+          //container
+          //direction="row"
+          //justify="flex-start"
+          //alignItems="center"
           className={classes.boxes}>
           
           <img src={pic1} alt="Logo" className={classes.image} />
-          <Grid justify="flex-start">
-            <h1>Hussain Albayat</h1>
+          <Typography component="div" variant="body1">
+            <Box color="primary.main" m={3} fontSize={20}>Hussain Albayat</Box>
             <p>ENG - Electrical Engineering - May 2021</p>
             <p>I like to learn new and hard skills like swimming and biking</p>
-          </Grid>
+            </Typography>
+          
+
 
         </Grid>
 
-        <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
-        <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
 
         <Grid
-          container
+         // container
           direction="row"
           justify="flex-start"
-          alignItems="center"
+          //alignItems="center"
+          
           className={classes.boxes}>
           
           <img src={pic2} alt="Logo" className={classes.image} />
-          <Grid justify="flex-start">
-            <h1>Yousuf Baker</h1>
+            <Typography component="div" variant="body1">
+            <Box color="primary.main" m={3} fontSize={20}>Yousuf Baker</Box>
             <p>ENG - Electrical Engineering - May 2021</p>
             <p>I can clab with one hand</p>
-          </Grid>
+            </Typography>
 
         </Grid>
 
-        <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
-        <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
+
 
         <Grid
-          container
+          //container
           direction="row"
           justify="flex-start"
           alignItems="center"
           className={classes.boxes}>
           
           <img src={pic3} alt="Hussain" className={classes.image} />
-          <Grid justify="flex-start">
-            <h1>Benjamin Chan</h1>
+
+        <Typography component="div" variant="body1">
+            <Box color="primary.main" m={3} fontSize={20}>Benjamin Chan</Box>
             <p>ENG - Computer Engineering - May 2021</p>
-            <p>I like to learn new and hard skills like swimming and biking</p>
-          </Grid>
+            <p>waiting for their input</p>
+            </Typography>
+        
 
-        </Grid>
-
-        <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
-        <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
+            </Grid>
 
         <Grid
-          container
+          //container
           direction="row"
-          justify="flex-start"
+          justify="flex-end"
           alignItems="center"
           className={classes.boxes}>
           
           <img src={pic4} alt="Logo" className={classes.image} />
-          <Grid justify="flex-start">
-            <h1>Nadim El Helou</h1>
+
+          <Typography component="div" variant="body1">
+            <Box color="primary.main" m={3} fontSize={20}>Nadim El Helou</Box>
             <p>ENG - Computer Engineering - May 2021</p>
             <p>waiting for their input</p>
-          </Grid>
+            </Typography>
 
         </Grid>
 
-        <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
-        <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
+  
 
         <Grid
-          container
+          //container
           direction="row"
           justify="flex-start"
           alignItems="center"
           className={classes.boxes}>
           
           <img src={pic5} alt="Logo" className={classes.image} />
-          <Grid justify="flex-start">
-            <h1>Damani Philip</h1>
+
+          <Typography component="div" variant="body1">
+            <Box color="primary.main" m={3} fontSize={20}>Damani Philip</Box>
             <p>ENG - Computer Engineering - May 2021</p>
             <p>waiting for their input</p>
-          </Grid>
+            </Typography>
+          
 
+        </Grid>
         </Grid>
         </div>
   );
