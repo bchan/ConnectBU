@@ -70,6 +70,11 @@ const menuItems = [
     path: '/search',
   },
   {
+    title: 'Recommendations',
+    icon: <BlockIcon />,
+    path: '/recommendations',
+  },
+  {
     title: 'About Us',
     icon: <BlockIcon />,
     path: '/aboutus',
