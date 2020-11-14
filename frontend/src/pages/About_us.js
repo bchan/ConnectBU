@@ -30,6 +30,8 @@ const useStyles = makeStyles((theme) => ({
   image: {
     width: '80%', 
     borderRadius: '80%', 
+    height: '30%',
+
     marginRight: 30
   }, 
   separation: {

@@ -70,11 +70,11 @@ const useStyles = makeStyles((theme) => ({
         marginBottom: 20
       },
       editButton: {
-        backgroundColor: '#EB5757',
+        backgroundColor: 'red',
         color: 'white',
         '&:hover': {
-          backgroundColor: '#B03E3E',
-          color: 'white'
+          backgroundColor: 'red',
+          color: 'red'
         },
         marginLeft: 10
       }
@@ -159,7 +159,7 @@ export default function Signup()  {
       const flatCountries = {
         options: countries.map((option) => option.title),
       };
-      const [activeStep, setActiveStep] = React.useState(0);
+    const [activeStep, setActiveStep] = React.useState(0);
     const [completed, setCompleted] = React.useState({});
     const steps = getSteps();
 
@@ -190,6 +190,7 @@ export default function Signup()  {
 
     const handleBack = () => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
+        setCompleted({})
     };
 
     const handleStep = (step) => () => {
@@ -249,16 +250,13 @@ export default function Signup()  {
                   direction="column"
                   justify="flex-start">
                     <div className={classes.screen}>
-                    <h2>First Name</h2>
+                    <h2>Your Name</h2>
                     <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
                     <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
                     <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
 
 
-                    <h2>BU ID</h2>
-                    <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
-                    <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
-                    <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
+
 
 
                     <h2>Country</h2>
@@ -268,7 +266,7 @@ export default function Signup()  {
                         <div className={classes.formControl}>
 
                         
-                        <form className={classes.root} noValidate autoComplete="off">
+                        <form className={classes.root} Validate autoComplete="off">
                            <TextField id="standard-basic" label="First Name" variant="outlined" />
                            <TextField id="standard-basic" label="Last Name" variant="outlined" />
                          </form>
@@ -276,7 +274,6 @@ export default function Signup()  {
                         <div className={classes.formControl}>
 
                         
-                        <TextField id="standard-basic" label="Your BU ID" variant="outlined"/>
                           </div>
                           <div className={classes.formControl}>
 
@@ -441,14 +438,15 @@ export default function Signup()  {
              <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
                Back
              </Button>
-             <Button
+             
+             {/* <Button
                variant="contained"
                color="primary"
                onClick={handleNext}
                className={classes.button}
              >
                Next
-             </Button>
+             </Button> */}
              {activeStep !== steps.length &&
                (completed[activeStep] ? (
                  <Typography variant="caption" className={classes.completed}>
@@ -456,7 +454,7 @@ export default function Signup()  {
                  </Typography>
                ) : (
                  <Button variant="contained" color="primary" onClick={handleComplete}>
-                   {completedSteps() === totalSteps() - 1 ? 'Join ConnectBU' : 'Complete Step'}
+                   {completedSteps() === totalSteps() - 1  ? 'Join ConnectBU' : 'Next'}
                  </Button>
                ))}
            </div>
