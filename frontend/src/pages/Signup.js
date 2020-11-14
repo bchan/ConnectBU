@@ -22,33 +22,42 @@ const useStyles = makeStyles((theme) => ({
       rootText: {
         '& > *': {
           margin: theme.spacing(1),
+          paddingLeft: 40, 
+          paddingRight: 10,
           width: '25ch',
         },
       },
       button: {
+        paddingLeft: 40, 
         marginRight: theme.spacing(1),
       },
       completed: {
         display: 'inline-block',
       },
       instructions: {
+        paddingLeft: 40, 
         marginTop: theme.spacing(1),
+        paddingRight: 30,
         marginBottom: theme.spacing(1),
       },
     screen: {
         paddingLeft: 40, 
         paddingRight: 40, 
+        paddingRight: 10,
         paddingTop: 1, 
         paddingBottom: 1, 
         backgroundColor: "rgb(240,240,240)"
       },
     boxes: {
         border: "1px solid grey", 
+        paddingLeft: 30, 
+        paddingRight: 10,
         padding: 30, 
         width: "70%",
         borderRadius: 20, 
         backgroundColor: "rgb(255,255,255)", 
         marginBottom: 20,
+        marginLeft: 40,
         marginTop: 10
     },
     formControl: {
@@ -56,10 +65,13 @@ const useStyles = makeStyles((theme) => ({
      marginTop: theme.spacing(-2),
      marginLeft: theme.spacing(30),
      marginBottom: theme.spacing(12),
+     paddingRight: 10,
+     paddingLeft: 40, 
      minWidth: 150,
      },
     selectEmpty: {
       marginTop: theme.spacing(0),
+      paddingLeft: 40, 
     },
     separation: {
         width: "100%", 
@@ -190,7 +202,9 @@ export default function Signup()  {
 
     const handleBack = () => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
-        setCompleted({})
+        const newCompleted = completed;
+        newCompleted[activeStep-1] = false;
+        setCompleted(newCompleted);
     };
 
     const handleStep = (step) => () => {
@@ -215,10 +229,10 @@ export default function Signup()  {
      <div className={classes.root}>
         <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
         <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
-        <Stepper nonLinear activeStep={activeStep}>
+        <Stepper nonLinear activeStep={activeStep} color='red'>
           {steps.map((label, index) => (
             <Step key={label}>
-              <StepButton onClick={handleStep(index)} completed={completed[index]}>
+              <StepButton  completed={completed[index]}>
                 {label}
               </StepButton>
             </Step>
@@ -243,12 +257,16 @@ export default function Signup()  {
               container
               direction="row"
               justify="flex-start"
+              paddingLeft= {40}
+              marginLeft= {30} 
               //alignItems="center"
               className={classes.boxes}>
               
               <Grid 
                   direction="column"
-                  justify="flex-start">
+                  justify="flex-start"
+                  >
+                    
                     <div className={classes.screen}>
                     <h2>Your Name</h2>
                     <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
@@ -453,8 +471,8 @@ export default function Signup()  {
                    Step {activeStep + 1} already completed
                  </Typography>
                ) : (
-                 <Button variant="contained" color="primary" onClick={handleComplete}>
-                   {completedSteps() === totalSteps() - 1  ? 'Join ConnectBU' : 'Next'}
+                 <Button variant="contained" color="secondary" onClick={handleComplete}>
+                   {activeStep === totalSteps() - 1  ? 'Join ConnectBU' : 'Next'}
                  </Button>
                ))}
            </div>
