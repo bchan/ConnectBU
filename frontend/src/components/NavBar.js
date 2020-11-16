@@ -5,10 +5,9 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import { useScrollTrigger } from '@material-ui/core';
 import { useStyles } from '../styles/NavBar.styles';
-import { Link } from 'react-router-dom';
 import GoogleLogin from 'react-google-login';
 
 // Drawer Imports
@@ -26,6 +25,7 @@ import { login, logout, selectLoginState } from '../redux/loginSlice';
 
 export default function NavBar() {
   const location = useLocation();
+  const history = useHistory();
   const classes = useStyles();
   let trigger = useScrollTrigger(
     {
@@ -48,6 +48,7 @@ export default function NavBar() {
 
   let responseSuccess = (event) => {
     dispatch(login());
+    history.push('/signup');
   }
 
   let responseError = (event) => {

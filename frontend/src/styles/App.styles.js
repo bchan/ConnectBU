@@ -12,6 +12,7 @@ export const useStyles = makeStyles((theme) => ({
     },
     sectionHeader: {
       color: '#EB5757',
+      fontSize: 28,
     },
     paper: {
       padding: theme.spacing(2),
