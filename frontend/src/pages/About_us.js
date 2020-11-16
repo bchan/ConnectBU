@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   },
   boxes: {
     //border: "1px solid grey", 
-    padding: 20, 
+    // padding: 20, 
     width: "80%",
     height: 450,
     width: 200,
@@ -96,7 +96,7 @@ export default function Signup()  {
           <Typography component="div" variant="body1">
             <Box color="primary.main" m={3} fontSize={20}>Hussain Albayat</Box>
             <p>ENG - Electrical Engineering - May 2021</p>
-            <p>I like to learn new and hard skills like swimming and biking</p>
+            <p>I can clab with 3 hands</p>
           </Typography>
           
 
@@ -106,10 +106,9 @@ export default function Signup()  {
 
         <Grid
           direction="row"
-          //alignItems="center"
           container
-          //direction="row"
           alignItems="center"
+          justify="flex-start"
 
           
           className={classes.boxes}>
@@ -147,7 +146,7 @@ export default function Signup()  {
         <Grid
           container
           direction="row"
-          justify="flex-end"
+          justify="flex-start"
           alignItems="center"
           className={classes.boxes}>
           
