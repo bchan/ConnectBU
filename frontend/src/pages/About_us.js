@@ -6,7 +6,7 @@ import Box from '@material-ui/core/Box';
 
 
 import pic1 from '../images/Hussain.jpg';
-import pic2 from '../images/Yousuf.png';
+import pic2 from '../images/Yousuf.jpg';
 import pic3 from '../images/Ben.jpg';
 import pic4 from '../images/Nadim.jpg';
 import pic5 from '../images/Damani.jpg';
@@ -25,12 +25,14 @@ const useStyles = makeStyles((theme) => ({
     //borderRadius: 1, 
     //backgroundColor: "rgb(255,255,255)", 
     marginBottom: 10,
-    marginTop: 10
+    marginTop: 10,
+    justifyContent: "center",
+    justifyItems: "center"
   },
   image: {
-    width: '80%', 
+    width: 'auto', 
     borderRadius: '80%', 
-    height: '30%',
+    height: '140px',
 
     marginRight: 30
   }, 
@@ -84,10 +86,10 @@ export default function Signup()  {
 
         <Grid 
         
-          //container
+          container
           //direction="row"
-          //justify="flex-start"
-          //alignItems="center"
+          justify="flex-start"
+          alignItems="center"
           className={classes.boxes}>
           
           <img src={pic1} alt="Logo" className={classes.image} />
@@ -95,7 +97,7 @@ export default function Signup()  {
             <Box color="primary.main" m={3} fontSize={20}>Hussain Albayat</Box>
             <p>ENG - Electrical Engineering - May 2021</p>
             <p>I like to learn new and hard skills like swimming and biking</p>
-            </Typography>
+          </Typography>
           
 
 
@@ -103,10 +105,12 @@ export default function Signup()  {
 
 
         <Grid
-         // container
           direction="row"
-          justify="flex-start"
           //alignItems="center"
+          container
+          //direction="row"
+          alignItems="center"
+
           
           className={classes.boxes}>
           
@@ -122,7 +126,8 @@ export default function Signup()  {
 
 
         <Grid
-          //container
+        container
+          alignItems="center"
           direction="row"
           justify="flex-start"
           alignItems="center"
@@ -140,7 +145,7 @@ export default function Signup()  {
             </Grid>
 
         <Grid
-          //container
+          container
           direction="row"
           justify="flex-end"
           alignItems="center"
@@ -159,7 +164,7 @@ export default function Signup()  {
   
 
         <Grid
-          //container
+          container
           direction="row"
           justify="flex-start"
           alignItems="center"
