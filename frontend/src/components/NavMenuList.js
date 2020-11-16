@@ -6,6 +6,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import HomeIcon from '@material-ui/icons/Home';
 import DescriptionIcon from '@material-ui/icons/Description';
 import PeopleIcon from '@material-ui/icons/People';
+import SearchIcon from '@material-ui/icons/Search';
+import InfoIcon from '@material-ui/icons/Info';
 import ContactSupportIcon from '@material-ui/icons/ContactSupport';
 import BlockIcon from '@material-ui/icons/Block';
 import { Link } from 'react-router-dom';
@@ -20,14 +22,14 @@ export default function NavMenuList(props) {
       path: '/',
     },
     {
-      title: 'Features',
-      icon: <DescriptionIcon />,
-      path: '/',
+      title: 'Search',
+      icon: <SearchIcon />,
+      path: '/search',
     },
     {
-      title: 'Community',
-      icon: <PeopleIcon />,
-      path: '/',
+      title: 'About Us',
+      icon: <InfoIcon />,
+      path: '/aboutus',
     },
     {
       title: 'Support',
@@ -35,25 +37,11 @@ export default function NavMenuList(props) {
       path: '/support',
     },
     {
-      title: 'Profile',
-      icon: <BlockIcon />,
-      path: '/profile',
-    },
-    {
       title: 'Sign Up',
       icon: <BlockIcon />,
       path: '/signup',
     },
-    {
-      title: 'Search',
-      icon: <BlockIcon />,
-      path: '/search',
-    },
-    {
-      title: 'About Us',
-      icon: <BlockIcon />,
-      path: '/aboutus',
-    }
+
   ]
 
   return (

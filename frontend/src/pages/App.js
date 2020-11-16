@@ -31,7 +31,7 @@ function App() {
       <Grid container spacing={2} justify="center" alignItems="stretch" className={classes.container}>
         <Grid item xs={10} sm={5}>
           <div className={classes.paper}>
-            <h2>Clubs</h2>
+            <h3>Clubs</h3>
             <p>
               From beekeeping to photography, rocket propulsion to religion, BU has more than 500 student organizations to engage almost any interest. Find and connect with fellow students who share your interests.
             </p>
@@ -39,7 +39,7 @@ function App() {
         </Grid>
         <Grid item xs={10} sm={5}>
           <div className={classes.paper}>
-            <h2>School, Major, and Classes Taken</h2>
+            <h3>School, Major, and Classes Taken</h3>
             <p>
               Explore the many classes BU has to offer and reach out to fellow students for tips, help, and academic guidance.
             </p>
@@ -47,7 +47,7 @@ function App() {
         </Grid>
         <Grid item xs={10} sm={5}>
           <div className={classes.paper}>
-            <h2>Interests</h2>
+            <h3>Interests</h3>
             <p>
               Consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam.
             </p>
@@ -55,7 +55,7 @@ function App() {
         </Grid>
         <Grid item xs={10} sm={5}>
           <div className={classes.paper}>
-            <h2>Research</h2>
+            <h3>Research</h3>
             <p>
               Eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora.
             </p>
