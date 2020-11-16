@@ -9,6 +9,7 @@ import Signup from './pages/Signup';
 import Profile from './pages/Profile';
 import Support from './pages/Support';
 import HomeLI from './pages/Home_LI'
+import Search from './pages/Search'
 import AboutUs from './pages/About_us'
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
@@ -34,6 +35,9 @@ const routing = (
           <Signup />
         </Route>
         <Route path="/search">
+          <Search />
+        </Route>
+        <Route path="/recommendations">
           <HomeLI />
         </Route>
         <Route path="/aboutus">

@@ -1,27 +1,115 @@
 
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import Stepper from '@material-ui/core/Stepper';
+import Step from '@material-ui/core/Step';
+import StepButton from '@material-ui/core/StepButton';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles((theme) => ({
-  formControl: {
-    margin: theme.spacing(0),
-    marginTop: theme.spacing(0),
-    marginLeft: theme.spacing(20),
-    marginBottom: theme.spacing(10),
-    minWidth: 150,
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(0),
-  },
+  
+    root: {
+        width: '100%',
+        paddingLeft: 10, 
+        paddingRight: 10, 
+        paddingTop: 30, 
+        paddingBottom: 1, 
+      },
+      rootText: {
+        '& > *': {
+          margin: theme.spacing(1),
+          paddingLeft: 40, 
+          paddingRight: 10,
+          width: '25ch',
+        },
+      },
+      button: {
+        paddingLeft: 40, 
+        marginRight: theme.spacing(1),
+      },
+      completed: {
+        display: 'inline-block',
+      },
+      instructions: {
+        paddingLeft: 40, 
+        marginTop: theme.spacing(1),
+        paddingRight: 30,
+        marginBottom: theme.spacing(1),
+      },
+    screen: {
+        paddingLeft: 40, 
+        paddingRight: 40, 
+        paddingRight: 10,
+        paddingTop: 1, 
+        paddingBottom: 1, 
+        backgroundColor: "rgb(240,240,240)"
+      },
+    boxes: {
+        border: "1px solid grey", 
+        paddingLeft: 30, 
+        paddingRight: 10,
+        padding: 30, 
+        width: "70%",
+        borderRadius: 20, 
+        backgroundColor: "rgb(255,255,255)", 
+        marginBottom: 20,
+        marginLeft: 40,
+        marginTop: 10
+    },
+    formControl: {
+     margin: theme.spacing(5),
+     marginTop: theme.spacing(-2),
+     marginLeft: theme.spacing(30),
+     marginBottom: theme.spacing(12),
+     paddingRight: 10,
+     paddingLeft: 40, 
+     minWidth: 150,
+     },
+    selectEmpty: {
+      marginTop: theme.spacing(0),
+      paddingLeft: 40, 
+    },
+    separation: {
+        width: "100%", 
+        height: 0, 
+        borderTop: "1px solid grey", 
+        borderColor: "grey", 
+        marginTop: 10, 
+        marginBottom: 20
+      },
+      editButton: {
+        backgroundColor: 'red',
+        color: 'white',
+        '&:hover': {
+          backgroundColor: 'red',
+          color: 'red'
+        },
+        marginLeft: 10
+      }
 }));
+function getSteps() {
+    return ['General Information', 'Education', 'Extracurricular Activities'];
+  }
+  
+  function getStepContent(step) {
+    switch (step) {
+      case 0:
+        return ( <h1>Step 1: Tell us more about you</h1>
+        )
+      case 1:
+        return <h1>Step 2: Tell us more about your Education</h1>
+       // 'Step 2: Tell us more about your Extracurricular Activities';
+      case 2:
+        return <h1>Step 3: Tell us more about your Extracurricular Activities</h1>
+      default:
+        return 'Unknown step';
+    }
+  }
+  
 export default function Signup()  {
     const classes = useStyles();
     //const [Major, setMajor] = React.useState('');
@@ -52,6 +140,15 @@ export default function Signup()  {
       const flatClubs = {
         options: club.map((option) => option.title),
       };
+      const Research = {
+        options: research,
+        getOptionLabel: (option) => option.title,
+      };
+
+      const flatResearch = {
+        options: research.map((option) => option.title),
+      };
+      
       const Interests = {
         options: Interest,
         getOptionLabel: (option) => option.title,
@@ -66,173 +163,323 @@ export default function Signup()  {
       const flatClosses = {
         options: club.map((option) => option.title),
       };
+      const Countries = {
+        options: countries,
+        getOptionLabel: (option) => option.title,
+      };
+
+      const flatCountries = {
+        options: countries.map((option) => option.title),
+      };
+    const [activeStep, setActiveStep] = React.useState(0);
+    const [completed, setCompleted] = React.useState({});
+    const steps = getSteps();
+
+    const totalSteps = () => {
+        return steps.length;
+    };
+
+    const completedSteps = () => {
+        return Object.keys(completed).length;
+    };
+
+    const isLastStep = () => {
+        return activeStep === totalSteps() - 1;
+    };
+
+    const allStepsCompleted = () => {
+        return completedSteps() === totalSteps();
+    };
+
+    const handleNext = () => {
+        const newActiveStep =
+        isLastStep() && !allStepsCompleted()
+            ? 
+            steps.findIndex((step, i) => !(i in completed))
+            : activeStep + 1;
+        setActiveStep(newActiveStep);
+    };
+
+    const handleBack = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep - 1);
+        const newCompleted = completed;
+        newCompleted[activeStep-1] = false;
+        setCompleted(newCompleted);
+    };
+
+    const handleStep = (step) => () => {
+        setActiveStep(step);
+    };
+
+    const handleComplete = () => {
+        const newCompleted = completed;
+        newCompleted[activeStep] = true;
+        setCompleted(newCompleted);
+        handleNext();
+    };
+
+    const handleReset = () => {
+        setActiveStep(0);
+        setCompleted({});
+    };
+
     return (
 
-        <div>
 
-            <p style={{
-                'white-space': 'pre-wrap'
-                }}>{"\n"}
-            </p>
-            <p style={{
-                'white-space': 'pre-wrap'
-                }}>{"\n"}
-            </p>
+     <div className={classes.root}>
+        <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
+        <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
+        <Stepper nonLinear activeStep={activeStep} color='red'>
+          {steps.map((label, index) => (
+            <Step key={label}>
+              <StepButton  completed={completed[index]}>
+                {label}
+              </StepButton>
+            </Step>
+          ))}
+        </Stepper>
+     <div>
+       {allStepsCompleted() ? (
+         <div>
+           <Typography className={classes.instructions}>
+             All steps completed - you&apos;re finished
+           </Typography>
+           <Button onClick={handleReset}>Reset</Button>
+         </div>
+       ) : (
+         <div>
+           <Typography className={classes.instructions}>{getStepContent(activeStep)}</Typography>
 
-            <Grid item xs={10} sm={5}>
-                    <div className={classes.paper}>
+           {
+            {
+          '0':
+          <Grid
+              container
+              direction="row"
+              justify="flex-start"
+              paddingLeft= {40}
+              marginLeft= {30} 
+              //alignItems="center"
+              className={classes.boxes}>
+              
+              <Grid 
+                  direction="column"
+                  justify="flex-start"
+                  >
+                    
+                    <div className={classes.screen}>
+                    <h2>Your Name</h2>
+                    <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
+                    <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
+                    <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
 
-                     <h2>Step 1: Tell us more about your education</h2>
 
-                     </div>
-            </Grid>
 
-            <Grid item xs={12} sm={7}
-                 container
-                direction="row"
-                justify="space-between"
-                 alignItems="center">
-                <Grid item xs={10} sm={5}>
-                    <div className={classes.paper}>
 
-                     <h2>Major</h2>
 
-                     </div>
+                    <h2>Country</h2>
+                    </div>
+              </Grid>
+              <Grid item xs={30} sm={20}>
+                        <div className={classes.formControl}>
+
+                        
+                        <form className={classes.root} Validate autoComplete="off">
+                           <TextField id="standard-basic" label="First Name" variant="outlined" />
+                           <TextField id="standard-basic" label="Last Name" variant="outlined" />
+                         </form>
+                        </div>
+                        <div className={classes.formControl}>
+
+                        
+                          </div>
+                          <div className={classes.formControl}>
+
+                        
+                              <Autocomplete
+                              {...Countries}
+                              id="Countries"
+                              style={{ width: 300 }}
+                              debug
+                              renderInput={(params) => <TextField {...params} label="Where Are You From?" margin="normal" />}
+
+                              />
+                            </div>
                 </Grid>
-                <Autocomplete
-                     {...Majors}
-                     id="Major"
+
+
+        </Grid>,
+
+          '1':             
+          <Grid
+              container
+              direction="row"
+              justify="flex-start"
+              //alignItems="center"
+              className={classes.boxes}>
+              
+              <Grid 
+                  direction="column"
+                  justify="flex-start">
+                    <div className={classes.screen}>
+                    <h2>Major</h2>
+                    <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
+                    <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
+                    <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
+
+
+                    <h2>Minor</h2>
+                    <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
+                    <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
+                    <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
+
+
+                    <h2>Classes</h2>
+                    </div>
+              </Grid>
+              <Grid item xs={30} sm={20}>
+                        <div className={classes.formControl}>
+
+                        
+                        <Autocomplete
+                        {...Majors}
+                        id="Major"
+                        style={{ width: 300 }}
+                        debug
+                        renderInput={(params) => <TextField {...params} label="Major" margin="normal" />}
+
+                        />
+                        </div>
+                        <div className={classes.formControl}>
+
+                        
+                            <Autocomplete
+                            {...Minors}
+                            id="Minor"
+                            style={{ width: 300 }}
+                            debug
+                            renderInput={(params) => <TextField {...params} label="Minor" margin="normal" />}
+
+                            />
+                          </div>
+                          <div className={classes.formControl}>
+
+                        
+                              <Autocomplete
+                              {...Closses}
+                              id="Classes"
+                              style={{ width: 300 }}
+                              debug
+                              renderInput={(params) => <TextField {...params} label="Classes" margin="normal" />}
+
+                              />
+                            </div>
+                </Grid>
+
+
+        </Grid>,
+          '2': 
+          <Grid
+          container
+          direction="row"
+          justify="flex-start"
+          //alignItems="center"
+          className={classes.boxes}>
+          
+          <Grid 
+              direction="column"
+              justify="flex-start">
+                <div className={classes.screen}>
+                <h2>Clubs</h2>
+                <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
+                <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
+                <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
+
+
+                <h2>Research</h2>
+                <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
+                <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
+                <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
+
+
+                <h2>Interest</h2>
+                </div>
+          </Grid>
+          <Grid item xs={30} sm={30}>
+                    <div className={classes.formControl}>
+
+                    
+                    <Autocomplete
+                    {...Clubs}
+                    id="Clubs"
                     style={{ width: 300 }}
                     debug
-                    renderInput={(params) => <TextField {...params} label="Major" margin="normal" />}
+                    renderInput={(params) => <TextField {...params} label="Clubs" margin="normal" />}
 
-                />
+                    />
+                    </div>
+                    <div className={classes.formControl}>
 
-            </Grid>
+                    
+                        <Autocomplete
+                        {...Research}
+                        id="Minor"
+                        style={{ width: 300 }}
+                        debug
+                        renderInput={(params) => <TextField {...params} label="Research Group" margin="normal" />}
 
-            <Grid item xs={12} sm={7}
-                 container
-                direction="row"
-                justify="space-between"
-                 alignItems="center">
-                <Grid item xs={10} sm={5}>
-                    <div className={classes.paper}>
+                        />
+                      </div>
+                      <div className={classes.formControl}>
 
-                     <h2>Minor</h2>
+                    
+                          <Autocomplete
+                          {...Interests}
+                          id="Interest"
+                          style={{ width: 300 }}
+                          debug
+                          renderInput={(params) => <TextField {...params} label="Interest" margin="normal" />}
 
-                     </div>
-                </Grid>
-                <Autocomplete
-                     {...Minors}
-                     id="Minor"
-                    style={{ width: 300 }}
-                    debug
-                    renderInput={(params) => <TextField {...params} label="Minor" margin="normal" />}
-
-                />
-
-            </Grid>
-
-            <Grid item xs={10} sm={5}>
-                    <div className={classes.paper}>
-
-                     <h2>Step 2: Tell us more about your Extracurricular Activities</h2>
-
-
-                     </div>
-            </Grid>
-
-            <Grid item xs={12} sm={7}
-                 container
-                direction="row"
-                justify="space-between"
-                 alignItems="center">
-                <Grid item xs={10} sm={5}>
-                    <div className={classes.paper}>
-
-                     <h2>Clubs</h2>
-
-                     </div>
-                </Grid>
-                <Autocomplete
-                     {...Clubs}
-                     id="Club"
-                    style={{ width: 300 }}
-                    debug
-                    renderInput={(params) => <TextField {...params} label="Club" margin="normal" />}
-
-                />
-            </Grid>
-
-            <Grid item xs={10} sm={5}>
-                    <div className={classes.paper}>
-
-                     <h2>Step 3: Tell us more about your Classes & Interest</h2>
-
-                     </div>
-            </Grid>
-
-            <Grid item xs={12} sm={7}
-                 container
-                direction="row"
-                justify="space-between"
-                 alignItems="center">
-                <Grid item xs={10} sm={5}>
-                    <div className={classes.paper}>
-
-                     <h2>Classes</h2>
-
-                     </div>
-                </Grid>
-                <Autocomplete
-                     {...Closses}
-                     id="Classes"
-                    style={{ width: 300 }}
-                    debug
-                    renderInput={(params) => <TextField {...params} label="Classes" margin="normal" />}
-
-                />
-
-            </Grid>
-
-            <Grid item xs={12} sm={7}
-                 container
-                direction="row"
-                justify="space-between"
-                 alignItems="center">
-                <Grid item xs={10} sm={5}>
-                    <div className={classes.paper}>
-
-                     <h2>Interest</h2>
-
-                     </div>
-                </Grid>
-                <Autocomplete
-                     {...Interests}
-                     id="Interests"
-                    style={{ width: 300 }}
-                    debug
-                    renderInput={(params) => <TextField {...params} label="Interests" margin="normal" />}
-
-                />
-
-            </Grid>
-            <Grid item xs={14} sm={9}>
-                  <div className={classes.paper}>
-
-                   <h2>Note that you can always add more information later!</h2>
-
-
-                   </div>
+                          />
+                        </div>
             </Grid>
 
 
+    </Grid>,
+            }[activeStep]
+             }
 
+ 
+     
+           <div>
 
-
-
-
-      </div>
+             <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
+               Back
+             </Button>
+             
+             {/* <Button
+               variant="contained"
+               color="primary"
+               onClick={handleNext}
+               className={classes.button}
+             >
+               Next
+             </Button> */}
+             {activeStep !== steps.length &&
+               (completed[activeStep] ? (
+                 <Typography variant="caption" className={classes.completed}>
+                   Step {activeStep + 1} already completed
+                 </Typography>
+               ) : (
+                 <Button variant="contained" color="secondary" onClick={handleComplete}>
+                   {activeStep === totalSteps() - 1  ? 'Join ConnectBU' : 'Next'}
+                 </Button>
+               ))}
+           </div>
+         </div>
+       )}
+     </div>
+   </div>
     );
   }
 
@@ -988,4 +1235,232 @@ const closses = [
     { title: 'EC 447'},
 
 
+];
+
+const research = [
+  { title: 'robotics lab'},
+  { title: 'IMB'},
+  { title: 'kinsy group'},
+  { title: 'EC 311'},
+  { title: 'EC 500'},
+  { title: 'EC 413'},
+  { title: 'EC 447'},
+
+
+];
+
+const countries = [
+  { title: 'Afghanistan'},
+  { title: 'Albania'},
+  { title: 'Algeria'},
+  { title: 'Andorra'},
+  { title: 'Angola'},
+  { title: 'Antigua and Barbuda'},
+  { title: 'Argentina'},
+  { title: 'Armenia'},
+  { title: 'Australia'},
+  { title: 'Austria'},
+  { title: 'Austrian Empire'},
+  { title: 'Azerbaijan'},
+  { title: 'Baden'},
+  { title: 'Bahamas'},
+  { title: 'Bahrain'},
+  { title: 'Bangladesh'},
+  { title: 'Barbados'},
+  { title: 'Bavaria'},
+  { title: 'Belarus'},
+  { title: 'Belgium'},
+  { title: 'Belize'},
+  { title: 'Benin (Dahomey)'},
+  { title: 'Bolivia'},
+  { title: 'Bosnia and Herzegovina'},
+  { title: 'Botswana'},
+  { title: 'Brazil'},
+  { title: 'Brunei'},
+  { title: 'Brunswick and Lüneburg'},
+  { title: 'Bulgaria'},
+  { title: 'Burkina Faso (Upper Volta)'},
+  { title: 'Burma'},
+  { title: 'Burundi'},
+  { title: 'Cabo Verde'},
+  { title: 'Cambodia'},
+  { title: 'Cameroon'},
+  { title: 'Canada'},
+  { title: 'Cayman Islands'},
+  { title: 'Central African Republic'},
+  { title: 'Central American Federation'},
+  { title: 'chad'},
+  { title: 'Chile'},
+  { title: 'China'},
+  { title: 'Colombia'},
+  { title: 'Comoros'},
+  { title: 'Congo Free State'},
+  { title: 'Costa Rica'},
+  { title: 'Cote d’Ivoire (Ivory Coast)'},
+  { title: 'Croatia'},
+  { title: 'Cuba'},
+  { title: 'Cyprus'},
+  { title: 'Czechia'},
+  { title: 'Czechoslovakia'},
+  { title: 'Democratic Republic of the Congo'},
+  { title: 'Denmark'},
+  { title: 'Djibouti'},
+  { title: 'Dominica'},
+  { title: 'Dominican Republic'},
+  { title: 'Duchy of Parma'},
+  { title: 'East Germany (German Democratic Republic)'},
+  { title: 'Ecuador'},
+  { title: 'Egypt'},
+  { title: 'El Salvador'},
+  { title: 'Equatorial Guinea'},
+  { title: 'Eritrea'},
+  { title: 'Estonia'},
+  { title: 'Eswatini'},
+  { title: 'Ethiopia'},
+  { title: 'Fiji'},
+  { title: 'Finland'},
+  { title: 'France'},
+  { title: 'Gabon'},
+  { title: 'Gambia'},
+  { title: 'Georgia'},
+  { title: 'Germany'},
+  { title: 'Ghana'},
+  { title: 'Grand Duchy of Tuscany'},
+  { title: 'Greece'},
+  { title: 'Grenada'},
+  { title: 'Guatemala'},
+  { title: 'Guinea'},
+  { title: 'Guinea-Bissau'},
+  { title: 'Guyana'},
+  { title: 'Haiti'},
+  { title: 'Hanover'},
+  { title: 'Hanseatic Republics'},
+  { title: 'Hawaii'},
+  { title: 'Hesse'},
+  { title: 'Holy See'},
+  { title: 'Honduras'},
+  { title: 'Hungary'},
+  { title: 'Iceland'},
+  { title: 'India'},
+  { title: 'Indonesia'},
+  { title: 'Iran'},
+  { title: 'Iraq'},
+  { title: 'Ireland'},
+  { title: 'Israel'},
+  { title: 'Italy'},
+  { title: 'Jamaica'},
+  { title: 'Japan'},
+  { title: 'Jordan'},
+  { title: 'Kazakhstan'},
+  { title: 'Kenya'},
+  { title: 'Kingdom of Serbia/Yugoslavia'},
+  { title: 'Kiribati'},
+  { title: 'Korea'},
+  { title: 'Kosovo'},
+  { title: 'Kuwait'},
+  { title: 'Kyrgyzstan'},
+  { title: 'Laos'},
+  { title: 'Latvia'},
+  { title: 'Lebanon'},
+  { title: 'Lesotho'},
+  { title: 'Lew Chew (Loochoo)'},
+  { title: 'Liberia'},
+  { title: 'Libya'},
+  { title: 'Liechtenstein'},
+  { title: 'Lithuania'},
+  { title: 'Luxembourg'},
+  { title: 'Madagascar'},
+  { title: 'Malawi'},
+  { title: 'Malaysia'},
+  { title: 'Maldives'},
+  { title: 'Mali'},
+  { title: 'Malta'},
+  { title: 'Marshall Islands'},
+  { title: 'Mauritania'},
+  { title: 'Mauritius'},
+  { title: 'Mecklenburg-Schwerin'},
+  { title: 'Mecklenburg-Strelitz'},
+  { title: 'Mexico'},
+  { title: 'Micronesia'},
+  { title: 'Moldova'},
+  { title: 'Monaco'},
+  { title: 'Mongolia'},
+  { title: 'Montenegro'},
+  { title: 'Morocco'},
+  { title: 'Mozambique'},
+  { title: 'Namibia'},
+  { title: 'Nassau'},
+  { title: 'Nauru'},
+  { title: 'Nepal'},
+  { title: 'Netherlands'},
+  { title: 'New Zealand'},
+  { title: 'Nicaragua'},
+  { title: 'Niger'},
+  { title: 'Nigeria'},
+  { title: 'North Macedonia'},
+  { title: 'Norway'},
+  { title: 'Oldenburg'},
+  { title: 'Oman'},
+  { title: 'Orange Free State'},
+  { title: 'Pakistan'},
+  { title: 'Palau'},
+  { title: 'Panama'},
+  { title: 'Papal States'},
+  { title: 'Papua New Guinea'},
+  { title: 'Paraguay'},
+  { title: 'Peru'},
+  { title: 'Philippines'},
+  { title: 'Piedmont-Sardinia'},
+  { title: 'Poland'},
+  { title: 'Portugal'},
+  { title: 'Qatar'},
+  { title: 'Saint Kitts and Nevis'},
+  { title: 'Saint Lucia'},
+  { title: 'Saint Vincent and the Grenadines'},
+  { title: 'Samoa'},
+  { title: 'San Marino'},
+  { title: 'Sao Tome and Principe'},
+  { title: 'Saudi Arabia'},
+  { title: 'Senegal'},
+  { title: 'Serbia'},
+  { title: 'Seychelles'},
+  { title: 'Sierra Leone'},
+  { title: 'Singapore'},
+  { title: 'Slovakia'},
+  { title: 'Slovenia'},
+  { title: 'Solomon Islands'},
+  { title: 'Somalia'},
+  { title: 'South Africa'},
+  { title: 'South Sudan'},
+  { title: 'Spain'},
+  { title: 'Sri Lanka'},
+  { title: 'Suriname'},
+  { title: 'Sweden'},
+  { title: 'Switzerland'},
+  { title: 'Syria'},
+  { title: 'Tajikistan'},
+  { title: 'Tanzania'},
+  { title: 'Thailand'},
+  { title: 'Timor-Leste'},
+  { title: 'Togo'},
+  { title: 'Tonga'},
+  { title: 'Trinidad and Tobago'},
+  { title: 'Tunisia'},
+  { title: 'Turkey'},
+  { title: 'Turkmenistan'},
+  { title: 'Tuvalu'},
+  { title: 'Uganda'},
+  { title: 'Ukraine'},
+  { title: 'United Arab Emirates'},
+  { title: 'United Kingdom'},
+  { title: 'United States of America'},
+  { title: 'Uruguay'},
+  { title: 'Uzbekistan'},
+  { title: 'Vanuatu'},
+  { title: 'Venezuela'},
+  { title: 'Vietnam'},
+  { title: 'Yemen'},
+  { title: 'Zambia'},
+  { title: 'Zimbabwe'},
+ 
 ];
