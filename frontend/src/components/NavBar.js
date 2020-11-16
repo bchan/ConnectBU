@@ -10,71 +10,20 @@ import { useScrollTrigger } from '@material-ui/core';
 import { useStyles } from '../styles/NavBar.styles';
 import { Link } from 'react-router-dom';
 import GoogleLogin from 'react-google-login';
+
 // Drawer Imports
 import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import HomeIcon from '@material-ui/icons/Home';
-import DescriptionIcon from '@material-ui/icons/Description';
-import PeopleIcon from '@material-ui/icons/People';
-import ContactSupportIcon from '@material-ui/icons/ContactSupport';
+import NavBarMenuList from './NavMenuList';
 
-import InputBase from '@material-ui/core/InputBase';
+// Right Menu
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-
-// Icons
-import BlockIcon from '@material-ui/icons/Block';
 
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
 import { login, logout, selectLoginState } from '../redux/loginSlice';
 
-const menuItems = [
-  {
-    title: 'Home',
-    icon: <HomeIcon />,
-    path: '/',
-  },
-  {
-    title: 'Features',
-    icon: <DescriptionIcon />,
-    path: '/',
-  },
-  {
-    title: 'Community',
-    icon: <PeopleIcon />,
-    path: '/',
-  },
-  {
-    title: 'Support',
-    icon: <ContactSupportIcon />,
-    path: '/support',
-  },
-  {
-    title: 'Profile',
-    icon: <BlockIcon />,
-    path: '/profile',
-  },
-  {
-    title: 'Sign Up',
-    icon: <BlockIcon />,
-    path: '/signup',
-  },
-  {
-    title: 'Search',
-    icon: <BlockIcon />,
-    path: '/search',
-  },
-  {
-    title: 'About Us',
-    icon: <BlockIcon />,
-    path: '/aboutus',
-  }
-]
 export default function NavBar() {
   const location = useLocation();
   const classes = useStyles();
@@ -115,23 +64,6 @@ export default function NavBar() {
     setAnchorEl(null);
   }
 
-  const menuList = (
-    <List className={classes.list}>
-      {menuItems.map((element) => {
-        return (
-          <ListItem button key={element.title} component={Link} to={element.path} onClick={() => {toggleDrawer(false)}}>
-            <ListItemIcon>
-              {element.icon}
-            </ListItemIcon>
-            <ListItemText>
-              {element.title}
-            </ListItemText>
-          </ListItem>
-        )
-      })}
-    </List>
-  )
-
   let loginElement;
   if (isLoggedIn) {
     loginElement = (
@@ -151,11 +83,13 @@ export default function NavBar() {
         keepMounted
         open={anchorEl !== null}
         onClose={handleSettingsClose}
-        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
         transformOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
         <MenuItem onClick={handleSettingsClose}>
           {"Settings"}
+        </MenuItem>
+        <MenuItem onClick={() => {dispatch(logout()); handleSettingsClose()}}>
+          {"Logout"}
         </MenuItem>
       </Menu>
       </div>
@@ -170,7 +104,7 @@ export default function NavBar() {
         cookiePolicy={'single_host_origin'}
         style={{disabled: 'false'}}
         render={(renderProps) => (
-          <Button color="inherit" onClick={renderProps.onClick}  >Login</Button>
+          <Button color="inherit" onClick={renderProps.onClick}>Login</Button>
         )}
       />
     );
@@ -182,7 +116,7 @@ export default function NavBar() {
         open={state.isDrawerOpen}
         onClose={() => {toggleDrawer(false)}}
       >
-        {menuList}
+        <NavBarMenuList toggle={() => toggleDrawer(false)}/>
       </Drawer>
       <AppBar className={(!shouldUseScroll)? classes.solidBar : (trigger)? classes.scrolledBar : classes.bar} elevation={0}> 
         <Toolbar>
@@ -190,7 +124,7 @@ export default function NavBar() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
-            Connect<a style={{color: '#CC0000'}}>BU</a>
+            Connect<span style={{color: '#CC0000'}}>BU</span>
           </Typography>
           {/* <Button className={classes.profileButton} component={Link} to={"/profile"}>
             Profile
