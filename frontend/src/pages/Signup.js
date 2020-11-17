@@ -9,6 +9,8 @@ import Step from '@material-ui/core/Step';
 import StepButton from '@material-ui/core/StepButton';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import { Link } from 'react-router-dom';
+
 
 const useStyles = makeStyles((theme) => ({
   
@@ -102,7 +104,6 @@ function getSteps() {
         )
       case 1:
         return <h1>Step 2: Tell us more about your Education</h1>
-       // 'Step 2: Tell us more about your Extracurricular Activities';
       case 2:
         return <h1>Step 3: Tell us more about your Extracurricular Activities</h1>
       default:
@@ -112,11 +113,7 @@ function getSteps() {
   
 export default function Signup()  {
     const classes = useStyles();
-    //const [Major, setMajor] = React.useState('');
-
-  //  const handleChange = (event) => {
-    //  setMajor(event.target.value);
-    //};
+ 
 
     const Majors = {
         options: major,
@@ -259,7 +256,6 @@ export default function Signup()  {
               justify="flex-start"
               paddingLeft= {40}
               marginLeft= {30} 
-              //alignItems="center"
               className={classes.boxes}>
               
               <Grid 
@@ -293,6 +289,10 @@ export default function Signup()  {
 
                         
                           </div>
+
+                          <div className={classes.formControl}>
+                        </div>
+                       
                           <div className={classes.formControl}>
 
                         
@@ -315,7 +315,6 @@ export default function Signup()  {
               container
               direction="row"
               justify="flex-start"
-              //alignItems="center"
               className={classes.boxes}>
               
               <Grid 
@@ -338,6 +337,10 @@ export default function Signup()  {
                     </div>
               </Grid>
               <Grid item xs={30} sm={20}>
+              <div>
+                        </div>
+                        <div>
+                        </div>
                         <div className={classes.formControl}>
 
                         
@@ -350,6 +353,18 @@ export default function Signup()  {
 
                         />
                         </div>
+
+                        <div className={classes.formControl}>
+                        </div>
+                        <div className={classes.formControl}>
+                        </div>
+                        <div className={classes.formControl}>
+                        </div>
+                        <div className={classes.formControl}>
+                        </div>
+                        <div className={classes.formControl}>
+                        </div>
+
                         <div className={classes.formControl}>
 
                         
@@ -362,6 +377,10 @@ export default function Signup()  {
 
                             />
                           </div>
+                          <div className={classes.formControl}>
+                        </div>
+                        <div className={classes.formControl}>
+                        </div>
                           <div className={classes.formControl}>
 
                         
@@ -383,7 +402,6 @@ export default function Signup()  {
           container
           direction="row"
           justify="flex-start"
-          //alignItems="center"
           className={classes.boxes}>
           
           <Grid 
@@ -418,12 +436,19 @@ export default function Signup()  {
 
                     />
                     </div>
+                    <div>
+                        </div>
+                        <div className={classes.formControl}>
+                        </div>
+                        <div className={classes.formControl}>
+                        </div>
+                        
                     <div className={classes.formControl}>
 
                     
                         <Autocomplete
                         {...Research}
-                        id="Minor"
+                        id="Research"
                         style={{ width: 300 }}
                         debug
                         renderInput={(params) => <TextField {...params} label="Research Group" margin="normal" />}
@@ -448,30 +473,19 @@ export default function Signup()  {
     </Grid>,
             }[activeStep]
              }
-
- 
-     
            <div>
 
              <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
                Back
              </Button>
-             
-             {/* <Button
-               variant="contained"
-               color="primary"
-               onClick={handleNext}
-               className={classes.button}
-             >
-               Next
-             </Button> */}
+
              {activeStep !== steps.length &&
                (completed[activeStep] ? (
                  <Typography variant="caption" className={classes.completed}>
                    Step {activeStep + 1} already completed
                  </Typography>
                ) : (
-                 <Button variant="contained" color="secondary" onClick={handleComplete}>
+                 <Button variant="contained" color="secondary" onClick={handleComplete} component={Link} to={activeStep === totalSteps() - 1 ? '/profile' : '/signup'}>
                    {activeStep === totalSteps() - 1  ? 'Join ConnectBU' : 'Next'}
                  </Button>
                ))}
