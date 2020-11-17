@@ -48,7 +48,26 @@ export default function NavBar() {
 
   let responseSuccess = (event) => {
     dispatch(login());
-    history.push('/signup');
+    // FOR TESTING PURPOSES
+
+    let firstName = event.profileObj.givenName;
+    fetch('http://localhost:5000')
+    .then((res) => {
+      return res.text();
+    })
+    .then((nameArray) => {
+      let names = JSON.parse(nameArray);
+      if (names.includes(firstName)) {
+        history.push('/profile');
+      } else {
+        fetch('http://localhost:5000/add?name=' + firstName)
+        .then((res) => {
+          history.push('/signup');
+        })
+      }
+    })
+    
+    
   }
 
   let responseError = (event) => {
