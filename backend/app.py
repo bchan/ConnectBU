@@ -1,59 +1,21 @@
-from flask import Flask, request
-import mysql.connector
-from flask_cors import CORS
-import json
-import numpy as np
+from flask import Flask
+from flask_restful import Resource, Api
+from flask_sqlalchemy import SQLAlchemy
+from models import db, Student, Class, Club, Lab, CampusJob, TakesClass, TakesJob, JoinsClub, JoinsLab
 
 app = Flask(__name__)
-CORS(app)
-
-@app.route('/')
-def getNames():
-    
-    mydb = mysql.connector.connect(
-        host="HOSTNAME",
-        user="USERNAME",
-        password="PASSWORD",
-        database="connectbudb"
-    )
-    cursor = mydb.cursor()
-
-    query = ("SELECT * FROM student")
-
-    cursor.execute(query)
-    names = []
-
-    for id, firstName, lastName, major, minor, schoolYear, _ in cursor:
-        names.append(firstName)
-
-    cursor.close()
-    mydb.close()
-    
-    return json.dumps(names)
+api = Api(app)
+app.config.from_pyfile('config.py')
+db.init_app(app)
 
 
-@app.route('/add')
-def addName():
-    mydb = mysql.connector.connect(
-        host="HOSTNAME",
-        user="USERNAME",
-        password="PASSWORD",
-        database="connectbudb"
-    )
-    cursor = mydb.cursor()
+class GetUser(Resource):
+    def get(self, user):
+        res = Student.query.filter_by(first_name=user).first()
+        return {'first_name': res.first_name}
 
-    name = request.args.get('name')
-    if name is None:
-        return 'Need name parameter'
+# API Routes
+api.add_resource(GetUser, '/<string:user>')
 
-    query = "INSERT INTO student (student_id, first_name, last_name, major, minor, school_year, has_ipad) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-    values = (str(np.random.randint(0, 100000)), name, 'LASTNAME', 'EE', 'CE', '2021', '1')
-
-    cursor.execute(query, values)
-
-    mydb.commit()
-
-    cursor.close()
-    mydb.close()
-
-    return 'Success'
+if __name__ == '__main__':
+    app.run(debug=True)
