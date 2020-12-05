@@ -1,7 +1,8 @@
 import React from 'react';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
-import StepButton from '@material-ui/core/StepButton';
+import StepLabel from '@material-ui/core/StepLabel';
+import StepContent from '@material-ui/core/StepContent';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import SignUpInfo from '../components/SignUpInfo';
@@ -9,8 +10,12 @@ import SignUpEdu from '../components/SignUpEdu';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
-  stepper: {
-    margin: '20px',
+  container: {
+    width: '100%',
+  },
+  buttons: {
+    marginTop: '10px',
+    marginLeft: '5px',
   },
 }));
 
@@ -45,10 +50,6 @@ export default function SignUp() {
     setCompleted(newDictionary);
   };
 
-  const setStep = (index) => {
-    setCurrentStep(index);
-  };
-
   const setField = (newData) => {
     let newDictionary = formData;
     for (let key of Object.keys(newData)) {
@@ -77,35 +78,44 @@ export default function SignUp() {
         container
         alignItems="center"
         justify="center"
+        className={classes.container}
       >
         <Grid item xs={12}>
-          <Stepper nonLinear activeStep={currentStep}>
+          <Stepper nonLinear activeStep={currentStep} orientation="vertical">
             {steps.map((element, index) => {
               return (
                 <Step 
                   key={element}
-                  onClick={() => setStep(index)}
                   completed={completed[index]}
                 >
-                  <StepButton>
+                  <StepLabel>
                     {element}
-                  </StepButton>
+                  </StepLabel>
+                  <StepContent>
+                    {getStepComponent(currentStep)}
+                    <Button 
+                      color="primary" 
+                      onClick={() => handleBack()}
+                      disabled={currentStep === 0}
+                      className={classes.buttons}
+                    >
+                      Back
+                    </Button>
+                    <Button 
+                      variant="contained"
+                      color="primary"
+                      onClick={() => handleNext()}
+                      className={classes.buttons}
+                    >
+                      {(currentStep !== numSteps - 1) ? 'Next' : 'Finish'}
+                    </Button>
+                  </StepContent>
                 </Step>
               )
             })}
           </Stepper>
         </Grid>
       </Grid>
-
-      <Grid container className={classes.stepper}>
-        {getStepComponent(currentStep)}
-      </Grid>
-
-      <Grid container>
-        <Button variant="contained" color="primary" style={{marginLeft: '20px'}} onClick={() => handleBack()}>Back</Button>
-        <Button variant="contained" color="primary" style={{marginLeft: '10px'}} onClick={() => handleNext()}>Next</Button>
-      </Grid>
-      
 
       <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
     </div>

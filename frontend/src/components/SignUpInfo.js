@@ -11,6 +11,9 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 'auto',
     marginRight: 'auto'
   },
+  textField: {
+    margin: '5px',
+  },
   autoComplete: {
     width: 300,
     margin: 'auto',
@@ -71,14 +74,15 @@ export default function SignUpInfo(props) {
           id="firstName" 
           label="First Name" 
           variant="outlined" 
-          style={{marginRight: '10px'}} 
+          className={classes.textField}
           onChange={(event) => updateFirstName(event)} 
           value={firstName}
         />
         <TextField 
           id="lastName" 
           label="Last Name" 
-          variant="outlined" 
+          variant="outlined"
+          className={classes.textField}
           onChange={(event) => updateLastName(event)} 
           value={lastName}
         />
@@ -97,7 +101,7 @@ export default function SignUpInfo(props) {
             (params) => <TextField 
                           {...params} 
                           label="Where Are You From?" 
-                          margin="normal" 
+                          className={classes.textField}
                           variant="outlined"
                         />
           }
