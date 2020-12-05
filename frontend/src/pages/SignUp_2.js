@@ -104,7 +104,7 @@ export default function SignUp() {
                   </Button>
                   <Button 
                     variant="contained"
-                    color="primary"
+                    color="secondary"
                     onClick={() => handleNext()}
                     className={classes.buttons}
                   >
