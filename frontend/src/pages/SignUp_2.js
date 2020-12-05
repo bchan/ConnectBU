@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import SignUpInfo from '../components/SignUpInfo';
 import SignUpEdu from '../components/SignUpEdu';
+import SignUpAct from '../components/SignUpAct';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
@@ -65,9 +66,9 @@ export default function SignUp() {
       case 0:
         return <SignUpInfo completeHandler={(isComplete) => handleComplete(0, isComplete)} setFieldsHandler={setField} currentData={formData} />;
       case 1:
-        return <SignUpEdu completeHandler={(isComplete) => handleComplete(1, isComplete)} />;
+        return <SignUpEdu completeHandler={(isComplete) => handleComplete(1, isComplete)} setFieldsHandler={setField} currentData={formData}/>;
       case 2:
-        return <div>nothing</div>;
+        return <SignUpAct completeHandler={(isComplete) => handleComplete(2, isComplete)} setFieldsHandler={setField} currentData={formData}/>;
       default:
         return <div>nothing</div>;
     }
@@ -107,7 +108,7 @@ export default function SignUp() {
                     onClick={() => handleNext()}
                     className={classes.buttons}
                   >
-                    {(currentStep !== numSteps - 1) ? 'Next' : 'Finish'}
+                    {(currentStep !== numSteps - 1) ? 'Next' : 'Fnish'}
                   </Button>
                 </StepContent>
               </Step>
