@@ -9,7 +9,9 @@ import SignUpEdu from '../components/SignUpEdu';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
-
+  stepper: {
+    margin: '20px',
+  },
 }));
 
 const steps = [
@@ -37,9 +39,9 @@ export default function SignUp() {
     }
   };
 
-  const handleComplete = (index) => {
+  const handleComplete = (index, isComplete) => {
     let newDictionary = completed;
-    newDictionary[index] = true;
+    newDictionary[index] = isComplete;
     setCompleted(newDictionary);
   };
 
@@ -58,9 +60,9 @@ export default function SignUp() {
   const getStepComponent = (step) => {
     switch (step) {
       case 0:
-        return <SignUpInfo completeHandler={() => handleComplete(0)} setFieldsHandler={setField} currentData={formData} />;
+        return <SignUpInfo completeHandler={(isComplete) => handleComplete(0, isComplete)} setFieldsHandler={setField} currentData={formData} />;
       case 1:
-        return <SignUpEdu completeHandler={() => handleComplete(1)} />;
+        return <SignUpEdu completeHandler={(isComplete) => handleComplete(1, isComplete)} />;
       case 2:
         return <div>nothing</div>;
       default:
@@ -76,7 +78,7 @@ export default function SignUp() {
         alignItems="center"
         justify="center"
       >
-        <Grid item xs="12">
+        <Grid item xs={12}>
           <Stepper nonLinear activeStep={currentStep}>
             {steps.map((element, index) => {
               return (
@@ -95,7 +97,7 @@ export default function SignUp() {
         </Grid>
       </Grid>
 
-      <Grid container style={{margin: '20px'}}>
+      <Grid container className={classes.stepper}>
         {getStepComponent(currentStep)}
       </Grid>
 

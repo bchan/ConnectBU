@@ -1,8 +1,8 @@
-import React from 'react';
-import Button from '@material-ui/core/Button';
-import { Grid, TextField, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import React, { useState, useEffect } from 'react';
+import Grid from '@material-ui/core/Grid';
+import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   element: {
@@ -24,9 +24,13 @@ export default function SignUpInfo(props) {
   const completeHandler = props.completeHandler;
   const setFormData = props.setFieldsHandler;
   const classes = useStyles();
-  let [firstName, setFirstName] = React.useState(firstNameProp);
-  let [lastName, setLastName] = React.useState(lastNameProp);
-  let [country, setCountry] = React.useState(countryProp || '');
+  let [firstName, setFirstName] = useState(firstNameProp);
+  let [lastName, setLastName] = useState(lastNameProp);
+  let [country, setCountry] = useState(countryProp);
+
+  useEffect(() => {
+    updateCompleteStatus();
+  });
 
   const updateFirstName = (event) => {
     setFormData({firstName: event.target.value});
@@ -39,12 +43,21 @@ export default function SignUpInfo(props) {
   }
 
   const updateCountry = (event) => {
-    if (event.target.textContent) {
+    if (event.target.id === '') {
+      setFormData({country: ''});
+      setCountry('');
+    } else {
       setFormData({country: event.target.textContent});
       setCountry(event.target.textContent);
     }
+  }
 
-    console.log(event.target.textContent);
+  const updateCompleteStatus = () => {
+    if (firstName !== '' && lastName !== '' && country !== '') {
+      completeHandler(true);
+    } else {
+      completeHandler(false);
+    }
   }
 
   return (
