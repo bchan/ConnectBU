@@ -96,7 +96,6 @@ export default function SignUpInfo(props) {
           getOptionSelected={(option) => option.title === country}
           onChange={(event) => updateCountry(event)}
           value={(country === '')? null : {title: country}}
-          inputValue={country}
           renderInput={
             (params) => <TextField 
                           {...params} 
