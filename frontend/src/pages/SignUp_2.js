@@ -108,7 +108,7 @@ export default function SignUp() {
                     onClick={() => handleNext()}
                     className={classes.buttons}
                   >
-                    {(currentStep !== numSteps - 1) ? 'Next' : 'Fnish'}
+                    {(currentStep !== numSteps - 1) ? 'Next' : 'Join connectBU'}
                   </Button>
                 </StepContent>
               </Step>
