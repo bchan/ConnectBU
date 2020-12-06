@@ -77,13 +77,17 @@ export default function SignUpEdu(props) {
      
       <Grid item xs={12} className={classes.element}>
         <Autocomplete
+            
             id="majorBox"
+            multiple
+            limitTags={2}
             className={classes.autoComplete}
             options={Major}
             getOptionLabel={(option) => option.title}
             getOptionSelected={(option) => option.title === major}
             onChange={(event) => updateMajor(event)}
-            value={(major === '')? null : {title: major}}
+           // value={(major === '')? null : {title: major}}
+            filterSelectedOptions
             renderInput={
               (params) => <TextField 
                             {...params} 
@@ -94,15 +98,18 @@ export default function SignUpEdu(props) {
             }
           />
         </Grid>
+
+      
         <Grid item xs={12} className={classes.element}>
             <Autocomplete
+                multiple
                 id="minorBox"
                 className={classes.autoComplete}
                 options={Minor}
                 getOptionLabel={(option) => option.title}
                 getOptionSelected={(option) => option.title === minor}
                 onChange={(event) => updateMinor(event)}
-                value={(minor === '')? null : {title: minor}}
+                //value={(minor === '')? null : {title: minor}}
                 renderInput={
                   (params) => <TextField 
                                 {...params} 
@@ -113,16 +120,19 @@ export default function SignUpEdu(props) {
                 }
               />
           </Grid>
+     
+
         <Grid item xs={12} className={classes.element}>
           <Autocomplete
+            multiple
             id="classBox"
             className={classes.autoComplete}
             options={Class_options}
             getOptionLabel={(option) => option.title}
             getOptionSelected={(option) => option.title === class_options}
             onChange={(event) => updateClass_options(event)}
-            value={(class_options === '')? null : {title: class_options}}
-            inputValue={class_options}
+            //value={(class_options === '')? null : {title: class_options}}
+            //inputValue={class_options}
             renderInput={
               (params) => <TextField 
                             {...params} 
@@ -412,12 +422,30 @@ const Minor = [
 
 const Class_options = [
   { title: 'EC 103'},
+  { title: 'EC 311'},
   { title: 'EC 327'},
   { title: 'EC 330'},
-  { title: 'EC 311'},
-  { title: 'EC 500'},
+  { title: 'EC 381'},
+  { title: 'EC 400'},
+  { title: 'EC 401'},
+  { title: 'EC 402'},
+  { title: 'EC 410'},
+  { title: 'EC 412'},
   { title: 'EC 413'},
+  { title: 'EC 414'},
+  { title: 'EC 415'},
+  { title: 'EC 416'},
+  { title: 'EC 417'},
+  { title: 'EC 440'},
+  { title: 'EC 441'},
+  { title: 'EC 444'},
   { title: 'EC 447'},
+  { title: 'EC 450'},
+  { title: 'EC 451'},
+  { title: 'EC 455'},
+  { title: 'EC 456'},
+  { title: 'EC 463'},
+  { title: 'EC 464'},
 
 
 ];

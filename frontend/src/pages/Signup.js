@@ -368,6 +368,7 @@ export default function Signup()  {
                               <Autocomplete
                               {...Closses}
                               id="Classes"
+                              autoComplete="off"
                               style={{ width: 300 }}
                               debug
                               renderInput={(params) => <TextField {...params} label="Classes" margin="normal" />}
@@ -436,8 +437,10 @@ export default function Signup()  {
                           <Autocomplete
                           {...Interests}
                           id="Interest"
+                          autoComplete="off"
                           style={{ width: 300 }}
                           debug
+                          
                           renderInput={(params) => <TextField {...params} label="Interest" margin="normal" />}
 
                           />

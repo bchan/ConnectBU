@@ -10,6 +10,7 @@ import SignUpEdu from '../components/SignUpEdu';
 import SignUpAct from '../components/SignUpAct';
 import { makeStyles } from '@material-ui/core/styles';
 
+
 const useStyles = makeStyles((theme) => ({
   container: {
     marginTop: '75px',

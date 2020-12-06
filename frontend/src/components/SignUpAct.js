@@ -63,13 +63,14 @@ export default function SignUpAct(props) {
      
       <Grid item xs={12} className={classes.element}>
         <Autocomplete
+            multiple
             id="clubBox"
             className={classes.autoComplete}
             options={Club}
             getOptionLabel={(option) => option.title}
             getOptionSelected={(option) => option.title === club}
             onChange={(event) => updateClub(event)}
-            value={(club === '')? null : {title: club}}
+           // value={(club === '')? null : {title: club}}
             renderInput={
               (params) => <TextField 
                             {...params} 
@@ -82,13 +83,14 @@ export default function SignUpAct(props) {
         </Grid>
         <Grid item xs={12} className={classes.element}>
             <Autocomplete
+                multiple
                 id="researchBox"
                 className={classes.autoComplete}
                 options={Research}
                 getOptionLabel={(option) => option.title}
                 getOptionSelected={(option) => option.title === research}
                 onChange={(event) => updateResearch(event)}
-                value={(research === '')? null : {title: research}}
+                //value={(research === '')? null : {title: research}}
                 renderInput={
                   (params) => <TextField 
                                 {...params} 
