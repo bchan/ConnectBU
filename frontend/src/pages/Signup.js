@@ -439,7 +439,7 @@ export default function Signup()  {
                           id="Interest"
                           autoComplete="off"
                           style={{ width: 300 }}
-                          debug
+                
                           
                           renderInput={(params) => <TextField {...params} label="Interest" margin="normal" />}
 

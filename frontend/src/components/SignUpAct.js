@@ -26,6 +26,7 @@ export default function SignUpAct(props) {
   });
  
   const updateClub = (event) => {
+    console.log(event);
     if (event.target.id === '') {
       setFormData({club: ''});
       setClub('');
@@ -70,7 +71,7 @@ export default function SignUpAct(props) {
             getOptionLabel={(option) => option.title}
             getOptionSelected={(option) => option.title === club}
             onChange={(event) => updateClub(event)}
-           // value={(club === '')? null : {title: club}}
+            //value={(club === '')? null : {title: club}}
             renderInput={
               (params) => <TextField 
                             {...params} 
@@ -90,7 +91,7 @@ export default function SignUpAct(props) {
                 getOptionLabel={(option) => option.title}
                 getOptionSelected={(option) => option.title === research}
                 onChange={(event) => updateResearch(event)}
-                //value={(research === '')? null : {title: research}}
+                value={(research === '')? null : [{title: research}]}
                 renderInput={
                   (params) => <TextField 
                                 {...params} 
@@ -566,12 +567,16 @@ const Club = [
 ];
 
 const Research = [
-    { title: 'robotics lab'},
+    { title: 'Robotics lab'},
     { title: 'IMB'},
-    { title: 'kinsy group'},
-    { title: 'EC 311'},
-    { title: 'EC 500'},
-    { title: 'EC 413'},
-    { title: 'EC 447'},
+    { title: 'DBLab Databases and Data Mining'},
+    { title: 'BUSec BU Security Group'},
+    { title: 'BOSS BU Operating Systems and Services'},
+    { title: 'IVC Image and Video Computing'},
+    { title: 'NRG Networks Research Group'},
+    { title: 'TCS Theoretical Computer Science'},
+    { title: 'LISP Learning, Intelligence, + Signal Processing'},
+    { title: 'Beeler Research Group'},
+    { title: 'BU Dental Student Research Group'},
 
   ];

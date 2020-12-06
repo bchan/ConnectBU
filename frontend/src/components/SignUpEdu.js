@@ -86,7 +86,7 @@ export default function SignUpEdu(props) {
             getOptionLabel={(option) => option.title}
             getOptionSelected={(option) => option.title === major}
             onChange={(event) => updateMajor(event)}
-           // value={(major === '')? null : {title: major}}
+           // value={(major === '' )? null : {title: major}}
             filterSelectedOptions
             renderInput={
               (params) => <TextField 
@@ -109,7 +109,7 @@ export default function SignUpEdu(props) {
                 getOptionLabel={(option) => option.title}
                 getOptionSelected={(option) => option.title === minor}
                 onChange={(event) => updateMinor(event)}
-                //value={(minor === '')? null : {title: minor}}
+                //value={(minor === '')? 'null' : {title: minor}}
                 renderInput={
                   (params) => <TextField 
                                 {...params} 
