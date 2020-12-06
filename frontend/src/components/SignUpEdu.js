@@ -12,61 +12,42 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignUpEdu(props) {
-  const majorProp = ('major' in props.currentData) ? props.currentData.major : '';
-  const minorProp = ('minor' in props.currentData) ? props.currentData.minor : '';
-  const class_optionsProp = ('class_options' in props.currentData) ? props.currentData.class_options : '';
+  const majorProp = ('major' in props.currentData) ? props.currentData.major : [];
+  const minorProp = ('minor' in props.currentData) ? props.currentData.minor : [];
+  const class_optionsProp = ('class_options' in props.currentData) ? props.currentData.class_options : [];
   const completeHandler = props.completeHandler;
   const setFormData = props.setFieldsHandler;
   const classes = useStyles();
-  let [major, setMajor] = useState(majorProp);
-  let [minor, setMinor] = useState(minorProp);
-  let [class_options, setClass_options] = useState(class_optionsProp);
+  let [major, setMajor] = useState(majorProp.map((element) => { return {title: element} }));
+  let [minor, setMinor] = useState(minorProp.map((element) => { return {title: element} }));
+  let [class_options, setClass_options] = useState(class_optionsProp.map((element) => { return {title: element} }));
 
   useEffect(() => {
     updateCompleteStatus();
   });
 
-  const updateMajor = (event) => {
-    if (event.target.id === '') {
-      setFormData({major: ''});
-      setMajor('');
-    } else {
-      setFormData({major: event.target.textContent});
-      setMajor(event.target.textContent);
-    }
+  const updateMajor = (event, newValue) => {
+    setMajor([...newValue]);
+    setFormData({major: newValue.map((element) => element.title)});
   }
-  const updateMinor = (event) => {
-    if (event.target.id === '') {
-      setFormData({minor: ''});
-      setMinor('');
-    } else {
-      setFormData({minor: event.target.textContent});
-      setMinor(event.target.textContent);
-    }
+
+  const updateMinor = (event, newValue) => {
+    setMinor([...newValue]);
+    setFormData({minor: newValue.map((element) => element.title)});
   }
-  const updateClass_options = (event) => {
-    if (event.target.id === '') {
-      setFormData({class_options: ''});
-      setClass_options('');
-    } else {
-      setFormData({class_options: event.target.textContent});
-      setClass_options(event.target.textContent);
-    }
+
+  const updateClass_options = (event, newValue) => {
+    setClass_options([...newValue]);
+    setFormData({class_options: newValue.map((element) => element.title)});
   }
 
   const updateCompleteStatus = () => {
-    if (class_options !== '' && minor !== '' && major !== '') {
+    if (class_options.length !== 0 && major.length !== 0) {
       completeHandler(true);
     } else {
       completeHandler(false);
     }
   }
-
- 
-
-
-
- 
 
   return (
     <Grid
@@ -77,16 +58,14 @@ export default function SignUpEdu(props) {
      
       <Grid item xs={12} className={classes.element}>
         <Autocomplete
-            
             id="majorBox"
             multiple
-            limitTags={2}
             className={classes.autoComplete}
             options={Major}
             getOptionLabel={(option) => option.title}
-            getOptionSelected={(option) => option.title === major}
-            onChange={(event) => updateMajor(event)}
-           // value={(major === '' )? null : {title: major}}
+            getOptionSelected={(option) => major.map((element) => { return element.title }).includes(option.title)}
+            onChange={(event, newValue) => updateMajor(event, newValue)}
+            value={major}
             filterSelectedOptions
             renderInput={
               (params) => <TextField 
@@ -99,7 +78,6 @@ export default function SignUpEdu(props) {
           />
         </Grid>
 
-      
         <Grid item xs={12} className={classes.element}>
             <Autocomplete
                 multiple
@@ -107,9 +85,10 @@ export default function SignUpEdu(props) {
                 className={classes.autoComplete}
                 options={Minor}
                 getOptionLabel={(option) => option.title}
-                getOptionSelected={(option) => option.title === minor}
-                onChange={(event) => updateMinor(event)}
-                //value={(minor === '')? 'null' : {title: minor}}
+                getOptionSelected={(option) => minor.map((element) => { return element.title }).includes(option.title)}
+                onChange={(event, newValue) => updateMinor(event, newValue)}
+                value={minor}
+                filterSelectedOptions
                 renderInput={
                   (params) => <TextField 
                                 {...params} 
@@ -129,10 +108,10 @@ export default function SignUpEdu(props) {
             className={classes.autoComplete}
             options={Class_options}
             getOptionLabel={(option) => option.title}
-            getOptionSelected={(option) => option.title === class_options}
-            onChange={(event) => updateClass_options(event)}
-            //value={(class_options === '')? null : {title: class_options}}
-            //inputValue={class_options}
+            getOptionSelected={(option) => class_options.map((element) => { return element.title }).includes(option.title)}
+            onChange={(event, newValue) => updateClass_options(event, newValue)}
+            value={class_options}
+            filterSelectedOptions
             renderInput={
               (params) => <TextField 
                             {...params} 
