@@ -8,8 +8,6 @@ api = Api(app)
 app.config.from_pyfile('config.py')
 db.init_app(app)
 
-print(Student.__table__.columns)
-
 class GetProfile(Resource):
     def get(self, email):
         user = Student.query.filter_by(email=email).first()
@@ -21,7 +19,8 @@ class GetProfile(Resource):
                 'email': user.email,
                 'first_name': user.first_name,
                 'last_name': user.last_name,
-                'major': user.major,
+                'major1': user.major1,
+                'major2': user.major2,
                 'minor': user.minor,
                 'year': user.school_year,
                 'has_ipad': user.has_ipad
