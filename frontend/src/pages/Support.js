@@ -2,7 +2,6 @@ import React from 'react';
 import { useStyles } from '../styles/Support.styles';
 import Container from '@material-ui/core/Container';
 import Paper from '@material-ui/core/Paper';
-import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 
 export default function Support() {
@@ -29,7 +28,7 @@ export default function Support() {
         <Typography className={classes.header}>
           Frequently Asked Questions (FAQ)
         </Typography>
-        <Divider className={classes.divider} />
+        <br />
 
         {
           questionAnswers.map((element) => {
@@ -51,7 +50,7 @@ export default function Support() {
         <p style={{
           'white-space': 'pre-wrap'
         }}>{"For any more questions, feel free to contact us through: "}</p>
-          <h1 style={{ color: 'red' }}>connectbu2021@gmail.com</h1>
+          <h1 style={{ color: 'red', wordWrap: 'break-word'}}>connectbu2021@gmail.com</h1>
 
       </Container>
     </div>
