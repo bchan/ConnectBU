@@ -57,7 +57,7 @@ export default function NavBar() {
         history.push('/signup', { email: userEmail });
       } else {
         dispatch(login());
-        history.push('/profile');
+        history.push('/profile', { email: userEmail });
       }
     })
     .catch((error) => {

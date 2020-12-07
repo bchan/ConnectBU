@@ -67,7 +67,7 @@ export default function SignUp() {
       .then(data => {
         if (data.response === 'User data inserted successfully') {
           dispatch(login());
-          history.push('/profile');
+          history.push('/profile', { email: location.state.email });
         }
       })
       .catch((error) => {
