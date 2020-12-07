@@ -47,9 +47,6 @@ export default function NavBar() {
   }
 
   let responseSuccess = (event) => {
-    dispatch(login());
-    // FOR TESTING PURPOSES
-
     let firstName = event.profileObj.givenName;
     fetch('http://localhost:5000')
     .then((res) => {
@@ -58,12 +55,10 @@ export default function NavBar() {
     .then((nameArray) => {
       let names = JSON.parse(nameArray);
       if (names.includes(firstName)) {
+        dispatch(login());
         history.push('/profile');
       } else {
-        fetch('http://localhost:5000/add?name=' + firstName)
-        .then((res) => {
-          history.push('/signup');
-        })
+        history.push('/signup');
       }
     })
     
