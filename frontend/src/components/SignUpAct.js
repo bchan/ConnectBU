@@ -13,36 +13,25 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignUpAct(props) {
-  const clubProp = ('club' in props.currentData) ? props.currentData.club : '';
-  const researchProp = ('research' in props.currentData) ? props.currentData.research : '';
+  const clubProp = ('club' in props.currentData) ? props.currentData.club : [];
+  const researchProp = ('research' in props.currentData) ? props.currentData.research : [];
   const completeHandler = props.completeHandler;
   const setFormData = props.setFieldsHandler;
   const classes = useStyles();
-  let [club, setClub] = useState(clubProp);
-  let [research, setResearch] = useState(researchProp);
+  let [club, setClub] = useState(clubProp.map((element) => { return {title: element} }));
+  let [research, setResearch] = useState(researchProp.map((element) => { return {title: element} }));
 
   useEffect(() => {
     updateCompleteStatus();
   });
  
-  const updateClub = (event) => {
-    console.log(event);
-    if (event.target.id === '') {
-      setFormData({club: ''});
-      setClub('');
-    } else {
-      setFormData({club: event.target.textContent});
-      setClub(event.target.textContent);
-    }
+  const updateClub = (event, newValue) => {
+    setClub([...newValue]);
+    setFormData({club: newValue.map((element) => element.title)});
   }
-  const updateResearch = (event) => {
-    if (event.target.id === '') {
-      setFormData({research: ''});
-      setResearch('');
-    } else {
-      setFormData({research: event.target.textContent});
-      setResearch(event.target.textContent);
-    }
+  const updateResearch = (event, newValue) => {
+    setResearch([...newValue]);
+    setFormData({research: newValue.map((element) => element.title)});
   }
 
   const updateCompleteStatus = () => {
@@ -63,15 +52,16 @@ export default function SignUpAct(props) {
     >  
      
       <Grid item xs={12} className={classes.element}>
-        <Autocomplete
-            multiple
+        <Autocomplete    
             id="clubBox"
+            multiple
             className={classes.autoComplete}
             options={Club}
             getOptionLabel={(option) => option.title}
-            getOptionSelected={(option) => option.title === club}
-            onChange={(event) => updateClub(event)}
-            //value={(club === '')? null : {title: club}}
+            getOptionSelected={(option) => club.map((element) => { return element.title }).includes(option.title)}
+            onChange={(event, newValue) => updateClub(event, newValue)}
+            value={club}
+            filterSelectedOptions
             renderInput={
               (params) => <TextField 
                             {...params} 
@@ -89,9 +79,10 @@ export default function SignUpAct(props) {
                 className={classes.autoComplete}
                 options={Research}
                 getOptionLabel={(option) => option.title}
-                getOptionSelected={(option) => option.title === research}
-                onChange={(event) => updateResearch(event)}
-                value={(research === '')? null : [{title: research}]}
+                getOptionSelected={(option) => research.map((element) => { return element.title }).includes(option.title)}
+                onChange={(event, newValue) => updateResearch(event, newValue)}
+                value={research}
+                filterSelectedOptions
                 renderInput={
                   (params) => <TextField 
                                 {...params} 

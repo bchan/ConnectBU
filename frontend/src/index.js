@@ -32,7 +32,7 @@ const routing = (
         <Route path="/support">
           <Support />
         </Route>
-        <Route path="/signup">
+        <Route path="/updatesignup">
           <Signup />
         </Route>
         <Route path="/search">
@@ -47,7 +47,7 @@ const routing = (
         <Route path="/profile">
           <Profile />
         </Route>
-        <Route path="/updatesignup">
+        <Route path="/signup">
           <SignUp />
         </Route>
       </Switch>
