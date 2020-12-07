@@ -9,7 +9,11 @@ import SignUpInfo from '../components/SignUpInfo';
 import SignUpEdu from '../components/SignUpEdu';
 import SignUpAct from '../components/SignUpAct';
 import { makeStyles } from '@material-ui/core/styles';
+import { useLocation, useHistory } from 'react-router-dom';
 
+// Redux
+import { useSelector, useDispatch } from 'react-redux';
+import { login, logout, selectLoginState } from '../redux/loginSlice';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -30,6 +34,9 @@ const steps = [
 ];
 
 export default function SignUp() {
+  const location = useLocation();
+  const history = useHistory();
+  const dispatch = useDispatch();
   const classes = useStyles();
   const [currentStep, setCurrentStep] = React.useState(0);
   const [completed, setCompleted] = React.useState({});
@@ -40,17 +47,28 @@ export default function SignUp() {
     if (currentStep !== numSteps - 1) {
       setCurrentStep(currentStep + 1);
     } else {
+      if (typeof location.state === 'undefined') {
+        return;
+      }
+      
+      formData['email'] = location.state.email;
+      formData['school_year'] = 2021;
+
       // Send request to backend
+      console.log(JSON.stringify(formData))
       fetch('http://localhost:5000/create_user', {
         method: 'POST',
         header: {
           'Content-Type': 'application/json',
-          body: JSON.stringify(formData)
-        }
+        },
+        body: JSON.stringify(formData),
       })
       .then(response => response.json())
       .then(data => {
-        console.log(data);
+        if (data.response === 'User data inserted successfully') {
+          dispatch(login());
+          history.push('/profile');
+        }
       })
       .catch((error) => {
         console.error('Error: ', error);

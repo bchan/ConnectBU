@@ -47,22 +47,22 @@ export default function NavBar() {
   }
 
   let responseSuccess = (event) => {
-    let firstName = event.profileObj.givenName;
-    fetch('http://localhost:5000')
+    let userEmail = event.profileObj.email;
+    fetch('http://localhost:5000/profile/' + userEmail)
     .then((res) => {
       return res.text();
     })
-    .then((nameArray) => {
-      let names = JSON.parse(nameArray);
-      if (names.includes(firstName)) {
+    .then((response) => {
+      if (response.includes('error')) {
+        history.push('/signup', { email: userEmail });
+      } else {
         dispatch(login());
         history.push('/profile');
-      } else {
-        history.push('/signup');
       }
     })
-    
-    
+    .catch((error) => {
+      console.log(error);
+    })
   }
 
   let responseError = (event) => {
