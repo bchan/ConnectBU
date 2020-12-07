@@ -23,7 +23,8 @@ class NewUser(Resource):
             email = json_data['email'],
             first_name = json_data['first_name'],
             last_name =json_data['last_name'],
-            major = json_data['major'],
+            major1 = json_data['major'][0],
+            major2 = json_data['major'][1] if len(json_data['major']) > 1 else null,
             minor = json_data['minor'],
             school_year = json_data['school_year'],
             has_ipad = json_data['has_ipad']
@@ -32,29 +33,33 @@ class NewUser(Resource):
         db.session.add(new_student)
         db.session.commit()
 
+        """
         listclasses = json_data['class_options']
         listresearch = json_data['research']
         listclubs = json_data['club']
 
-        for i in range(len(listclasses)):
-            new_takes_class = TakesClass(email = json_data['email'], class_id = i+1)
+        for i in listclasses:
+            new_takes_class = TakesClass(email = json_data['email'], class_name = i)
             db.session.add(new_takes_class)
 
-        for i in range(len(listresearch)):
-            new_joins_lab = JoinsLab(email = json_data['email'],  lab_id = i+1)
+        for i in listresearch:
+            new_joins_lab = JoinsLab(email = json_data['email'],  lab_name = i)
             db.session.add(new_joins_lab)
 
-        for i in range(len(listclubs)):
-            new_joins_club = JoinsClub(email = json_data['email'],  club_id = i+1)
+        for i in listclubs:
+            new_joins_club = JoinsClub(email = json_data['email'],  club_name = i)
             db.session.add(new_joins_club)
 
         db.session.commit()
+
+        """
+
         res = Student.query.filter_by(email=json_data['email']).first()
 
         if(res is not None):
-            return {response: 'User data inserted successfully'}, 200
+            return {'response': 'User data inserted successfully'}, 200
         else:
-            return {error: 'Error creating user.'}, 404
+            return {'error': 'Error creating user.'}, 404
 
 
 # API Routes
