@@ -1,9 +1,11 @@
 from flask import Flask, jsonify, request
 from flask_restful import Resource, Api
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 from models import db, Student, Class, Club, Lab, CampusJob, TakesClass, TakesJob, JoinsClub, JoinsLab
 
 app = Flask(__name__)
+CORS(app)
 api = Api(app)
 app.config.from_pyfile('config.py')
 db.init_app(app)

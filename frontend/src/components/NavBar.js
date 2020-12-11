@@ -47,27 +47,22 @@ export default function NavBar() {
   }
 
   let responseSuccess = (event) => {
-    dispatch(login());
-    // FOR TESTING PURPOSES
-
-    let firstName = event.profileObj.givenName;
-    fetch('http://localhost:5000')
+    let userEmail = event.profileObj.email;
+    fetch('http://localhost:5000/profile/' + userEmail)
     .then((res) => {
       return res.text();
     })
-    .then((nameArray) => {
-      let names = JSON.parse(nameArray);
-      if (names.includes(firstName)) {
-        history.push('/profile');
+    .then((response) => {
+      if (response.includes('error')) {
+        history.push('/signup', { email: userEmail });
       } else {
-        fetch('http://localhost:5000/add?name=' + firstName)
-        .then((res) => {
-          history.push('/signup');
-        })
+        dispatch(login());
+        history.push('/profile', { email: userEmail });
       }
     })
-    
-    
+    .catch((error) => {
+      console.log(error);
+    })
   }
 
   let responseError = (event) => {

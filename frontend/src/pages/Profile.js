@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
+import { useLocation } from 'react-router-dom';
 
 import pic from '../images/image.jpg';
 
@@ -46,6 +47,24 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Profile()  {
   const classes = useStyles();
+  const location = useLocation();
+  let [name, setName] = React.useState('Artoo the Terrier');
+  let [major, setMajor] = React.useState('CAS - Human Anthropology - May 2021');
+  let [minor, setMinor] = React.useState('Specialization: T.L.');
+
+  if (typeof location.state !== 'undefined') {
+    let userEmail = location.state.email;
+    fetch('http://localhost:5000/profile/' + userEmail)
+    .then((res) => {
+      return res.text();
+    })
+    .then((response) => {
+      let userData = JSON.parse(response);
+      setName(userData['first_name'] + ' ' + userData['last_name']);
+      setMajor(userData['major1'] + ' - ' + String(userData['year']));
+      setMinor(userData['minor']);
+    })
+  }
 
   return (
 
@@ -63,9 +82,9 @@ export default function Profile()  {
           
           <img src={pic} alt="Logo" className={classes.image} />
           <Grid justify="flex-start">
-            <h1>Artoo the Terrier</h1>
-            <p>CAS - Human Anthropology - May 2021</p>
-            <p>Specialization: T.L.</p>
+            <h1>{name}</h1>
+            <p>{major}</p>
+            <p>{minor}</p>
           </Grid>
 
         </Grid>

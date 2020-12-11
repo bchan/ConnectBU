@@ -21,8 +21,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignUpInfo(props) {
-  const firstNameProp = ('firstName' in props.currentData) ? props.currentData.firstName : '';
-  const lastNameProp = ('lastName' in props.currentData) ? props.currentData.lastName : '';
+  const firstNameProp = ('first_name' in props.currentData) ? props.currentData.first_name : '';
+  const lastNameProp = ('last_name' in props.currentData) ? props.currentData.last_name : '';
   const countryProp = ('country' in props.currentData) ? props.currentData.country : '';
   const completeHandler = props.completeHandler;
   const setFormData = props.setFieldsHandler;
@@ -36,12 +36,12 @@ export default function SignUpInfo(props) {
   });
 
   const updateFirstName = (event) => {
-    setFormData({firstName: event.target.value});
+    setFormData({first_name: event.target.value});
     setFirstName(event.target.value);
   }
 
   const updateLastName = (event) => {
-    setFormData({lastName: event.target.value});
+    setFormData({last_name: event.target.value});
     setLastName(event.target.value);
   }
 
