@@ -13,7 +13,7 @@ CREATE TABLE student (
 
 CREATE TABLE class (
     class_name VARCHAR (10) PRIMARY KEY,
-    credits INT NOT NULL
+    credits INT
 );
 
 CREATE TABLE club (
