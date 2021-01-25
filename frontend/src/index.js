@@ -10,7 +10,7 @@ import Support from './pages/Support';
 import HomeLI from './pages/Home_LI'
 import Search from './pages/Search'
 import AboutUs from './pages/AboutUs'
-import SignUp from './pages/Signup';
+import SignUp from './pages/SignUp';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 // import BotBar from './components/BotBar'
