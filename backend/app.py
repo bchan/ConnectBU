@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, make_response
 from flask_restful import Resource, Api
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
@@ -16,7 +16,6 @@ app.config.from_pyfile('config.py')
 db.init_app(app)
 
 
-
 TEMP_SECRET = 'supersecretkey'
 
 
@@ -25,7 +24,7 @@ TEMP_SECRET = 'supersecretkey'
 # Checks Google SSO token from the frontend
 def checkGoogleToken(token):
     try:
-        idInfo = id_token.verify_oauth2_token(token, requests.Request(), CLIENT_ID)
+        idInfo = id_token.verify_oauth2_token(token, requests.Request(), app.config['GOOGLE_CLIENT_ID'])
         return idInfo
     except ValueError:
         # Invalid Token
@@ -130,7 +129,12 @@ class NewUser(Resource):
 
 class Login(Resource):
     def post(self):
-        data = request.json
+        data = request.get_json(force=True)
+
+        # Check if data exists
+        if data is None:
+            return 'No data', 400
+
         # Checks if token exists in request
         if not 'tokenId' in data:
             return 'Could not find token', 400
@@ -142,6 +146,9 @@ class Login(Resource):
         if googleInfo is None:
             return 'Invalid token', 401
 
+        if googleInfo['hd'] != 'bu.edu':
+            return 'Invalid email', 401
+
         print(googleInfo)
 
         # Issues JWT
@@ -152,7 +159,7 @@ class Login(Resource):
         res = make_response()
         res.set_cookie('token', value=jwtToken, httponly=True, expires=expirationDate)
 
-        return res, 200
+        return res
 
 
 class Logout(Resource):
@@ -163,7 +170,7 @@ class Logout(Resource):
         # TODO: Blacklist jwt if exists
         # Will need to use AWS ElastiCache -- Redis SETEX for the key and then check everytime in the declarer
 
-        return res, 200
+        return res
 
 
 # API Routes
