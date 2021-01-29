@@ -3,12 +3,62 @@ from flask_restful import Resource, Api
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from models import db, Student, Class, Club, Lab, CampusJob, TakesClass, TakesJob, JoinsClub, JoinsLab
+import jwt
+from google.oauth2 import id_token
+from google.auth.transport import requests
+from datetime import datetime, timedelta
+from functools import wraps
 
 app = Flask(__name__)
 CORS(app)
 api = Api(app)
 app.config.from_pyfile('config.py')
 db.init_app(app)
+
+
+
+TEMP_SECRET = 'supersecretkey'
+
+
+##### Helper functions for Authentication #####
+
+# Checks Google SSO token from the frontend
+def checkGoogleToken(token):
+    try:
+        idInfo = id_token.verify_oauth2_token(token, requests.Request(), CLIENT_ID)
+        return idInfo
+    except ValueError:
+        # Invalid Token
+        return None
+
+
+# Creates JWT for the frontend
+def createToken(tokenDict):
+    return jwt.encode(tokenDict, TEMP_SECRET, algorithm='HS256')
+
+
+# Decorator for JWTs
+def jwt_required(func):
+    @wraps(func)
+    def checkJWT(*args, **kwargs):
+        encodedToken = request.cookies.get('token')
+        if encodedToken is None:
+            return 'Not authorized', 401
+
+        try:
+            token = jwt.decode(encodedToken, TEMP_SECRET, algorithms=['HS256'])
+        except jwt.ExpiredSignatureError:
+            return 'Expired token', 401
+        except:
+            return 'Invalid token', 401
+
+        print(token)
+        # TODO: Do checks for blacklist
+
+        return func(*args, **kwargs)
+    
+    return checkJWT
+
 
 class GetProfile(Resource):
     def get(self, email):
