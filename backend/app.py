@@ -128,9 +128,49 @@ class NewUser(Resource):
             return {'error': 'Error creating user.'}, 404
 
 
+class Login(Resource):
+    def post(self):
+        data = request.json
+        # Checks if token exists in request
+        if not 'tokenId' in data:
+            return 'Could not find token', 400
+
+        # Takes token and checks with Google API
+        token = data['tokenId']
+        googleInfo = checkGoogleToken(token)
+
+        if googleInfo is None:
+            return 'Invalid token', 401
+
+        print(googleInfo)
+
+        # Issues JWT
+        td = timedelta(hours=12, seconds=0)
+        expirationDate = datetime.utcnow() + td # 12 hours
+
+        jwtToken = createToken({'email': googleInfo['email'], 'exp': expirationDate})
+        res = make_response()
+        res.set_cookie('token', value=jwtToken, httponly=True, expires=expirationDate)
+
+        return res, 200
+
+
+class Logout(Resource):
+    def post(self):
+        res = make_response()
+        res.set_cookie('token', value='', httponly=True, expires=0)
+
+        # TODO: Blacklist jwt if exists
+        # Will need to use AWS ElastiCache -- Redis SETEX for the key and then check everytime in the declarer
+
+        return res, 200
+
+
 # API Routes
 api.add_resource(GetProfile, '/profile/<string:email>')
 api.add_resource(NewUser, '/create_user')
+api.add_resource(Login, '/api/login')
+api.add_resource(Logout, '/api/logout')
 
 if __name__ == '__main__':
     app.run(debug=True)
