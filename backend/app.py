@@ -160,6 +160,10 @@ class Login(Resource):
         res.set_cookie('token', value=jwtToken, httponly=True, expires=expirationDate)
 
         return res
+    
+    @jwt_required
+    def get(self):
+        return 'Logged in', 200
 
 
 class Logout(Resource):
