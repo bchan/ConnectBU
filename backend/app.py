@@ -8,6 +8,7 @@ from google.oauth2 import id_token
 from google.auth.transport import requests
 from datetime import datetime, timedelta
 from functools import wraps
+import requests as r
 
 app = Flask(__name__)
 CORS(app)
@@ -36,6 +37,28 @@ def createToken(tokenDict):
     return jwt.encode(tokenDict, TEMP_SECRET, algorithm='HS256')
 
 
+# Checks if JWT is blacklisted
+def checkToken(token):
+    url = 'http://ec2-3-95-148-186.compute-1.amazonaws.com:5000/checkToken'
+    res = r.post(url, json={'token': token})
+
+    if res.status_code == 200 and res.text == 'Exists':
+        return True
+    else:
+        return False
+
+
+# Expires JWT
+def expireToken(token):
+    url = 'http://ec2-3-95-148-186.compute-1.amazonaws.com:5000/expireToken'
+    res = r.post(url, json={'token': token})
+
+    if res.status_code == 200 and res.text == 'Success':
+        return True
+    else:
+        return False
+
+
 # Decorator for JWTs
 def jwt_required(func):
     @wraps(func)
@@ -52,12 +75,16 @@ def jwt_required(func):
             return 'Invalid token', 401
 
         print(token)
-        # TODO: Do checks for blacklist
+
+        if checkToken(encodedToken):
+            return 'Logged out', 401
 
         return func(*args, **kwargs)
     
     return checkJWT
 
+
+##### Endpoints #####
 
 class GetProfile(Resource):
     def get(self, email):
@@ -173,6 +200,8 @@ class Logout(Resource):
 
         # TODO: Blacklist jwt if exists
         # Will need to use AWS ElastiCache -- Redis SETEX for the key and then check everytime in the declarer
+        encodedToken = request.cookies.get('token')
+        expireToken(encodedToken)
 
         return res
 
