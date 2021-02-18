@@ -154,6 +154,18 @@ class User(Resource):
         else:
             return {'error': 'Error creating user.'}, 404
 
+class Course(Resource):
+    def get(self):
+        class_query = Class.query.all()
+        class_list = []
+
+        if (class_query == []): # TODO: possibly define a more robust error check
+            return {'error': 'Classes could not be retrieved'}, 404
+        else:
+            for elem in class_query:
+                class_list.append(elem.class_name)
+            return {'class_list': class_list}, 200
+
 
 class Login(Resource):
     def post(self):
@@ -209,6 +221,7 @@ class Logout(Resource):
 
 # API Routes
 api.add_resource(User, '/user/<string:email>')
+api.add_resource(Course, '/courses')
 api.add_resource(Login, '/api/login')
 api.add_resource(Logout, '/api/logout')
 

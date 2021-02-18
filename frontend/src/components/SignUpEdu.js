@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Grid, TextField, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
 
@@ -21,6 +22,30 @@ export default function SignUpEdu(props) {
   let [major, setMajor] = useState(majorProp.map((element) => { return {title: element} }));
   let [minor, setMinor] = useState(minorProp.map((element) => { return {title: element} }));
   let [class_options, setClass_options] = useState(class_optionsProp.map((element) => { return {title: element} }));
+
+  const class_list = useRef([]);
+
+  const getClassList = (callback) => { // TODO: Fix issue of class list not appearing on first render
+    axios.get('http://localhost:5000/courses')
+      .then((response) => {
+        // console.log(response);
+        return callback(response);
+      })
+      .catch((response) => {
+        // console.log(response);
+      })
+  }
+
+  if (class_list.current.length === 0) {
+    getClassList((response) => {
+      if (response.status === 200) {
+        class_list.current = response.data.class_list;
+      }
+      else {
+        alert("Unable to load list of classes."); // TODO: Use a Material-UI error message/pop-up
+      }
+    });
+  }
 
   useEffect(() => {
     updateCompleteStatus();
@@ -54,8 +79,8 @@ export default function SignUpEdu(props) {
       container
       alignItems="center"
       justify="center"
-    >  
-     
+    >
+
       <Grid item xs={12} className={classes.element}>
         <Autocomplete
             id="majorBox"
@@ -68,10 +93,10 @@ export default function SignUpEdu(props) {
             value={major}
             filterSelectedOptions
             renderInput={
-              (params) => <TextField 
-                            {...params} 
-                            label="What's your major?" 
-                            margin="normal" 
+              (params) => <TextField
+                            {...params}
+                            label="What's your major?"
+                            margin="normal"
                             variant="outlined"
                           />
             }
@@ -90,33 +115,33 @@ export default function SignUpEdu(props) {
                 value={minor}
                 filterSelectedOptions
                 renderInput={
-                  (params) => <TextField 
-                                {...params} 
-                                label="What's your minor?" 
-                                margin="normal" 
+                  (params) => <TextField
+                                {...params}
+                                label="What's your minor?"
+                                margin="normal"
                                 variant="outlined"
                               />
                 }
               />
           </Grid>
-     
+
 
         <Grid item xs={12} className={classes.element}>
           <Autocomplete
             multiple
             id="classBox"
             className={classes.autoComplete}
-            options={Class_options}
-            getOptionLabel={(option) => option.title}
-            getOptionSelected={(option) => class_options.map((element) => { return element.title }).includes(option.title)}
+            options={class_list.current}
+            getOptionLabel={(option) => option}
+            getOptionSelected={(option) => class_options.map((element) => { return element }).includes(option)}
             onChange={(event, newValue) => updateClass_options(event, newValue)}
             value={class_options}
             filterSelectedOptions
             renderInput={
-              (params) => <TextField 
-                            {...params} 
-                            label="Classes?" 
-                            margin="normal" 
+              (params) => <TextField
+                            {...params}
+                            label="Classes?"
+                            margin="normal"
                             variant="outlined"
                           />
             }
@@ -397,34 +422,4 @@ const Minor = [
   { title: 'SHA Hospitality Administration (Marketing Concentration)'},
   { title: 'SHA Hospitality Administration (Real Estate Development Concentration)'},
   { title: 'SHA Hospitality Administration (Revenue Management & Analytics Concentration)'},
-];
-
-const Class_options = [
-  { title: 'EC 103'},
-  { title: 'EC 311'},
-  { title: 'EC 327'},
-  { title: 'EC 330'},
-  { title: 'EC 381'},
-  { title: 'EC 400'},
-  { title: 'EC 401'},
-  { title: 'EC 402'},
-  { title: 'EC 410'},
-  { title: 'EC 412'},
-  { title: 'EC 413'},
-  { title: 'EC 414'},
-  { title: 'EC 415'},
-  { title: 'EC 416'},
-  { title: 'EC 417'},
-  { title: 'EC 440'},
-  { title: 'EC 441'},
-  { title: 'EC 444'},
-  { title: 'EC 447'},
-  { title: 'EC 450'},
-  { title: 'EC 451'},
-  { title: 'EC 455'},
-  { title: 'EC 456'},
-  { title: 'EC 463'},
-  { title: 'EC 464'},
-
-
 ];
