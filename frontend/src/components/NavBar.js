@@ -23,6 +23,10 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { useSelector, useDispatch } from 'react-redux';
 import { login, logout, selectLoginState } from '../redux/loginSlice';
 
+// Axios
+import axios from 'axios';
+
+
 export default function NavBar() {
   const location = useLocation();
   const history = useHistory();
@@ -48,19 +52,15 @@ export default function NavBar() {
 
   let responseSuccess = (event) => {
     let userEmail = event.profileObj.email;
-    fetch('http://localhost:5000/profile/' + userEmail)
+    let token = event.tokenId;
+
+    axios.post('/api/login', { tokenId: token })
     .then((res) => {
-      return res.text();
-    })
-    .then((response) => {
-      if (response.includes('error')) {
-        history.push('/signup', { email: userEmail });
-      } else {
-        dispatch(login());
-        history.push('/profile', { email: userEmail });
-      }
+      dispatch(login());
+      history.push('/profile');
     })
     .catch((error) => {
+      console.log("error");
       console.log(error);
     })
   }
@@ -77,6 +77,20 @@ export default function NavBar() {
 
   let handleSettingsClose = () => {
     setAnchorEl(null);
+  }
+
+  let handleLogout = () => {
+    dispatch(logout());
+    handleSettingsClose();
+    axios.get('/api/logout')
+    .then((res) => {
+      console.log('Successfully logged out');
+      history.push('/');
+    })
+    .catch((err) => {
+      console.log('ERROR');
+      console.log(err);
+    })
   }
 
   let loginElement;
@@ -103,7 +117,7 @@ export default function NavBar() {
         <MenuItem onClick={handleSettingsClose}>
           {"Settings"}
         </MenuItem>
-        <MenuItem onClick={() => {dispatch(logout()); handleSettingsClose()}}>
+        <MenuItem onClick={() => handleLogout()}>
           {"Logout"}
         </MenuItem>
       </Menu>

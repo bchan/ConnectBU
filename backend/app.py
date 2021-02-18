@@ -207,7 +207,7 @@ class Login(Resource):
 
 
 class Logout(Resource):
-    def post(self):
+    def get(self):
         res = make_response()
         res.set_cookie('token', value='', httponly=True, expires=0)
 

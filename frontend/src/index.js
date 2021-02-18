@@ -22,7 +22,7 @@ import axios from 'axios';
 function Index() {
   useEffect(() => {
     console.log('hello');
-    axios.get('http://localhost:5000/api/login')
+    axios.get('/api/login')
     .then((res) => {
       if (res.status === 200) {
         console.log(res);

@@ -53,17 +53,17 @@ export default function Profile()  {
   let [minor, setMinor] = React.useState('Specialization: T.L.');
 
   if (typeof location.state !== 'undefined') {
-    let userEmail = location.state.email;
-    fetch('http://localhost:5000/profile/' + userEmail)
-    .then((res) => {
-      return res.text();
-    })
-    .then((response) => {
-      let userData = JSON.parse(response);
-      setName(userData['first_name'] + ' ' + userData['last_name']);
-      setMajor(userData['major1'] + ' - ' + String(userData['year']));
-      setMinor(userData['minor']);
-    })
+    // let userEmail = location.state.email;
+    // fetch('http://localhost:5000/profile/' + userEmail)
+    // .then((res) => {
+    //   return res.text();
+    // })
+    // .then((response) => {
+    //   let userData = JSON.parse(response);
+    //   setName(userData['first_name'] + ' ' + userData['last_name']);
+    //   setMajor(userData['major1'] + ' - ' + String(userData['year']));
+    //   setMinor(userData['minor']);
+    // })
   }
 
   return (
