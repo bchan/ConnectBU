@@ -83,7 +83,7 @@ export default function NavBar() {
       console.log(res);
     })
     .catch((err) => {
-      console.log('something dun fucked up');
+      console.log('ERROR');
       console.log(err);
     })
   }
