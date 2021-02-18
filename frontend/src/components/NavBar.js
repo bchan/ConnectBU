@@ -51,9 +51,13 @@ export default function NavBar() {
   }
 
   let responseSuccess = (event) => {
-    axios.post('/api/login', { tokenId: event.tokenId })
+    let userEmail = event.profileObj.email;
+    let token = event.tokenId;
+
+    axios.post('/api/login', { tokenId: token })
     .then((res) => {
       dispatch(login());
+      history.push('/profile');
     })
     .catch((error) => {
       console.log("error");
@@ -80,7 +84,8 @@ export default function NavBar() {
     handleSettingsClose();
     axios.get('/api/logout')
     .then((res) => {
-      console.log(res);
+      console.log('Successfully logged out');
+      history.push('/');
     })
     .catch((err) => {
       console.log('ERROR');
