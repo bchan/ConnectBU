@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './pages/App';
@@ -16,9 +16,27 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 // import BotBar from './components/BotBar'
 import store from './redux/store';
 import { Provider } from 'react-redux';
+import { login, logout } from './redux/loginSlice';
+import axios from 'axios';
 
-const routing = (
-  <Provider store={store}>
+function Index() {
+  useEffect(() => {
+    console.log('hello');
+    axios.get('http://localhost:5000/api/login')
+    .then((res) => {
+      if (res.status === 200) {
+        console.log(res);
+        store.dispatch(login())
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+      store.dispatch(logout())
+    })
+  })
+
+  return (
+    <Provider store={store}>
     <Router>
       <NavBar />
       <Switch>
@@ -50,11 +68,12 @@ const routing = (
       <Footer />
     </Router>
   </Provider>
-);
-
+  )
+  
+}
 
 ReactDOM.render(
-  routing,
+  <Index />,
   document.getElementById('root')
 );
 

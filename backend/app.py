@@ -1,14 +1,90 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, make_response
 from flask_restful import Resource, Api
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from models import db, Student, Class, Club, Lab, CampusJob, TakesClass, TakesJob, JoinsClub, JoinsLab
+import jwt
+from google.oauth2 import id_token
+from google.auth.transport import requests
+from datetime import datetime, timedelta
+from functools import wraps
+import requests as r
 
 app = Flask(__name__)
 CORS(app)
 api = Api(app)
 app.config.from_pyfile('config.py')
 db.init_app(app)
+
+
+TEMP_SECRET = 'supersecretkey'
+
+
+##### Helper functions for Authentication #####
+
+# Checks Google SSO token from the frontend
+def checkGoogleToken(token):
+    try:
+        idInfo = id_token.verify_oauth2_token(token, requests.Request(), app.config['GOOGLE_CLIENT_ID'])
+        return idInfo
+    except ValueError:
+        # Invalid Token
+        return None
+
+
+# Creates JWT for the frontend
+def createToken(tokenDict):
+    return jwt.encode(tokenDict, TEMP_SECRET, algorithm='HS256')
+
+
+# Checks if JWT is blacklisted
+def checkToken(token):
+    url = 'http://ec2-3-95-148-186.compute-1.amazonaws.com:5000/checkToken'
+    res = r.post(url, json={'token': token})
+
+    if res.status_code == 200 and res.text == 'Exists':
+        return True
+    else:
+        return False
+
+
+# Expires JWT
+def expireToken(token):
+    url = 'http://ec2-3-95-148-186.compute-1.amazonaws.com:5000/expireToken'
+    res = r.post(url, json={'token': token})
+
+    if res.status_code == 200 and res.text == 'Success':
+        return True
+    else:
+        return False
+
+
+# Decorator for JWTs
+def jwt_required(func):
+    @wraps(func)
+    def checkJWT(*args, **kwargs):
+        encodedToken = request.cookies.get('token')
+        if encodedToken is None:
+            return 'Not authorized', 401
+
+        try:
+            token = jwt.decode(encodedToken, TEMP_SECRET, algorithms=['HS256'])
+        except jwt.ExpiredSignatureError:
+            return 'Expired token', 401
+        except:
+            return 'Invalid token', 401
+
+        print(token)
+
+        if checkToken(encodedToken):
+            return 'Logged out', 401
+
+        return func(*args, **kwargs)
+    
+    return checkJWT
+
+
+##### Endpoints #####
 
 class GetProfile(Resource):
     def get(self, email):
@@ -78,9 +154,63 @@ class NewUser(Resource):
             return {'error': 'Error creating user.'}, 404
 
 
+class Login(Resource):
+    def post(self):
+        data = request.get_json(force=True)
+
+        # Check if data exists
+        if data is None:
+            return 'No data', 400
+
+        # Checks if token exists in request
+        if not 'tokenId' in data:
+            return 'Could not find token', 400
+
+        # Takes token and checks with Google API
+        token = data['tokenId']
+        googleInfo = checkGoogleToken(token)
+
+        if googleInfo is None:
+            return 'Invalid token', 401
+
+        if googleInfo['hd'] != 'bu.edu':
+            return 'Invalid email', 401
+
+        print(googleInfo)
+
+        # Issues JWT
+        td = timedelta(hours=12, seconds=0)
+        expirationDate = datetime.utcnow() + td # 12 hours
+
+        jwtToken = createToken({'email': googleInfo['email'], 'exp': expirationDate})
+        res = make_response()
+        res.set_cookie('token', value=jwtToken, httponly=True, expires=expirationDate)
+
+        return res
+    
+    @jwt_required
+    def get(self):
+        return 'Logged in', 200
+
+
+class Logout(Resource):
+    def post(self):
+        res = make_response()
+        res.set_cookie('token', value='', httponly=True, expires=0)
+
+        # TODO: Blacklist jwt if exists
+        # Will need to use AWS ElastiCache -- Redis SETEX for the key and then check everytime in the declarer
+        encodedToken = request.cookies.get('token')
+        expireToken(encodedToken)
+
+        return res
+
+
 # API Routes
 api.add_resource(GetProfile, '/profile/<string:email>')
 api.add_resource(NewUser, '/create_user')
+api.add_resource(Login, '/api/login')
+api.add_resource(Logout, '/api/logout')
 
 if __name__ == '__main__':
     app.run(debug=True)
