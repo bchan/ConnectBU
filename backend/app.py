@@ -80,13 +80,14 @@ def jwt_required(func):
             return 'Logged out', 401
 
         return func(*args, **kwargs)
-    
+
     return checkJWT
 
 
 ##### Endpoints #####
 
-class GetProfile(Resource):
+class User(Resource):
+    # retrieve a user's profile info
     def get(self, email):
         user = Student.query.filter_by(email=email).first()
 
@@ -105,7 +106,7 @@ class GetProfile(Resource):
             }
             return user_info, 200
 
-class NewUser(Resource):
+    # create a new user
     def post(self):
 
         json_data = request.get_json(force=True)
@@ -187,7 +188,7 @@ class Login(Resource):
         res.set_cookie('token', value=jwtToken, httponly=True, expires=expirationDate)
 
         return res
-    
+
     @jwt_required
     def get(self):
         return 'Logged in', 200
@@ -207,8 +208,7 @@ class Logout(Resource):
 
 
 # API Routes
-api.add_resource(GetProfile, '/profile/<string:email>')
-api.add_resource(NewUser, '/create_user')
+api.add_resource(User, '/user/<string:email>')
 api.add_resource(Login, '/api/login')
 api.add_resource(Logout, '/api/logout')
 
