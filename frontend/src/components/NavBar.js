@@ -25,6 +25,7 @@ import { login, logout, selectLoginState } from '../redux/loginSlice';
 
 // Axios
 import axios from 'axios';
+import NavMenuRight from './NavMenuRight';
 
 
 export default function NavBar() {
@@ -40,103 +41,10 @@ export default function NavBar() {
   const [state, setState] = React.useState({
     isDrawerOpen: false,
   });
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const isLoggedIn = useSelector(selectLoginState);
-  const dispatch = useDispatch();
-
   const shouldUseScroll = location.pathname === '/';
   
   let toggleDrawer = (open) => {
     setState({isDrawerOpen: open});
-  }
-
-  let responseSuccess = (event) => {
-    let userEmail = event.profileObj.email;
-    let token = event.tokenId;
-
-    axios.post('/api/login', { tokenId: token })
-    .then((res) => {
-      dispatch(login(userEmail));
-      history.push('/profile');
-    })
-    .catch((error) => {
-      console.log("error");
-      console.log(error);
-    })
-  }
-
-  let responseError = (event) => {
-    if (event.error !== "popup_closed_by_user") {
-      alert(event.error);
-    }
-  }
-
-  let handleSettingsClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  }
-
-  let handleSettingsClose = () => {
-    setAnchorEl(null);
-  }
-
-  let handleLogout = () => {
-    dispatch(logout());
-    handleSettingsClose();
-    axios.get('/api/logout')
-    .then((res) => {
-      console.log('Successfully logged out');
-      history.push('/');
-    })
-    .catch((err) => {
-      console.log('ERROR');
-      console.log(err);
-    })
-  }
-
-  let loginElement;
-  if (isLoggedIn) {
-    loginElement = (
-      <div>
-      <IconButton
-        aria-label="more"
-        aria-controls="long-menu"
-        aria-haspopup="true"
-        color="inherit"
-        onClick={handleSettingsClick}
-      >
-        <MoreVertIcon />
-      </IconButton>
-      <Menu
-        id="long-menu"
-        anchorEl={anchorEl}
-        keepMounted
-        open={anchorEl !== null}
-        onClose={handleSettingsClose}
-        transformOrigin={{ vertical: "bottom", horizontal: "center" }}
-      >
-        <MenuItem onClick={handleSettingsClose}>
-          {"Settings"}
-        </MenuItem>
-        <MenuItem onClick={() => handleLogout()}>
-          {"Logout"}
-        </MenuItem>
-      </Menu>
-      </div>
-    );
-  } else {
-    loginElement = (
-      <GoogleLogin 
-        clientId="575450034905-v02tn4l35jt2s3mhd46impe7pb79cc18.apps.googleusercontent.com"
-        // buttonText="Sign In with BU Account"
-        onSuccess={responseSuccess}
-        onFailure={responseError}
-        cookiePolicy={'single_host_origin'}
-        style={{disabled: 'false'}}
-        render={(renderProps) => (
-          <Button color="inherit" onClick={renderProps.onClick}>Login</Button>
-        )}
-      />
-    );
   }
 
   return (
@@ -158,7 +66,7 @@ export default function NavBar() {
           {/* <Button className={classes.profileButton} component={Link} to={"/profile"}>
             Profile
           </Button> */}
-          {loginElement}
+          <NavMenuRight />
         </Toolbar>
       </AppBar>
     </div>
