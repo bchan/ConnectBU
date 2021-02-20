@@ -13,7 +13,6 @@ import Drawer from '@material-ui/core/Drawer';
 import NavMenuList from './NavMenuList';
 import NavMenuRight from './NavMenuRight';
 
-
 export default function NavBar() {
   const location = useLocation();
   const history = useHistory();
@@ -49,9 +48,6 @@ export default function NavBar() {
           <Typography variant="h6" className={classes.title}>
             Connect<span style={{color: '#CC0000'}}>BU</span>
           </Typography>
-          {/* <Button className={classes.profileButton} component={Link} to={"/profile"}>
-            Profile
-          </Button> */}
           <NavMenuRight />
         </Toolbar>
       </AppBar>

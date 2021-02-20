@@ -13,7 +13,6 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { useSelector, useDispatch } from 'react-redux';
 import { login, logout, selectLoginState } from '../redux/loginSlice';
 
-
 export default function NavMenuRight() {
   const history = useHistory();
   const isLoggedIn = useSelector(selectLoginState);
