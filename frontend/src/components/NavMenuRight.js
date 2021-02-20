@@ -1,18 +1,18 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
+import axios from 'axios';
 import GoogleLogin from 'react-google-login';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
 import { login, logout, selectLoginState } from '../redux/loginSlice';
 
-// Axios
-import axios from 'axios';
 
 export default function NavMenuRight() {
   const history = useHistory();
@@ -66,31 +66,38 @@ export default function NavMenuRight() {
   return (
     (isLoggedIn)?
       <div>
-      <IconButton
-        aria-label="more"
-        aria-controls="long-menu"
-        aria-haspopup="true"
-        color="inherit"
-        onClick={handleSettingsClick}
-      >
-        <MoreVertIcon />
-      </IconButton>
-      <Menu
-        id="long-menu"
-        anchorEl={anchorEl}
-        keepMounted
-        open={anchorEl !== null}
-        onClose={handleSettingsClose}
-        transformOrigin={{ vertical: "bottom", horizontal: "center" }}
-        autoFocus={false}
-      >
-        <MenuItem onClick={handleSettingsClose}>
-          {"Settings"}
-        </MenuItem>
-        <MenuItem onClick={() => handleLogout()}>
-          {"Logout"}
-        </MenuItem>
-      </Menu>
+        <IconButton
+          component={Link}
+          to="/profile"
+          color="inherit"
+        >
+          <AccountCircleIcon />
+        </IconButton>
+        <IconButton
+          aria-label="more"
+          aria-controls="long-menu"
+          aria-haspopup="true"
+          color="inherit"
+          onClick={handleSettingsClick}
+        >
+          <MoreVertIcon />
+        </IconButton>
+        <Menu
+          id="long-menu"
+          anchorEl={anchorEl}
+          keepMounted
+          open={anchorEl !== null}
+          onClose={handleSettingsClose}
+          transformOrigin={{ vertical: "bottom", horizontal: "center" }}
+          autoFocus={false}
+        >
+          <MenuItem onClick={handleSettingsClose}>
+            {"Settings"}
+          </MenuItem>
+          <MenuItem onClick={() => handleLogout()}>
+            {"Logout"}
+          </MenuItem>
+        </Menu>
       </div>
     :
       <GoogleLogin 
@@ -106,5 +113,3 @@ export default function NavMenuRight() {
       />
   )
 }
-
-

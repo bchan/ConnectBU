@@ -2,29 +2,15 @@ import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import { useLocation, useHistory } from 'react-router-dom';
 import { useScrollTrigger } from '@material-ui/core';
 import { useStyles } from '../styles/NavBar.styles';
-import GoogleLogin from 'react-google-login';
 
-// Drawer Imports
+// NavBar Components
 import Drawer from '@material-ui/core/Drawer';
-import NavBarMenuList from './NavMenuList';
-
-// Right Menu
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-
-// Redux
-import { useSelector, useDispatch } from 'react-redux';
-import { login, logout, selectLoginState } from '../redux/loginSlice';
-
-// Axios
-import axios from 'axios';
+import NavMenuList from './NavMenuList';
 import NavMenuRight from './NavMenuRight';
 
 
@@ -53,7 +39,7 @@ export default function NavBar() {
         open={state.isDrawerOpen}
         onClose={() => {toggleDrawer(false)}}
       >
-        <NavBarMenuList toggle={() => toggleDrawer(false)}/>
+        <NavMenuList toggle={() => toggleDrawer(false)}/>
       </Drawer>
       <AppBar className={(!shouldUseScroll)? classes.solidBar : (trigger)? classes.scrolledBar : classes.bar} elevation={0}> 
         <Toolbar>
