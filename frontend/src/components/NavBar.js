@@ -56,7 +56,7 @@ export default function NavBar() {
 
     axios.post('/api/login', { tokenId: token })
     .then((res) => {
-      dispatch(login());
+      dispatch(login(userEmail));
       history.push('/profile');
     })
     .catch((error) => {

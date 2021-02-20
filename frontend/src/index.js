@@ -26,7 +26,7 @@ function Index() {
     .then((res) => {
       if (res.status === 200) {
         console.log(res);
-        store.dispatch(login())
+        store.dispatch(login(res.data))
       }
     })
     .catch((error) => {

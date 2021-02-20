@@ -66,7 +66,7 @@ export default function SignUp() {
       .then(response => response.json())
       .then(data => {
         if (data.response === 'User data inserted successfully') {
-          dispatch(login());
+          dispatch(login(''));
           history.push('/profile', { email: location.state.email });
         }
       })

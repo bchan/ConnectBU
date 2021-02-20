@@ -203,7 +203,9 @@ class Login(Resource):
 
     @jwt_required
     def get(self):
-        return 'Logged in', 200
+        encodedToken = request.cookies.get('token')
+        token = jwt.decode(encodedToken, TEMP_SECRET, algorithms=['HS256'])
+        return token['email'], 200
 
 
 class Logout(Resource):
