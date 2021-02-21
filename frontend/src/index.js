@@ -20,56 +20,56 @@ import { login, logout } from './redux/loginSlice';
 import axios from 'axios';
 
 function Index() {
+  // Handles state setting on refresh
   useEffect(() => {
     console.log('hello');
     axios.get('/api/login')
-    .then((res) => {
-      if (res.status === 200) {
-        console.log(res);
-        store.dispatch(login(res.data))
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-      store.dispatch(logout())
-    })
+      .then((res) => {
+        if (res.status === 200) {
+          console.log(res);
+          store.dispatch(login(res.data))
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        store.dispatch(logout())
+      })
   })
 
   return (
     <Provider store={store}>
-    <Router>
-      <NavBar />
-      <Switch>
-        <Route exact path="/">
-          <App />
-        </Route>
-        <Route path="/login">
-          <Login />
-        </Route>
-        <Route path="/support">
-          <Support />
-        </Route>
-        <Route path="/signup">
-          <SignUp />
-        </Route>
-        <Route path="/search">
-          <Search />
-        </Route>
-        <Route path="/recommendations">
-          <HomeLI />
-        </Route>
-        <Route path="/aboutus">
-          <AboutUs />
-        </Route>
-        <Route path="/profile">
-          <Profile />
-        </Route>
-      </Switch>
-      <Footer />
-    </Router>
-  </Provider>
+      <Router>
+        <NavBar />
+        <Switch>
+          <Route exact path="/">
+            <App />
+          </Route>
+          <Route path="/login">
+            <Login />
+          </Route>
+          <Route path="/support">
+            <Support />
+          </Route>
+          <Route path="/signup">
+            <SignUp />
+          </Route>
+          <Route path="/search">
+            <Search />
+          </Route>
+          <Route path="/recommendations">
+            <HomeLI />
+          </Route>
+          <Route path="/aboutus">
+            <AboutUs />
+          </Route>
+          <Route path="/profile">
+            <Profile />
+          </Route>
+        </Switch>
+        <Footer />
+      </Router>
+    </Provider>
   )
-  
 }
 
 ReactDOM.render(
