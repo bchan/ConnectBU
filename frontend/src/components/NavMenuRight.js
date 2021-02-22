@@ -9,8 +9,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
+import Alert from './Alert';
 
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
@@ -135,16 +134,13 @@ export default function NavMenuRight() {
           )}
         />
       }
-      <Snackbar
+
+      <Alert 
         open={errorState.isOpen}
-        autoHideDuration={6000}
-        onClose={handleErrorClose}
-        anchorOrigin={{ horizontal: 'center', vertical: 'top' }}
-      >
-        <MuiAlert elevation={6} variant="filled" onClose={handleErrorClose} severity="error">
-          {errorState.errorMessage}
-        </MuiAlert>
-      </Snackbar>
+        handleClose={handleErrorClose}
+        message={errorState.errorMessage}
+        type="error"
+      />
     </div>
   )
 
