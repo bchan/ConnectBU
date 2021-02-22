@@ -5,7 +5,7 @@ export const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
   },
   image: {
-    width: '50%',
+    width: '60%',
     height: 'auto',
   },
   message: {

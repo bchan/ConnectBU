@@ -21,7 +21,6 @@ import axios from 'axios';
 
 import Fade from '@material-ui/core/Fade';
 import Loading from './components/Loading';
-import { Box } from '@material-ui/core';
 
 // Custom hook, acts like constructor
 const useConstructor = (callBack = () => { }) => {
@@ -57,18 +56,9 @@ function Index() {
   return (
     <div>
       {(isLoading) ?
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          height="100vh"
-        >
-          <Fade in={isLoading}>
-            <div>
-              <Loading message="" />
-            </div>
-          </Fade>
-        </Box>
+        <Fade in={isLoading}>
+          <div><Loading message="" /></div>
+        </Fade>
         :
         <Provider store={store}>
           <Router>
@@ -76,9 +66,7 @@ function Index() {
             <Switch>
               <Route exact path="/">
                 <Fade in={!isLoading}>
-                  <div>
-                    <App />
-                  </div>
+                  <div><App /></div>
                 </Fade>
               </Route>
               <Route path="/login">
