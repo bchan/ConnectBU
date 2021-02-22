@@ -110,7 +110,7 @@ export default function NavMenuRight() {
             transformOrigin={{ vertical: "bottom", horizontal: "center" }}
             autoFocus={false}
           >
-            <MenuItem onClick={handleSettingsClose}>
+            <MenuItem onClick={handleSettingsClose} component={Link} to="/profile">
               {"Profile"}
             </MenuItem>
             <MenuItem onClick={handleSettingsClose}>
