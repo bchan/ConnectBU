@@ -186,7 +186,7 @@ class Login(Resource):
         if googleInfo is None:
             return 'Invalid token', 401
 
-        if googleInfo['hd'] != 'bu.edu':
+        if 'hd' not in googleInfo or googleInfo['hd'] != 'bu.edu':
             return 'Invalid email', 401
 
         print(googleInfo)

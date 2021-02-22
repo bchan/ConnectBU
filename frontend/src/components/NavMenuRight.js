@@ -7,7 +7,10 @@ import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import SearchIcon from '@material-ui/icons/Search';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
@@ -18,20 +21,22 @@ export default function NavMenuRight() {
   const isLoggedIn = useSelector(selectLoginState);
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [errorState, setErrorState] = React.useState({ isOpen: false, errorMessage: '' });
 
   let responseSuccess = (event) => {
     let userEmail = event.profileObj.email;
     let token = event.tokenId;
 
     axios.post('/api/login', { tokenId: token })
-    .then((res) => {
-      dispatch(login(userEmail));
-      history.push('/profile');
-    })
-    .catch((error) => {
-      console.log("error");
-      console.log(error);
-    })
+      .then((res) => {
+        dispatch(login(userEmail));
+        history.push('/profile');
+      })
+      .catch((error) => {
+        if (error.response.data === 'Invalid email') {
+          setErrorState({ isOpen: true, errorMessage: 'You must use a BU email to sign in/up'})
+        }
+      })
   }
 
   let responseError = (event) => {
@@ -52,63 +57,90 @@ export default function NavMenuRight() {
     dispatch(logout());
     handleSettingsClose();
     axios.get('/api/logout')
-    .then((res) => {
-      console.log('Successfully logged out');
-      history.push('/');
-    })
-    .catch((err) => {
-      console.log('ERROR');
-      console.log(err);
-    })
+      .then((res) => {
+        console.log('Successfully logged out');
+        history.push('/');
+      })
+      .catch((err) => {
+        console.log('ERROR');
+        console.log(err);
+      })
   }
 
+  let handleErrorClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setErrorState({ isOpen: false, errorMessage: '' });
+  };
+
   return (
-    (isLoggedIn)?
-      <div>
-        <IconButton
+    <div>
+      {(isLoggedIn) ?
+        <div>
+          <IconButton
+            component={Link}
+            to="/search"
+            color="inherit"
+          >
+            <SearchIcon />
+          </IconButton>
+          {/* <IconButton
           component={Link}
           to="/profile"
           color="inherit"
         >
           <AccountCircleIcon />
-        </IconButton>
-        <IconButton
-          aria-label="more"
-          aria-controls="long-menu"
-          aria-haspopup="true"
-          color="inherit"
-          onClick={handleSettingsClick}
-        >
-          <MoreVertIcon />
-        </IconButton>
-        <Menu
-          id="long-menu"
-          anchorEl={anchorEl}
-          keepMounted
-          open={anchorEl !== null}
-          onClose={handleSettingsClose}
-          transformOrigin={{ vertical: "bottom", horizontal: "center" }}
-          autoFocus={false}
-        >
-          <MenuItem onClick={handleSettingsClose}>
-            {"Settings"}
-          </MenuItem>
-          <MenuItem onClick={() => handleLogout()}>
-            {"Logout"}
-          </MenuItem>
-        </Menu>
-      </div>
-    :
-      <GoogleLogin 
-        clientId="575450034905-v02tn4l35jt2s3mhd46impe7pb79cc18.apps.googleusercontent.com"
-        // buttonText="Sign In with BU Account"
-        onSuccess={responseSuccess}
-        onFailure={responseError}
-        cookiePolicy={'single_host_origin'}
-        style={{disabled: 'false'}}
-        render={(renderProps) => (
-          <Button color="inherit" onClick={renderProps.onClick}>Login</Button>
-        )}
-      />
+        </IconButton> */}
+          <IconButton
+            aria-label="more"
+            aria-controls="long-menu"
+            aria-haspopup="true"
+            color="inherit"
+            onClick={handleSettingsClick}
+          >
+            {/* <MoreVertIcon /> */}
+            <AccountCircleIcon />
+          </IconButton>
+          <Menu
+            id="long-menu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={anchorEl !== null}
+            onClose={handleSettingsClose}
+            transformOrigin={{ vertical: "bottom", horizontal: "center" }}
+            autoFocus={false}
+          >
+            <MenuItem onClick={handleSettingsClose}>
+              {"Profile"}
+            </MenuItem>
+            <MenuItem onClick={handleSettingsClose}>
+              {"Settings"}
+            </MenuItem>
+            <MenuItem onClick={() => handleLogout()}>
+              {"Logout"}
+            </MenuItem>
+          </Menu>
+        </div>
+        :
+        <GoogleLogin
+          clientId="575450034905-v02tn4l35jt2s3mhd46impe7pb79cc18.apps.googleusercontent.com"
+          // buttonText="Sign In with BU Account"
+          onSuccess={responseSuccess}
+          onFailure={responseError}
+          cookiePolicy={'single_host_origin'}
+          style={{ disabled: 'false' }}
+          render={(renderProps) => (
+            <Button color="inherit" onClick={renderProps.onClick}>Login</Button>
+          )}
+        />
+      }
+      <Snackbar open={errorState.isOpen} autoHideDuration={6000} onClose={handleErrorClose} anchorOrigin={{ horizontal: 'center', vertical: 'top' }}>
+        <MuiAlert elevation={6} variant="filled" onClose={handleErrorClose} severity="error">
+          {errorState.errorMessage}
+        </MuiAlert>
+      </Snackbar>
+    </div>
   )
+
 }
