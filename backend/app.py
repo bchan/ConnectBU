@@ -186,7 +186,7 @@ class Login(Resource):
         if googleInfo is None:
             return 'Invalid token', 401
 
-        if googleInfo['hd'] != 'bu.edu':
+        if 'hd' not in googleInfo or googleInfo['hd'] != 'bu.edu':
             return 'Invalid email', 401
 
         print(googleInfo)
@@ -203,7 +203,9 @@ class Login(Resource):
 
     @jwt_required
     def get(self):
-        return 'Logged in', 200
+        encodedToken = request.cookies.get('token')
+        token = jwt.decode(encodedToken, TEMP_SECRET, algorithms=['HS256'])
+        return token['email'], 200
 
 
 class Logout(Resource):

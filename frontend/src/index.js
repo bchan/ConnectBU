@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './pages/App';
@@ -19,57 +19,86 @@ import { Provider } from 'react-redux';
 import { login, logout } from './redux/loginSlice';
 import axios from 'axios';
 
+import Fade from '@material-ui/core/Fade';
+import Loading from './components/Loading';
+
+// Custom hook, acts like constructor
+const useConstructor = (callBack = () => { }) => {
+  const [hasCalled, setCalled] = useState(false);
+  if (hasCalled) return;
+  callBack();
+  setCalled(true);
+}
+
 function Index() {
-  useEffect(() => {
-    console.log('hello');
+  // Handles loading
+  const [isLoading, setLoading] = useState(true);
+
+  useConstructor(() => {
     axios.get('/api/login')
-    .then((res) => {
-      if (res.status === 200) {
-        console.log(res);
-        store.dispatch(login())
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-      store.dispatch(logout())
-    })
+      .then((res) => {
+        if (res.status === 200) {
+          store.dispatch(login(res.data))
+        }
+
+        setTimeout(() => {
+          setLoading(false);
+        }, 1000);
+
+      })
+      .catch((error) => {
+        store.dispatch(logout());
+
+        setTimeout(() => {
+          setLoading(false);
+        }, 1000);
+      })
   })
 
   return (
-    <Provider store={store}>
-    <Router>
-      <NavBar />
-      <Switch>
-        <Route exact path="/">
-          <App />
-        </Route>
-        <Route path="/login">
-          <Login />
-        </Route>
-        <Route path="/support">
-          <Support />
-        </Route>
-        <Route path="/signup">
-          <SignUp />
-        </Route>
-        <Route path="/search">
-          <Search />
-        </Route>
-        <Route path="/recommendations">
-          <HomeLI />
-        </Route>
-        <Route path="/aboutus">
-          <AboutUs />
-        </Route>
-        <Route path="/profile">
-          <Profile />
-        </Route>
-      </Switch>
-      <Footer />
-    </Router>
-  </Provider>
+    <div>
+      {(isLoading) ?
+        <Fade in={isLoading}>
+          <div><Loading message="" /></div>
+        </Fade>
+        :
+        <Provider store={store}>
+          <Router>
+            <NavBar />
+            <Switch>
+              <Route exact path="/">
+                <Fade in={!isLoading}>
+                  <div><App /></div>
+                </Fade>
+              </Route>
+              <Route path="/login">
+                <Login />
+              </Route>
+              <Route path="/support">
+                <Support />
+              </Route>
+              <Route path="/signup">
+                <SignUp />
+              </Route>
+              <Route path="/search">
+                <Search />
+              </Route>
+              <Route path="/recommendations">
+                <HomeLI />
+              </Route>
+              <Route path="/aboutus">
+                <AboutUs />
+              </Route>
+              <Route path="/profile">
+                <Profile />
+              </Route>
+            </Switch>
+            <Footer />
+          </Router>
+        </Provider>
+      }
+    </div>
   )
-  
 }
 
 ReactDOM.render(
