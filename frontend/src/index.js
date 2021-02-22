@@ -47,9 +47,11 @@ function Index() {
 
       })
       .catch((error) => {
-        console.log(error);
         store.dispatch(logout());
-        setLoading(false);
+
+        setTimeout(() => {
+          setLoading(false);
+        }, 1000);
       })
   })
 
