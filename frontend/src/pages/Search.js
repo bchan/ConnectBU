@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import { Link } from 'react-router-dom';
@@ -9,6 +9,9 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 
 import pic from '../images/image.jpg';
 
@@ -68,30 +71,38 @@ const useStyles = makeStyles((theme) => ({
     fontSize:'1.3em'
   },
   imageSize: {
-    width: theme.spacing(10), 
+    width: theme.spacing(10),
     height: theme.spacing(10),
     marginRight: 15
   }
-
 }));
 
-const searchResults = [
-  { 
-    name: "Nadim El Helou", 
-    major: "Computer Engineering" 
-  }, 
-  { 
-    name: "Hussain Albayat", 
-    major: "Computer Engineering" 
-  }, 
-  { 
-    name: "Artoo the Terrier", 
-    major: "T.L." 
-  }
-];
 
 export default function Search() {
   const classes = useStyles();
+  const [filters, setFilters] = useState({
+    checkedClass: false,
+    checkedLab: false,
+    checkedMajor: false,
+    checkedMinor: false,
+    checkedYear: false,
+  });
+  const [searchBar, setSearchBar] = useState('');
+  const [searchQuery, setSearchQuery] = useState({});
+  const [searchResults, setSearchResults] = useState([]);
+
+  const setField = (newData) => {
+    let newDictionary = searchQuery;
+    for (let key of Object.keys(newData)) {
+      newDictionary[key] = newData[key];
+    }
+    setSearchQuery(newDictionary);
+  }
+
+  const handleFilterChange = (event) => {
+    setFilters({ ...filters, [event.target.name]: event.target.checked });
+    setField({filters: filters});
+  };
 
   return (
 
@@ -110,6 +121,28 @@ export default function Search() {
 
         <Grid className={classes.box1}>
           <p>Filter by</p>
+          <FormGroup>
+            <FormControlLabel
+              control={<Checkbox checked={filters.checkedClass} onChange={handleFilterChange} name="checkedClass"/>}
+              label="Classes"
+            />
+            <FormControlLabel
+              control={<Checkbox checked={filters.checkedLab} onChange={handleFilterChange} name="checkedLab"/>}
+              label="Labs"
+            />
+            <FormControlLabel
+              control={<Checkbox checked={filters.checkedMajor} onChange={handleFilterChange} name="checkedMajor"/>}
+              label="Major"
+            />
+            <FormControlLabel
+              control={<Checkbox checked={filters.checkedMinor} onChange={handleFilterChange} name="checkedMinor"/>}
+              label="Minor"
+            />
+            <FormControlLabel
+              control={<Checkbox checked={filters.checkedYear} onChange={handleFilterChange} name="checkedYear"/>}
+              label="School Year"
+            />
+          </FormGroup>
         </Grid>
 
         <Grid className={classes.spaceMiddle}> </Grid>
