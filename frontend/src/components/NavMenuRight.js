@@ -135,7 +135,12 @@ export default function NavMenuRight() {
           )}
         />
       }
-      <Snackbar open={errorState.isOpen} autoHideDuration={6000} onClose={handleErrorClose} anchorOrigin={{ horizontal: 'center', vertical: 'top' }}>
+      <Snackbar
+        open={errorState.isOpen}
+        autoHideDuration={6000}
+        onClose={handleErrorClose}
+        anchorOrigin={{ horizontal: 'center', vertical: 'top' }}
+      >
         <MuiAlert elevation={6} variant="filled" onClose={handleErrorClose} severity="error">
           {errorState.errorMessage}
         </MuiAlert>
