@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import { Link } from 'react-router-dom';
-
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import ListItem from '@material-ui/core/ListItem';
@@ -10,9 +9,11 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import FormGroup from '@material-ui/core/FormGroup';
+import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import IconButton from '@material-ui/core/IconButton';
 import Checkbox from '@material-ui/core/Checkbox';
+import { useSnackbar } from 'notistack';
 import axios from 'axios';
 import pic from '../images/image.jpg';
 
@@ -89,8 +90,9 @@ export default function Search() {
     year: false,
   });
   const [searchTerm, setSearchTerm] = useState('');
-  const [searchQuery, setSearchQuery] = useState({});
+  const [searchQuery, setSearchQuery] = useState({searchFields: {}, searchTerm: ''});
   const [searchResults, setSearchResults] = useState([]);
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const setField = (newData) => {
     let newDictionary = searchQuery;
@@ -110,15 +112,24 @@ export default function Search() {
     setField({searchTerm: searchTerm})
   };
 
-  const executeSearch = (callback) => {
-    axios.post('http://localhost:5000/search', searchQuery)
-      .then((response) => {
-        console.log(response);
-        return callback(response);
-      })
-      .catch((response) => {
-        // console.log(response);
-      })
+  const executeSearch = () => {
+    if (searchTerm === ''){
+      enqueueSnackbar('Please enter a term to search.', {variant: 'error'});
+      return;
+    }
+    else {
+      axios.post('http://localhost:5000/search', searchQuery)
+        .then((response) => {
+          const success_msg = `Your search returned ${response.data.nohits} results.`;
+          enqueueSnackbar(success_msg, {variant: 'info'});
+          console.log(response);
+        })
+        .catch((response) => {
+          const error_msg = 'There was an error with your search request. Please try again later';
+          enqueueSnackbar(error_msg, {variant: 'error'});
+          console.log(response);
+        })
+    }
   };
 
   return (
@@ -167,20 +178,14 @@ export default function Search() {
         <Grid className={classes.box2}>
 
           <Grid container direction="row" className={classes.search}>
-            <InputBase
-              placeholder="Search…"
-              required
-              classes={{ root: classes.inputRoot, input: classes.inputInput, }}
-              onChange={(event) => handleSearchChange(event)}
-            />
-            <IconButton
-              type="submit"
-              className={classes.searchIcon}
-              aria-label="search"
-              onClick={() => executeSearch()}
-            >
-              <SearchIcon />
-            </IconButton>
+              <InputBase
+                placeholder="Search…"
+                classes={{ root: classes.inputRoot, input: classes.inputInput, }}
+                onChange={(event) => handleSearchChange(event)}
+              />
+              <IconButton type="submit" className={classes.searchIcon} onClick={() => executeSearch()}>
+                <SearchIcon />
+              </IconButton>
           </Grid>
 
           <Grid className={classes.resultBox}>
