@@ -86,9 +86,9 @@ export default function Footer() {
             </Grid>
           </Grid>
 
-          <Grid item xs={12} className={classes.copyright}>
+          {/* <Grid item xs={12} className={classes.copyright}>
             <div>Copyright © ConnectBU 2021</div>
-          </Grid>
+          </Grid> */}
 
         </Grid>
       </Container>
