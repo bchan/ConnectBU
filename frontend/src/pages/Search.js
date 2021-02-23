@@ -11,6 +11,7 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import IconButton from '@material-ui/core/IconButton';
 import Checkbox from '@material-ui/core/Checkbox';
 
 import pic from '../images/image.jpg';
@@ -51,13 +52,13 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 10,
     height: '100%',
     alignItems: 'center',
-    justify: 'center',
   },
   inputRoot: {
     color: 'inherit',
   },
   inputInput: {
-    marginLeft: 10
+    marginLeft: 20,
+    minWidth: 400,
   },
   separation: {
     width: "100%",
@@ -87,7 +88,7 @@ export default function Search() {
     checkedMinor: false,
     checkedYear: false,
   });
-  const [searchBar, setSearchBar] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
   const [searchQuery, setSearchQuery] = useState({});
   const [searchResults, setSearchResults] = useState([]);
 
@@ -103,6 +104,15 @@ export default function Search() {
     setFilters({ ...filters, [event.target.name]: event.target.checked });
     setField({filters: filters});
   };
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+    setField({searchTerm: searchTerm})
+  };
+
+  const executeSearch = () => {
+    console.log('yessir');
+  }
 
   return (
 
@@ -150,10 +160,20 @@ export default function Search() {
         <Grid className={classes.box2}>
 
           <Grid container direction="row" className={classes.search}>
-            <div className={classes.searchIcon}>
+            <InputBase
+              placeholder="Search…"
+              required
+              classes={{ root: classes.inputRoot, input: classes.inputInput, }}
+              onChange={(event) => handleSearchChange(event)}
+            />
+            <IconButton
+              type="submit"
+              className={classes.searchIcon}
+              aria-label="search"
+              onClick={() => executeSearch()}
+            >
               <SearchIcon />
-            </div>
-            <InputBase placeholder="Search…" classes={{ root: classes.inputRoot, input: classes.inputInput, }} />
+            </IconButton>
           </Grid>
 
           <Grid className={classes.resultBox}>
