@@ -1,0 +1,10 @@
+.Chat {
+  font-family: sans-serif;
+  text-align: center;
+  height: 80vh;
+  padding-top: 30px;
+  padding-right: 10vh;
+  padding-bottom: 70px;
+  padding-left: 10vh;
+  background-color: rgb(240, 240, 240);
+}
