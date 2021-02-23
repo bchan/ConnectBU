@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import { Link } from 'react-router-dom';
@@ -9,7 +9,11 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
-
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import IconButton from '@material-ui/core/IconButton';
+import Checkbox from '@material-ui/core/Checkbox';
+import axios from 'axios';
 import pic from '../images/image.jpg';
 
 const useStyles = makeStyles((theme) => ({
@@ -48,13 +52,13 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 10,
     height: '100%',
     alignItems: 'center',
-    justify: 'center',
   },
   inputRoot: {
     color: 'inherit',
   },
   inputInput: {
-    marginLeft: 10
+    marginLeft: 20,
+    minWidth: 400,
   },
   separation: {
     width: "100%",
@@ -68,30 +72,54 @@ const useStyles = makeStyles((theme) => ({
     fontSize:'1.3em'
   },
   imageSize: {
-    width: theme.spacing(10), 
+    width: theme.spacing(10),
     height: theme.spacing(10),
     marginRight: 15
   }
-
 }));
 
-const searchResults = [
-  { 
-    name: "Nadim El Helou", 
-    major: "Computer Engineering" 
-  }, 
-  { 
-    name: "Hussain Albayat", 
-    major: "Computer Engineering" 
-  }, 
-  { 
-    name: "Artoo the Terrier", 
-    major: "T.L." 
-  }
-];
 
 export default function Search() {
   const classes = useStyles();
+  const [filters, setFilters] = useState({
+    checkedClass: false,
+    checkedLab: false,
+    checkedMajor: false,
+    checkedMinor: false,
+    checkedYear: false,
+  });
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchQuery, setSearchQuery] = useState({});
+  const [searchResults, setSearchResults] = useState([]);
+
+  const setField = (newData) => {
+    let newDictionary = searchQuery;
+    for (let key of Object.keys(newData)) {
+      newDictionary[key] = newData[key];
+    }
+    setSearchQuery(newDictionary);
+  }
+
+  const handleFilterChange = (event) => {
+    setFilters({ ...filters, [event.target.name]: event.target.checked });
+    setField({searchFields: filters});
+  };
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+    setField({searchTerm: searchTerm})
+  };
+
+  const executeSearch = (callback) => {
+    axios.post('http://localhost:5000/search', searchTerm)
+      .then((response) => {
+        console.log(response);
+        return callback(response);
+      })
+      .catch((response) => {
+        // console.log(response);
+      })
+  };
 
   return (
 
@@ -110,6 +138,28 @@ export default function Search() {
 
         <Grid className={classes.box1}>
           <p>Filter by</p>
+          <FormGroup>
+            <FormControlLabel
+              control={<Checkbox checked={filters.checkedClass} onChange={handleFilterChange} name="checkedClass"/>}
+              label="Classes"
+            />
+            <FormControlLabel
+              control={<Checkbox checked={filters.checkedLab} onChange={handleFilterChange} name="checkedLab"/>}
+              label="Labs"
+            />
+            <FormControlLabel
+              control={<Checkbox checked={filters.checkedMajor} onChange={handleFilterChange} name="checkedMajor"/>}
+              label="Major"
+            />
+            <FormControlLabel
+              control={<Checkbox checked={filters.checkedMinor} onChange={handleFilterChange} name="checkedMinor"/>}
+              label="Minor"
+            />
+            <FormControlLabel
+              control={<Checkbox checked={filters.checkedYear} onChange={handleFilterChange} name="checkedYear"/>}
+              label="School Year"
+            />
+          </FormGroup>
         </Grid>
 
         <Grid className={classes.spaceMiddle}> </Grid>
@@ -117,10 +167,20 @@ export default function Search() {
         <Grid className={classes.box2}>
 
           <Grid container direction="row" className={classes.search}>
-            <div className={classes.searchIcon}>
+            <InputBase
+              placeholder="Search…"
+              required
+              classes={{ root: classes.inputRoot, input: classes.inputInput, }}
+              onChange={(event) => handleSearchChange(event)}
+            />
+            <IconButton
+              type="submit"
+              className={classes.searchIcon}
+              aria-label="search"
+              onClick={() => executeSearch()}
+            >
               <SearchIcon />
-            </div>
-            <InputBase placeholder="Search…" classes={{ root: classes.inputRoot, input: classes.inputInput, }} />
+            </IconButton>
           </Grid>
 
           <Grid className={classes.resultBox}>
