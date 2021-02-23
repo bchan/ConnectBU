@@ -10,6 +10,9 @@ import { Link as RouterLink } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Link from '@material-ui/core/Link';
+import EditDialog from '../components/EditDialog';
+import EditIcon from '@material-ui/icons/Edit';
+import IconButton from '@material-ui/core/IconButton';
 
 import pic from '../images/image.jpg';
 import axios from 'axios';
@@ -58,7 +61,6 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: '#B03E3E',
       color: 'white'
     },
-    marginLeft: 10
   }
 }));
 
@@ -72,6 +74,7 @@ const useConstructor = (callBack = () => { }) => {
 export default function Profile() {
   const classes = useStyles();
   const [value, setValue] = useState(0);
+  const [open, setOpen] = useState(false);
   let email = useSelector(selectUserEmail);
   let [name, setName] = useState('John Smith');
   let [major1, setMajor1] = useState('Biomedical Engineering');
@@ -89,8 +92,8 @@ export default function Profile() {
         let userData = res.data;
         setName(userData.first_name + " " + userData.last_name);
         setMajor1(userData.major1);
-        setMajor2((userData.major2 === null)? '' : userData.major2);
-        setMinor((userData.minor === null)? '': userData.minor);
+        setMajor2((userData.major2 === null) ? '' : userData.major2);
+        setMinor((userData.minor === null) ? '' : userData.minor);
         setYear(userData.year);
       })
       .catch((err) => {
@@ -98,8 +101,17 @@ export default function Profile() {
       })
   })
 
+  let handleOpen = () => {
+    setOpen(true);
+  }
+
+  let handleClose = () => {
+    setOpen(false);
+  }
+
   return (
     <div className={classes.screen}>
+      <EditDialog open={open} handleClose={handleClose} />
       <Breadcrumbs aria-label="breadcrumb">
         <Link component={RouterLink} to="/">Home</Link>
         <Typography color="textPrimary">Profile</Typography>
@@ -107,15 +119,15 @@ export default function Profile() {
 
       <Grid
         container
-        className={classes.boxes}>
+        className={classes.boxes}
+        spacing={2}
+      >
 
-        <Grid item>
-          <ButtonBase className={classes.image}>
-            <img style={{ width: 128, height: 128, borderRadius: '50%', }} alt="complex" src={pic} />
-          </ButtonBase>
+        <Grid item xs={12} sm={12} md={2}>
+          <img style={{ width: 128, height: 128, borderRadius: '50%', }} alt="complex" src={pic} />
         </Grid>
-        <Grid item xs={12} sm container alignItems="center" spacing={1}>
-          <Grid item container spacing={2} md={8}>
+        <Grid item xs={12} sm={12} md={10} container alignItems="center" spacing={2}>
+          <Grid item container spacing={2} sm={8} md={10}>
             <Grid item xs={12}>
               <div style={{ fontSize: 36, fontWeight: 'bold' }}>{name}</div>
             </Grid>
@@ -128,9 +140,15 @@ export default function Profile() {
               }
             </Grid>
           </Grid>
-          <Grid item sm={false} md={2} lg={3}></Grid>
-          <Grid item xs={2} md={1} style={{ textAlign: 'center' }}>
-            <Button className={classes.button} component={Link}>Message</Button>
+          <Grid item container xs={12} sm={4} md={2} alignItems="center" justify="center" style={{textAlign: 'center'}}>
+            <Grid item xs={12}>
+              <Button className={classes.button}>Message</Button>
+            </Grid>
+            <Grid item xs={12}>
+              <IconButton onClick={handleOpen}>
+                <EditIcon />
+              </IconButton>
+            </Grid>
           </Grid>
         </Grid>
 
@@ -168,16 +186,16 @@ export default function Profile() {
             //   marginTop: 10,
             //   backgroundColor: "#F4F4F4",
             //   borderRadius: 10
-              
+
             // }}
             // spacing={4}
             className={classes.boxes}
           >
 
-            <Grid item xs={1}>
+            <Grid item xs={12}>
               <p style={{ fontWeight: "bold" }}>Year of Graduation</p>
             </Grid>
-            <Grid item xs={11}>
+            <Grid item xs={12}>
               <p>{year}</p>
             </Grid>
 
