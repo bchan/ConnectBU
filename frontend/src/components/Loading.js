@@ -16,7 +16,7 @@ export default function Loading(props) {
       height="100vh"
     >
       <Container maxWidth="xs" className={classes.container}>
-        <img src={Dog} className={classes.image} />
+        <img src={Dog} className={classes.image} alt="Loading dog" />
         <div className={classes.message}>
           {props.message}
         </div>

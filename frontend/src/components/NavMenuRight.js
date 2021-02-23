@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+// import MoreVertIcon from '@material-ui/icons/MoreVert';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Alert from './Alert';
@@ -31,10 +31,11 @@ export default function NavMenuRight() {
       .then((res) => {
         dispatch(login(userEmail));
         history.push('/profile');
+        setSuccessState({ isOpen: true, successMessage: 'Sucessfully logged in' })
       })
       .catch((error) => {
         if (error.response.data === 'Invalid email') {
-          setErrorState({ isOpen: true, errorMessage: 'You must use a BU email to sign in/up'})
+          setErrorState({ isOpen: true, errorMessage: 'You must use a BU email to sign in/up' })
         }
       })
   }
@@ -59,7 +60,7 @@ export default function NavMenuRight() {
     axios.get('/api/logout')
       .then((res) => {
         history.push('/');
-        setSuccessState({ isOpen: true, successMessage: 'Sucessfully logged out'})
+        setSuccessState({ isOpen: true, successMessage: 'Sucessfully logged out' })
       })
       .catch((err) => {
         console.log('ERROR');

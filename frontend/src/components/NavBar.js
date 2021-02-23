@@ -4,7 +4,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import { useLocation, useHistory } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useScrollTrigger } from '@material-ui/core';
 import { useStyles } from '../styles/NavBar.styles';
 
@@ -15,7 +15,6 @@ import NavMenuRight from './NavMenuRight';
 
 export default function NavBar() {
   const location = useLocation();
-  const history = useHistory();
   const classes = useStyles();
   let trigger = useScrollTrigger(
     {
