@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Chip from '@material-ui/core/Chip';
@@ -12,6 +12,11 @@ import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Link from '@material-ui/core/Link';
 
 import pic from '../images/image.jpg';
+import axios from 'axios';
+
+// Redux
+import { useSelector } from 'react-redux';
+import { selectUserEmail } from '../redux/loginSlice';
 
 function a11yProps(index) {
   return {
@@ -22,6 +27,7 @@ function a11yProps(index) {
 
 const useStyles = makeStyles((theme) => ({
   screen: {
+    marginTop: '90px',
     marginLeft: 50,
     marginRight: 50
   },
@@ -56,21 +62,44 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function NewProfile() {
+const useConstructor = (callBack = () => { }) => {
+  const [hasCalled, setCalled] = useState(false);
+  if (hasCalled) return;
+  callBack();
+  setCalled(true);
+}
+
+export default function Profile() {
   const classes = useStyles();
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
+  let email = useSelector(selectUserEmail);
+  let [name, setName] = useState('John Smith');
+  let [major1, setMajor1] = useState('Biomedical Engineering');
+  let [major2, setMajor2] = useState('Electrical Engineering');
+  let [minor, setMinor] = useState('Biology');
+  let [year, setYear] = useState('2021');
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
+  useConstructor(() => {
+    axios.get('/user/' + email)
+      .then((res) => {
+        let userData = res.data;
+        setName(userData.first_name + " " + userData.last_name);
+        setMajor1(userData.major1);
+        setMajor2((userData.major2 === null)? '' : userData.major2);
+        setMinor((userData.minor === null)? '': userData.minor);
+        setYear(userData.year);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  })
+
   return (
-
     <div className={classes.screen}>
-
-      <p style={{ 'white-space': 'pre-wrap' }}>{"\n"}</p>
-      <p style={{ 'white-space': 'pre-wrap' }}>{"\n"}</p>
-
       <Breadcrumbs aria-label="breadcrumb">
         <Link component={RouterLink} to="/">Home</Link>
         <Typography color="textPrimary">Profile</Typography>
@@ -85,14 +114,22 @@ export default function NewProfile() {
             <img style={{ width: 128, height: 128, borderRadius: '50%', }} alt="complex" src={pic} />
           </ButtonBase>
         </Grid>
-        <Grid item xs={12} sm container alignItems="center">
-          <Grid item xs container direction="column" spacing={2}>
-            <Grid item xs>
-              <h1 style={{ fontSize: 36 }}>Artoo the Terrier</h1>
-              <Chip label="Computer Engineering" style={{ backgroundColor: "#C4C4C4" }} />
+        <Grid item xs={12} sm container alignItems="center" spacing={1}>
+          <Grid item container spacing={2} md={8}>
+            <Grid item xs={12}>
+              <div style={{ fontSize: 36, fontWeight: 'bold' }}>{name}</div>
+            </Grid>
+            <Grid item xs={12}>
+              <Chip label={major1} style={{ backgroundColor: "#C4C4C4", marginRight: '5px', marginBottom: '5px' }} />
+              {(major2 !== '') ?
+                <Chip label={major2} style={{ backgroundColor: "#C4C4C4", marginRight: '5px', marginBottom: '5px' }} />
+                :
+                <div></div>
+              }
             </Grid>
           </Grid>
-          <Grid item>
+          <Grid item sm={false} md={2} lg={3}></Grid>
+          <Grid item xs={2} md={1} style={{ textAlign: 'center' }}>
             <Button className={classes.button} component={Link}>Message</Button>
           </Grid>
         </Grid>
@@ -104,9 +141,10 @@ export default function NewProfile() {
           value={value}
           onChange={handleChange}
           aria-label="tabs"
-          variant="fullWidth"
           indicatorColor="secondary"
           textColor="secondary"
+          variant="scrollable"
+          scrollButtons="auto"
         >
           <Tab label="About" {...a11yProps(0)} />
           <Tab label="Activities" {...a11yProps(1)} />
@@ -124,20 +162,23 @@ export default function NewProfile() {
         {value === 0 && (
           <Grid
             container
-            style={{
-              paddingLeft: 30, paddingRight: 30,
-              marginBottom: 30,
-              marginTop: 10,
-              backgroundColor: "#F4F4F4",
-              borderRadius: 10
-            }}
-            spacing={4}>
+            // style={{
+            //   paddingLeft: 30, paddingRight: 30,
+            //   marginBottom: 30,
+            //   marginTop: 10,
+            //   backgroundColor: "#F4F4F4",
+            //   borderRadius: 10
+              
+            // }}
+            // spacing={4}
+            className={classes.boxes}
+          >
 
-            <Grid item>
-              <p style={{ fontWeight: "bold" }}>Country</p>
+            <Grid item xs={1}>
+              <p style={{ fontWeight: "bold" }}>Year of Graduation</p>
             </Grid>
-            <Grid item xs={12} sm>
-              <p>Saudi Arabia</p>
+            <Grid item xs={11}>
+              <p>{year}</p>
             </Grid>
 
           </Grid>
@@ -157,22 +198,22 @@ export default function NewProfile() {
             className={classes.boxes}>
 
             <Grid>
-              <h2 style={{ marginTop: 0 }}>Extra-Curriculars</h2>
-              <p>Walking, peeing</p>
+              <h2 style={{ marginTop: 0 }}>Clubs</h2>
+              <p>Coming soon</p>
             </Grid>
 
             <Grid className={classes.separation}></Grid>
 
             <Grid>
               <h2 style={{ marginTop: 0 }}>Labs</h2>
-              <p>None</p>
+              <p>Coming soon</p>
             </Grid>
 
             <Grid className={classes.separation}></Grid>
 
             <Grid>
               <h2 style={{ marginTop: 0 }}>On Campus Job</h2>
-              <p>Being petted</p>
+              <p>Coming soon</p>
             </Grid>
 
           </Grid>
@@ -194,7 +235,7 @@ export default function NewProfile() {
 
             <Grid>
               <h2 style={{ marginTop: 0 }}>Classes</h2>
-              <p>I don't do classes. Okay?</p>
+              <p>Coming soon</p>
             </Grid>
 
           </Grid>

@@ -94,7 +94,9 @@ function Index() {
                 <Chat />
               </Route>
               <Route path="/profile">
-                <Profile />
+                <Fade in={!isLoading}>
+                  <div><Profile /></div>
+                </Fade>
               </Route>
             </Switch>
             <Footer />
