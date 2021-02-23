@@ -10,6 +10,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Link from '@material-ui/core/Link';
+import EditDialog from '../components/EditDialog';
 
 import pic from '../images/image.jpg';
 import axios from 'axios';
@@ -72,6 +73,7 @@ const useConstructor = (callBack = () => { }) => {
 export default function Profile() {
   const classes = useStyles();
   const [value, setValue] = useState(0);
+  const [open, setOpen] = useState(false);
   let email = useSelector(selectUserEmail);
   let [name, setName] = useState('John Smith');
   let [major1, setMajor1] = useState('Biomedical Engineering');
@@ -98,8 +100,17 @@ export default function Profile() {
       })
   })
 
+  let handleOpen = () => {
+    setOpen(true);
+  }
+
+  let handleClose = () => {
+    setOpen(false);
+  }
+
   return (
     <div className={classes.screen}>
+      <EditDialog open={open} handleClose={handleClose} />
       <Breadcrumbs aria-label="breadcrumb">
         <Link component={RouterLink} to="/">Home</Link>
         <Typography color="textPrimary">Profile</Typography>
@@ -130,7 +141,7 @@ export default function Profile() {
           </Grid>
           <Grid item sm={false} md={2} lg={3}></Grid>
           <Grid item xs={2} md={1} style={{ textAlign: 'center' }}>
-            <Button className={classes.button} component={Link}>Message</Button>
+            <Button className={classes.button} onClick={handleOpen}>Message</Button>
           </Grid>
         </Grid>
 
