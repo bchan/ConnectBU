@@ -142,10 +142,10 @@ export default function Profile() {
           </Grid>
           <Grid item container xs={12} sm={4} md={2} alignItems="center" justify="center" style={{textAlign: 'center'}}>
             <Grid item xs={12}>
-              <Button className={classes.button} onClick={handleOpen}>Message</Button>
+              <Button className={classes.button}>Message</Button>
             </Grid>
             <Grid item xs={12}>
-              <IconButton>
+              <IconButton onClick={handleOpen}>
                 <EditIcon />
               </IconButton>
             </Grid>
