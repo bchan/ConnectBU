@@ -24,6 +24,7 @@
     "react-redux": "^7.2.2",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.0",
+    "sendbird-uikit": "^2.0.2",
     "typography": "^0.16.19",
     "web-vitals": "^0.2.4"
   },
