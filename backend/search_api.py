@@ -34,7 +34,7 @@ class Search(Resource):
     def post(self):
 
         json_data = request.get_json(force=True)
-        print(json_data)
+        print("REQUEST DATA\n",json_data)
 
         searchFields = []
         filters = json_data["searchFields"]
@@ -44,13 +44,14 @@ class Search(Resource):
         if not searchFields:
             for key in json_data["searchFields"]:
                 searchFields.append(str(key))
-    
+
         search_query = {
                         "query":
                             {"multi_match":
                                 {"query": json_data["searchTerm"], "fields": searchFields}
                             }
                         }
+        print("SEARCH QUERY\n",search_query)
         resl = es.search(body=search_query)
 
         search_results =  {

@@ -125,7 +125,7 @@ export default function Search() {
           console.log(response);
         })
         .catch((response) => {
-          const error_msg = 'There was an error with your search request. Please try again later';
+          const error_msg = 'There was an error processing your search request. Please try again later.';
           enqueueSnackbar(error_msg, {variant: 'error'});
           console.log(response);
         })
@@ -151,23 +151,23 @@ export default function Search() {
           <p>Filter by</p>
           <FormGroup>
             <FormControlLabel
-              control={<Checkbox checked={filters.class} onChange={handleFilterChange} name="checkedClass"/>}
+              control={<Checkbox checked={filters.class} onChange={handleFilterChange} name="class"/>}
               label="Classes"
             />
             <FormControlLabel
-              control={<Checkbox checked={filters.labs} onChange={handleFilterChange} name="checkedLab"/>}
+              control={<Checkbox checked={filters.labs} onChange={handleFilterChange} name="labs"/>}
               label="Labs"
             />
             <FormControlLabel
-              control={<Checkbox checked={filters.majors} onChange={handleFilterChange} name="checkedMajor"/>}
+              control={<Checkbox checked={filters.majors} onChange={handleFilterChange} name="majors"/>}
               label="Major"
             />
             <FormControlLabel
-              control={<Checkbox checked={filters.minors} onChange={handleFilterChange} name="checkedMinor"/>}
+              control={<Checkbox checked={filters.minors} onChange={handleFilterChange} name="minors"/>}
               label="Minor"
             />
             <FormControlLabel
-              control={<Checkbox checked={filters.year} onChange={handleFilterChange} name="checkedYear"/>}
+              control={<Checkbox checked={filters.year} onChange={handleFilterChange} name="year"/>}
               label="School Year"
             />
           </FormGroup>
