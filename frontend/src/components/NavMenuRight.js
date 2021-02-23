@@ -21,6 +21,7 @@ export default function NavMenuRight() {
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [errorState, setErrorState] = React.useState({ isOpen: false, errorMessage: '' });
+  const [successState, setSuccessState] = React.useState({ isOpen: false, successMessage: '' })
 
   let responseSuccess = (event) => {
     let userEmail = event.profileObj.email;
@@ -57,8 +58,8 @@ export default function NavMenuRight() {
     handleSettingsClose();
     axios.get('/api/logout')
       .then((res) => {
-        console.log('Successfully logged out');
         history.push('/');
+        setSuccessState({ isOpen: true, successMessage: 'Sucessfully logged out'})
       })
       .catch((err) => {
         console.log('ERROR');
@@ -71,6 +72,13 @@ export default function NavMenuRight() {
       return;
     }
     setErrorState({ isOpen: false, errorMessage: '' });
+  };
+
+  let handleSuccessClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSuccessState({ isOpen: false, successMessage: '' });
   };
 
   return (
@@ -140,6 +148,13 @@ export default function NavMenuRight() {
         handleClose={handleErrorClose}
         message={errorState.errorMessage}
         type="error"
+      />
+
+      <Alert 
+        open={successState.isOpen}
+        handleClose={handleSuccessClose}
+        message={successState.successMessage}
+        type="success"
       />
     </div>
   )
