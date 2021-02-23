@@ -120,8 +120,15 @@ export default function Search() {
     else {
       axios.post('http://localhost:5000/search', searchQuery)
         .then((response) => {
-          const success_msg = `Your search returned ${response.data.nohits} results.`;
+          const results = response.data.results;
+          const num_results = response.data.nohits;
+
+          const success_msg = `Your search returned ${num_results} results.`;
           enqueueSnackbar(success_msg, {variant: 'info'});
+
+          if (num_results > 0){
+            setSearchResults(results);
+          }
           console.log(response);
         })
         .catch((response) => {
@@ -192,11 +199,11 @@ export default function Search() {
             <h3>Results</h3>
             <Grid className={classes.separation}></Grid>
             {searchResults.map((item) => (
-              <ListItem button key={item.name} component={Link} to={"/profile"}>
+              <ListItem button key={item._source.name} component={Link} to={"/profile"}>
                 <ListItemAvatar>
                   <Avatar src={pic} className={classes.imageSize} />
                 </ListItemAvatar>
-                <ListItemText classes={{primary:classes.listItemText}} primary={item.name} secondary={item.major} />
+                <ListItemText classes={{primary:classes.listItemText}} primary={item._source.name} secondary={item._source.majors} />
               </ListItem>
             ))}
           </Grid>

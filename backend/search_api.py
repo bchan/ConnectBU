@@ -31,18 +31,18 @@ es = Elasticsearch(
 print('ES is active')
 
 doc1 = {
-    "name": 'Damani Philip', 
-    "majors": 'ENG Computer Engineering', 
-    "minors": 'CAS Astronomy', 
-    "year": '2021', 
+    "name": 'Damani Philip',
+    "majors": 'ENG Computer Engineering',
+    "minors": 'CAS Astronomy',
+    "year": '2021',
     "ipad?": 'no'
     }
 
 doc2 = {
-    "name": 'Nadim El Helou', 
-    "majors": ['ENG Computer Engineering', "CAS Pyschology"], 
-    "minors": 'CAS Ancient Greek', 
-    "year": '2021', 
+    "name": 'Nadim El Helou',
+    "majors": ['ENG Computer Engineering', "CAS Pyschology"],
+    "minors": 'CAS Ancient Greek',
+    "year": '2021',
     "ipad?": 'no'
     }
 
