@@ -126,7 +126,7 @@ export default function Profile() {
         <Grid item xs={12} sm={12} md={2}>
           <img style={{ width: 128, height: 128, borderRadius: '50%', }} alt="complex" src={pic} />
         </Grid>
-        <Grid item xs={12} sm={12} md={10} container alignItems="center" spacing={1} style={{ width: '100%' }}>
+        <Grid item xs={12} sm={12} md={10} container alignItems="center" spacing={2}>
           <Grid item container spacing={2} sm={8} md={10}>
             <Grid item xs={12}>
               <div style={{ fontSize: 36, fontWeight: 'bold' }}>{name}</div>
