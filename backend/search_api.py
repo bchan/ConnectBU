@@ -1,7 +1,12 @@
 from flask import Flask, jsonify, request, make_response
 from flask_restful import Resource, Api
+from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 from requests_aws4auth import AWS4Auth
 import boto3
+from elasticsearch import Elasticsearch, RequestsHttpConnection
+from requests_aws4auth import AWS4Auth
+
 
 app = Flask(__name__)
 CORS(app)
@@ -36,14 +41,17 @@ class Search(Resource):
         for key in json_data["searchFields"]:
             if (filters[key]):
                 searchFields.append(str(key))
-
+        if not searchFields:
+            for key in json_data["searchFields"]:
+                searchFields.append(str(key))
+    
         search_query = {
                         "query":
                             {"multi_match":
                                 {"query": json_data["searchTerm"], "fields": searchFields}
                             }
                         }
-        resl = es.search(body=srch)
+        resl = es.search(body=search_query)
 
         search_results =  {
             'results': resl["hits"]["hits"],
