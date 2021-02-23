@@ -27,9 +27,24 @@ print('ES is active')
 
 class Search(Resource):
     def post(self):
+        
         json_data = request.get_json(force=True)
         print(json_data)
 
+        search_query = {
+                        "query": 
+                            {"multi_match": 
+                                {"query": json_data["searchTerm"], "fields": json_data["searchFields"]}
+                            }
+                        }  
+        resl = es.search(body=srch)
+
+        search_results =  {
+            'results': resl["hits"]["hits"],
+            'nohits': resl['hits']['total']['value']
+        }
+
+        return search_results, 200                 
         
 
 api.add_resource(Search, '/search')
