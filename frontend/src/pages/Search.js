@@ -13,7 +13,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import IconButton from '@material-ui/core/IconButton';
 import Checkbox from '@material-ui/core/Checkbox';
-
+import axios from 'axios';
 import pic from '../images/image.jpg';
 
 const useStyles = makeStyles((theme) => ({
@@ -102,7 +102,7 @@ export default function Search() {
 
   const handleFilterChange = (event) => {
     setFilters({ ...filters, [event.target.name]: event.target.checked });
-    setField({filters: filters});
+    setField({searchFields: filters});
   };
 
   const handleSearchChange = (event) => {
@@ -110,9 +110,16 @@ export default function Search() {
     setField({searchTerm: searchTerm})
   };
 
-  const executeSearch = () => {
-    console.log('yessir');
-  }
+  const executeSearch = (callback) => {
+    axios.post('http://localhost:5000/search', searchTerm)
+      .then((response) => {
+        console.log(response);
+        return callback(response);
+      })
+      .catch((response) => {
+        // console.log(response);
+      })
+  };
 
   return (
 
