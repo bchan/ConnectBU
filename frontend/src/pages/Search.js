@@ -82,11 +82,11 @@ const useStyles = makeStyles((theme) => ({
 export default function Search() {
   const classes = useStyles();
   const [filters, setFilters] = useState({
-    checkedClass: false,
-    checkedLab: false,
-    checkedMajor: false,
-    checkedMinor: false,
-    checkedYear: false,
+    class: false,
+    labs: false,
+    majors: false,
+    minors: false,
+    year: false,
   });
   const [searchTerm, setSearchTerm] = useState('');
   const [searchQuery, setSearchQuery] = useState({});
@@ -111,7 +111,7 @@ export default function Search() {
   };
 
   const executeSearch = (callback) => {
-    axios.post('http://localhost:5000/search', searchTerm)
+    axios.post('http://localhost:5000/search', searchQuery)
       .then((response) => {
         console.log(response);
         return callback(response);
@@ -140,23 +140,23 @@ export default function Search() {
           <p>Filter by</p>
           <FormGroup>
             <FormControlLabel
-              control={<Checkbox checked={filters.checkedClass} onChange={handleFilterChange} name="checkedClass"/>}
+              control={<Checkbox checked={filters.class} onChange={handleFilterChange} name="checkedClass"/>}
               label="Classes"
             />
             <FormControlLabel
-              control={<Checkbox checked={filters.checkedLab} onChange={handleFilterChange} name="checkedLab"/>}
+              control={<Checkbox checked={filters.labs} onChange={handleFilterChange} name="checkedLab"/>}
               label="Labs"
             />
             <FormControlLabel
-              control={<Checkbox checked={filters.checkedMajor} onChange={handleFilterChange} name="checkedMajor"/>}
+              control={<Checkbox checked={filters.majors} onChange={handleFilterChange} name="checkedMajor"/>}
               label="Major"
             />
             <FormControlLabel
-              control={<Checkbox checked={filters.checkedMinor} onChange={handleFilterChange} name="checkedMinor"/>}
+              control={<Checkbox checked={filters.minors} onChange={handleFilterChange} name="checkedMinor"/>}
               label="Minor"
             />
             <FormControlLabel
-              control={<Checkbox checked={filters.checkedYear} onChange={handleFilterChange} name="checkedYear"/>}
+              control={<Checkbox checked={filters.year} onChange={handleFilterChange} name="checkedYear"/>}
               label="School Year"
             />
           </FormGroup>
