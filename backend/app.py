@@ -17,9 +17,6 @@ app.config.from_pyfile('config.py')
 db.init_app(app)
 
 
-TEMP_SECRET = 'supersecretkey'
-
-
 ##### Helper functions for Authentication #####
 
 # Checks Google SSO token from the frontend
@@ -34,7 +31,7 @@ def checkGoogleToken(token):
 
 # Creates JWT for the frontend
 def createToken(tokenDict):
-    return jwt.encode(tokenDict, TEMP_SECRET, algorithm='HS256')
+    return jwt.encode(tokenDict, app.config['JWT_SECRET_KEY'], algorithm='HS256')
 
 
 # Checks if JWT is blacklisted
@@ -68,7 +65,7 @@ def jwt_required(func):
             return 'Not authorized', 401
 
         try:
-            token = jwt.decode(encodedToken, TEMP_SECRET, algorithms=['HS256'])
+            token = jwt.decode(encodedToken, app.config['JWT_SECRET_KEY'], algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
             return 'Expired token', 401
         except:
@@ -204,7 +201,7 @@ class Login(Resource):
     @jwt_required
     def get(self):
         encodedToken = request.cookies.get('token')
-        token = jwt.decode(encodedToken, TEMP_SECRET, algorithms=['HS256'])
+        token = jwt.decode(encodedToken, app.config['JWT_SECRET_KEY'], algorithms=['HS256'])
         return token['email'], 200
 
 
