@@ -186,7 +186,33 @@ class Login(Resource):
         if 'hd' not in googleInfo or googleInfo['hd'] != 'bu.edu':
             return 'Invalid email', 401
 
-        print(googleInfo)
+
+        email = googleInfo['email']
+        firstName = googleInfo['given_name']
+        lastName = googleInfo['family_name']
+
+        # Checks if user is in database
+        res = Student.query.filter_by(email=email).first()
+
+        # Adds user if not in database
+        if res is None:
+            new_student = Student(
+                email = email,
+                first_name = firstName,
+                last_name = lastName,
+                major1 = '',
+                major2 = None,
+                minor = None,
+                school_year = 0,
+                has_ipad = 0
+            )
+            db.session.add(new_student)
+            db.session.commit()
+
+            resp = Student.query.filter_by(email=email).first()
+
+            if resp is None:
+                return 'Error creating user profile', 501
 
         # Issues JWT
         td = timedelta(hours=12, seconds=0)

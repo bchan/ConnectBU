@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -22,6 +22,13 @@ const useStyles = makeStyles((theme) => ({
 
 export default function EditDialog(props) {
   const classes = useStyles();
+  let profileData = props.profileData;
+  let changeProfileData = props.handleChange;
+
+  let setNewProfileData = () => {
+
+  }
+  console.log(profileData);
 
   return (
     <Dialog
@@ -96,7 +103,7 @@ export default function EditDialog(props) {
                 options={Major}
                 getOptionLabel={(option) => option.title}
                 // getOptionSelected={(option) => major.map((element) => { return element.title }).includes(option.title)}
-                // onChange={(event, newValue) => updateMajor(event, newValue)}
+                onChange={(event, newValue) => console.log(newValue)}
                 // value={major}
                 filterSelectedOptions
                 renderInput={
