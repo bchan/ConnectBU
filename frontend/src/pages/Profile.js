@@ -61,6 +61,15 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: '#B03E3E',
       color: 'white'
     },
+    margin: '5px',
+  },
+  message: {
+    [theme.breakpoints.down('sm')]: {
+      justifyContent: 'center',
+    },
+    [theme.breakpoints.up('md')]: {
+      justifyContent: 'flex-end',
+    }
   }
 }));
 
@@ -151,7 +160,7 @@ export default function Profile() {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item container xs={9} sm={9} md={4} alignItems="center" justify="flex-end">
+        <Grid item container xs={12} sm={12} md={4} alignItems="center" className={classes.message}>
           <Button className={classes.button}>Message</Button>
           <IconButton onClick={handleOpen}>
             <EditIcon />
