@@ -13,6 +13,7 @@ import Link from '@material-ui/core/Link';
 import EditDialog from '../components/EditDialog';
 import EditIcon from '@material-ui/icons/Edit';
 import IconButton from '@material-ui/core/IconButton';
+import Alert from '../components/Alert';
 
 import pic from '../images/image.jpg';
 import axios from 'axios';
@@ -84,6 +85,8 @@ export default function Profile() {
   const classes = useStyles();
   const [value, setValue] = useState(0);
   const [open, setOpen] = useState(false);
+  const [errorState, setErrorState] = React.useState({ isOpen: false, errorMessage: '' });
+  const [successState, setSuccessState] = React.useState({ isOpen: false, successMessage: '' })
   let email = useSelector(selectUserEmail);
   let [profileData, setProfileData] = useState({
     firstName: 'John',
@@ -129,16 +132,42 @@ export default function Profile() {
     newData.hasIpad = 0; // NEED TO TAKE OUT LATER
     axios.put('/user/' + email, newData)
       .then((res) => {
-        console.log(res);
         setProfileData(newData);
+        setSuccessState({ isOpen: true, successMessage: 'Sucessfully updated profile data' });
       })
       .catch((err) => {
-        console.log(err);
+        setErrorState({ isOpen: true, errorMessage: 'Unable to update profile data. Please try again.' });
       })
   }
 
+  let handleErrorClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setErrorState({ isOpen: false, errorMessage: '' });
+  };
+
+  let handleSuccessClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSuccessState({ isOpen: false, successMessage: '' });
+  };
+
   return (
     <div className={classes.screen}>
+      <Alert
+        open={errorState.isOpen}
+        handleClose={handleErrorClose}
+        message={errorState.errorMessage}
+        type="error"
+      />
+      <Alert
+        open={successState.isOpen}
+        handleClose={handleSuccessClose}
+        message={successState.successMessage}
+        type="success"
+      />
       <EditDialog open={open} handleClose={handleClose} profileData={profileData} handleChange={setNewProfileData} />
       <Breadcrumbs aria-label="breadcrumb">
         <Link component={RouterLink} to="/">Home</Link>
