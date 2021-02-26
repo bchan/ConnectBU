@@ -117,7 +117,7 @@ export default function Profile() {
           major2: userData.major2,
           minor: userData.minor,
           year: userData.year,
-        })
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -267,7 +267,7 @@ export default function Profile() {
               <p style={{ fontWeight: "bold" }}>Year of Graduation</p>
             </Grid>
             <Grid item xs={12}>
-              <p>{(profileData.year !== 0) ? profileData.year : 'Edit profile'}</p>
+              <p>{(profileData.year !== 0) ? profileData.year : ''}</p>
             </Grid>
 
           </Grid>
