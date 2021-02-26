@@ -193,7 +193,7 @@ export default function Profile() {
                 :
                 <div></div>
               }
-              {(profileData.major2 !== null) ?
+              {(profileData.major2 !== '' && profileData.major2 !== null) ?
                 <Chip label={profileData.major2} style={{ backgroundColor: "#C4C4C4", marginRight: '5px', marginBottom: '5px' }} />
                 :
                 <div></div>

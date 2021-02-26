@@ -46,7 +46,6 @@ export default function EditDialog(props) {
   }
 
   let updateMajors = (value) => {
-    console.log(value);
     let valueLength = value.length;
     if (valueLength >= 2) {
       setMajor1(value[0].title);
