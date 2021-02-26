@@ -124,9 +124,13 @@ export default function Profile() {
     setOpen(false);
   }
 
+  let setNewProfileData = (profileData) => {
+
+  }
+
   return (
     <div className={classes.screen}>
-      <EditDialog open={open} handleClose={handleClose} profileData={profileData} handleChange={setProfileData} />
+      <EditDialog open={open} handleClose={handleClose} profileData={profileData} handleChange={setNewProfileData} />
       <Breadcrumbs aria-label="breadcrumb">
         <Link component={RouterLink} to="/">Home</Link>
         <Typography color="textPrimary">Profile</Typography>
