@@ -20,6 +20,7 @@ import axios from 'axios';
 // Redux
 import { useSelector } from 'react-redux';
 import { selectUserEmail } from '../redux/loginSlice';
+import IncompleteDialog from '../components/IncompleteDialog';
 
 function a11yProps(index) {
   return {
@@ -83,17 +84,18 @@ const useConstructor = (callBack = () => { }) => {
 export default function Profile() {
   const classes = useStyles();
   const [value, setValue] = useState(0);
+  const [openIncomplete, setIncomplete] = useState(false);
   const [open, setOpen] = useState(false);
   const [errorState, setErrorState] = React.useState({ isOpen: false, errorMessage: '' });
   const [successState, setSuccessState] = React.useState({ isOpen: false, successMessage: '' })
   let email = useSelector(selectUserEmail);
   let [profileData, setProfileData] = useState({
-    firstName: 'John',
-    lastName: 'Smith',
-    major1: 'Biomedical Engineering',
-    major2: 'Electrical Engineering',
-    minor: 'Biology',
-    year: 2021
+    firstName: '',
+    lastName: '',
+    major1: '',
+    major2: '',
+    minor: '',
+    year: ''
   })
 
   const handleChange = (event, newValue) => {
@@ -104,6 +106,10 @@ export default function Profile() {
     axios.get('/user/' + email)
       .then((res) => {
         let userData = res.data;
+        if (userData.major1 === '') {
+          setIncomplete(true);
+        }
+
         setProfileData({
           firstName: userData.first_name,
           lastName: userData.last_name,
@@ -153,6 +159,15 @@ export default function Profile() {
     setSuccessState({ isOpen: false, successMessage: '' });
   };
 
+  let handleIncompleteClose = () => {
+    setIncomplete(false);
+    setOpen(true);
+  }
+
+  let showErrorMessage = (message) => {
+    setErrorState({ isOpen: true, errorMessage: message });
+  }
+
   return (
     <div className={classes.screen}>
       <Alert
@@ -167,7 +182,7 @@ export default function Profile() {
         message={successState.successMessage}
         type="success"
       />
-      <EditDialog open={open} handleClose={handleClose} profileData={profileData} handleChange={setNewProfileData} />
+      <EditDialog open={open} handleClose={handleClose} profileData={profileData} handleChange={setNewProfileData} showError={showErrorMessage} />
       <Breadcrumbs aria-label="breadcrumb">
         <Link component={RouterLink} to="/">Home</Link>
         <Typography color="textPrimary">Profile</Typography>
@@ -315,7 +330,7 @@ export default function Profile() {
           </Grid>
         )}
       </div>
-
+      <IncompleteDialog open={openIncomplete} onClose={handleIncompleteClose} />
       <div style={{ height: 100 }}></div>
 
     </div>

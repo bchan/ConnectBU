@@ -68,6 +68,11 @@ export default function EditDialog(props) {
   }
 
   let sendUpdate = () => {
+    if (major1 === '') {
+      props.showError('Cannot have empty major');
+      return;
+    }
+
     props.handleClose();
     props.handleChange({
       firstName: firstName,
@@ -85,7 +90,7 @@ export default function EditDialog(props) {
       scroll="paper"
       aria-labelledby="scroll-dialog-title"
       aria-describedby="scroll-dialog-description"
-      maxWidth="lg"
+      maxWidth="xl"
     >
       <DialogTitle id="scroll-dialog-title">Edit Profile</DialogTitle>
       <DialogContent dividers={true}>
