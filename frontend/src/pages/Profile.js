@@ -124,8 +124,17 @@ export default function Profile() {
     setOpen(false);
   }
 
-  let setNewProfileData = (profileData) => {
-
+  let setNewProfileData = (newData) => {
+    newData.schoolYear = 2021; // NEED TO TAKE OUT LATER
+    newData.hasIpad = 0; // NEED TO TAKE OUT LATER
+    axios.put('/user/' + email, newData)
+      .then((res) => {
+        console.log(res);
+        setProfileData(newData);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
   }
 
   return (

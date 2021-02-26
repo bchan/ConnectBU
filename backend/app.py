@@ -71,8 +71,6 @@ def jwt_required(func):
         except:
             return 'Invalid token', 401
 
-        print(token)
-
         if checkToken(encodedToken):
             return 'Logged out', 401
 
@@ -150,6 +148,34 @@ class User(Resource):
             return {'response': 'User data inserted successfully'}, 200
         else:
             return {'error': 'Error creating user.'}, 404
+
+    # Updates an existing user
+    @jwt_required
+    def put(self, email):
+        json_data = request.get_json(force=True)
+        encodedToken = request.cookies.get('token')
+        token = jwt.decode(encodedToken, app.config['JWT_SECRET_KEY'], algorithms=['HS256'])
+
+        if email != token['email']:
+            return 'Cannot update other user\'s profile', 401
+
+        # Updating user tuple in database
+        try: 
+            s = Student.query.filter_by(email=email).first()
+            s.first_name = json_data['firstName']
+            s.last_name = json_data['lastName']
+            s.major1 = json_data['major1']
+            s.major2 = json_data['major2'] if json_data['major2'] != '' else None
+            s.minor = json_data['minor'] if json_data['minor'] != '' else None
+            s.school_year = json_data['schoolYear']
+            s.has_ipad = json_data['hasIpad']
+
+            db.session.commit()
+        except:
+            return 'Unable to complete update', 503
+
+        return 'User data updated successfully', 200
+
 
 class Course(Resource):
     def get(self):

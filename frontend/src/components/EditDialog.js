@@ -48,7 +48,7 @@ export default function EditDialog(props) {
     return majorList;
   }
 
-  let setMajors = (value) => {
+  let updateMajors = (value) => {
     console.log(value);
     let valueLength = value.length;
     if (valueLength >= 2) {
@@ -69,6 +69,17 @@ export default function EditDialog(props) {
     } else {
       setMinor('');
     }
+  }
+
+  let sendUpdate = () => {
+    props.handleClose();
+    props.handleChange({
+      firstName: firstName,
+      lastName: lastName,
+      major1: major1,
+      major2: major2,
+      minor: minor,
+    })
   }
 
   return (
@@ -144,7 +155,7 @@ export default function EditDialog(props) {
                 options={Major}
                 getOptionLabel={(option) => option.title}
                 getOptionSelected={(option) => getMajorList().map((element) => { return element.title }).includes(option.title)}
-                onChange={(event, newValue) => setMajors(newValue)}
+                onChange={(event, newValue) => updateMajors(newValue)}
                 value={getMajorList()}
                 filterSelectedOptions
                 renderInput={
@@ -259,7 +270,7 @@ export default function EditDialog(props) {
         <Button onClick={props.handleClose} color="primary">
           Cancel
           </Button>
-        <Button onClick={props.handleClose} color="primary">
+        <Button onClick={sendUpdate} color="primary">
           Update
           </Button>
       </DialogActions>
