@@ -83,10 +83,18 @@ export default function EditDialog(props) {
     })
   }
 
+  let handleClose = () => {
+    if (major1 === '') {
+      props.showError('Cannot have empty major');
+      return;
+    }
+    props.handleClose();
+  }
+
   return (
     <Dialog
       open={props.open}
-      onClose={props.handleClose}
+      onClose={handleClose}
       scroll="paper"
       aria-labelledby="scroll-dialog-title"
       aria-describedby="scroll-dialog-description"

@@ -31,7 +31,7 @@ function a11yProps(index) {
 
 const useStyles = makeStyles((theme) => ({
   screen: {
-    marginTop: '90px',
+    paddingTop: '90px',
     marginLeft: 50,
     marginRight: 50
   },
