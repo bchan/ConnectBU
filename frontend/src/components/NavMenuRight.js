@@ -21,7 +21,7 @@ export default function NavMenuRight() {
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [errorState, setErrorState] = React.useState({ isOpen: false, errorMessage: '' });
-  const [successState, setSuccessState] = React.useState({ isOpen: false, successMessage: '' })
+  const [successState, setSuccessState] = React.useState({ isOpen: false, successMessage: '' });
 
   let responseSuccess = (event) => {
     let userEmail = event.profileObj.email;
@@ -31,11 +31,11 @@ export default function NavMenuRight() {
       .then((res) => {
         dispatch(login(userEmail));
         history.push('/profile');
-        setSuccessState({ isOpen: true, successMessage: 'Sucessfully logged in' })
+        setSuccessState({ isOpen: true, successMessage: 'Sucessfully logged in' });
       })
       .catch((error) => {
         if (error.response.data === 'Invalid email') {
-          setErrorState({ isOpen: true, errorMessage: 'You must use a BU email to sign in/up' })
+          setErrorState({ isOpen: true, errorMessage: 'You must use a BU email to sign in/up' });
         }
       })
   }
@@ -60,7 +60,7 @@ export default function NavMenuRight() {
     axios.get('/api/logout')
       .then((res) => {
         history.push('/');
-        setSuccessState({ isOpen: true, successMessage: 'Sucessfully logged out' })
+        setSuccessState({ isOpen: true, successMessage: 'Sucessfully logged out' });
       })
       .catch((err) => {
         console.log('ERROR');

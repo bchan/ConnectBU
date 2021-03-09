@@ -3,7 +3,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Chip from '@material-ui/core/Chip';
 import Typography from '@material-ui/core/Typography';
-import ButtonBase from '@material-ui/core/ButtonBase';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { Link as RouterLink } from 'react-router-dom';
@@ -13,6 +12,7 @@ import Link from '@material-ui/core/Link';
 import EditDialog from '../components/EditDialog';
 import EditIcon from '@material-ui/icons/Edit';
 import IconButton from '@material-ui/core/IconButton';
+import Alert from '../components/Alert';
 
 import pic from '../images/image.jpg';
 import axios from 'axios';
@@ -20,6 +20,7 @@ import axios from 'axios';
 // Redux
 import { useSelector } from 'react-redux';
 import { selectUserEmail } from '../redux/loginSlice';
+import IncompleteDialog from '../components/IncompleteDialog';
 
 function a11yProps(index) {
   return {
@@ -30,7 +31,7 @@ function a11yProps(index) {
 
 const useStyles = makeStyles((theme) => ({
   screen: {
-    marginTop: '90px',
+    paddingTop: '90px',
     marginLeft: 50,
     marginRight: 50
   },
@@ -61,6 +62,15 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: '#B03E3E',
       color: 'white'
     },
+    margin: '5px',
+  },
+  message: {
+    [theme.breakpoints.down('sm')]: {
+      justifyContent: 'center',
+    },
+    [theme.breakpoints.up('md')]: {
+      justifyContent: 'flex-end',
+    }
   }
 }));
 
@@ -74,13 +84,19 @@ const useConstructor = (callBack = () => { }) => {
 export default function Profile() {
   const classes = useStyles();
   const [value, setValue] = useState(0);
+  const [openIncomplete, setIncomplete] = useState(false);
   const [open, setOpen] = useState(false);
+  const [errorState, setErrorState] = React.useState({ isOpen: false, errorMessage: '' });
+  const [successState, setSuccessState] = React.useState({ isOpen: false, successMessage: '' })
   let email = useSelector(selectUserEmail);
-  let [name, setName] = useState('John Smith');
-  let [major1, setMajor1] = useState('Biomedical Engineering');
-  let [major2, setMajor2] = useState('Electrical Engineering');
-  let [minor, setMinor] = useState('Biology');
-  let [year, setYear] = useState('2021');
+  let [profileData, setProfileData] = useState({
+    firstName: '',
+    lastName: '',
+    major1: '',
+    major2: '',
+    minor: '',
+    year: ''
+  })
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -90,11 +106,18 @@ export default function Profile() {
     axios.get('/user/' + email)
       .then((res) => {
         let userData = res.data;
-        setName(userData.first_name + " " + userData.last_name);
-        setMajor1(userData.major1);
-        setMajor2((userData.major2 === null) ? '' : userData.major2);
-        setMinor((userData.minor === null) ? '' : userData.minor);
-        setYear(userData.year);
+        if (userData.major1 === '') {
+          setIncomplete(true);
+        }
+
+        setProfileData({
+          firstName: userData.first_name,
+          lastName: userData.last_name,
+          major1: userData.major1,
+          major2: userData.major2,
+          minor: userData.minor,
+          year: userData.year,
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -109,9 +132,57 @@ export default function Profile() {
     setOpen(false);
   }
 
+  let setNewProfileData = (newData) => {
+    newData.schoolYear = 2021; // NEED TO TAKE OUT LATER
+    newData.hasIpad = 0; // NEED TO TAKE OUT LATER
+    axios.put('/user/' + email, newData)
+      .then((res) => {
+        setProfileData(newData);
+        setSuccessState({ isOpen: true, successMessage: 'Sucessfully updated profile data' });
+      })
+      .catch((err) => {
+        setErrorState({ isOpen: true, errorMessage: 'Unable to update profile data. Please try again.' });
+      })
+  }
+
+  let handleErrorClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setErrorState({ isOpen: false, errorMessage: '' });
+  };
+
+  let handleSuccessClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSuccessState({ isOpen: false, successMessage: '' });
+  };
+
+  let handleIncompleteClose = () => {
+    setIncomplete(false);
+    setOpen(true);
+  }
+
+  let showErrorMessage = (message) => {
+    setErrorState({ isOpen: true, errorMessage: message });
+  }
+
   return (
     <div className={classes.screen}>
-      <EditDialog open={open} handleClose={handleClose} />
+      <Alert
+        open={errorState.isOpen}
+        handleClose={handleErrorClose}
+        message={errorState.errorMessage}
+        type="error"
+      />
+      <Alert
+        open={successState.isOpen}
+        handleClose={handleSuccessClose}
+        message={successState.successMessage}
+        type="success"
+      />
+      <EditDialog open={open} handleClose={handleClose} profileData={profileData} handleChange={setNewProfileData} showError={showErrorMessage} />
       <Breadcrumbs aria-label="breadcrumb">
         <Link component={RouterLink} to="/">Home</Link>
         <Typography color="textPrimary">Profile</Typography>
@@ -120,36 +191,36 @@ export default function Profile() {
       <Grid
         container
         className={classes.boxes}
+        justify="center"
         spacing={2}
       >
-
-        <Grid item xs={12} sm={12} md={2}>
-          <img style={{ width: 128, height: 128, borderRadius: '50%', }} alt="complex" src={pic} />
-        </Grid>
-        <Grid item xs={12} sm={12} md={10} container alignItems="center" spacing={2}>
-          <Grid item container spacing={2} sm={8} md={10}>
+        <Grid item container spacing={2} sm={12} md={8} alignItems="center">
+          <Grid item>
+            <img style={{ width: 128, height: 128, borderRadius: '50%', }} alt="complex" src={pic} />
+          </Grid>
+          <Grid item container xs={12} sm={12} md={10} spacing={2}>
             <Grid item xs={12}>
-              <div style={{ fontSize: 36, fontWeight: 'bold' }}>{name}</div>
+              <div style={{ fontSize: 36, fontWeight: 'bold' }}>{profileData.firstName + " " + profileData.lastName}</div>
             </Grid>
             <Grid item xs={12}>
-              <Chip label={major1} style={{ backgroundColor: "#C4C4C4", marginRight: '5px', marginBottom: '5px' }} />
-              {(major2 !== '') ?
-                <Chip label={major2} style={{ backgroundColor: "#C4C4C4", marginRight: '5px', marginBottom: '5px' }} />
+              {(profileData.major1 !== "") ?
+                <Chip label={profileData.major1} style={{ backgroundColor: "#C4C4C4", marginRight: '5px', marginBottom: '5px' }} />
+                :
+                <div></div>
+              }
+              {(profileData.major2 !== '' && profileData.major2 !== null) ?
+                <Chip label={profileData.major2} style={{ backgroundColor: "#C4C4C4", marginRight: '5px', marginBottom: '5px' }} />
                 :
                 <div></div>
               }
             </Grid>
           </Grid>
-          <Grid item container xs={12} sm={4} md={2} alignItems="center" justify="center" style={{textAlign: 'center'}}>
-            <Grid item xs={12}>
-              <Button className={classes.button}>Message</Button>
-            </Grid>
-            <Grid item xs={12}>
-              <IconButton onClick={handleOpen}>
-                <EditIcon />
-              </IconButton>
-            </Grid>
-          </Grid>
+        </Grid>
+        <Grid item container xs={12} sm={12} md={4} alignItems="center" className={classes.message}>
+          <Button className={classes.button}>Message</Button>
+          <IconButton onClick={handleOpen}>
+            <EditIcon />
+          </IconButton>
         </Grid>
 
       </Grid>
@@ -196,7 +267,7 @@ export default function Profile() {
               <p style={{ fontWeight: "bold" }}>Year of Graduation</p>
             </Grid>
             <Grid item xs={12}>
-              <p>{year}</p>
+              <p>{(profileData.year !== 0) ? profileData.year : ''}</p>
             </Grid>
 
           </Grid>
@@ -259,7 +330,7 @@ export default function Profile() {
           </Grid>
         )}
       </div>
-
+      <IncompleteDialog open={openIncomplete} onClose={handleIncompleteClose} />
       <div style={{ height: 100 }}></div>
 
     </div>

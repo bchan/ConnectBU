@@ -26,7 +26,7 @@ export default function Footer() {
   ]
 
   return (
-    <div className={classes.footer}>
+    <footer className={classes.footer}>
       <Container maxWidth="xl">
         <Grid
           container
@@ -92,6 +92,6 @@ export default function Footer() {
 
         </Grid>
       </Container>
-    </div>
+    </footer>
   )
 }

@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
@@ -22,15 +21,84 @@ const useStyles = makeStyles((theme) => ({
 
 export default function EditDialog(props) {
   const classes = useStyles();
+  let [firstName, setFirstName] = useState(props.profileData.firstName || '');
+  let [lastName, setLastName] = useState(props.profileData.lastName || '');
+  // let [country, setCountry] = useState(props.profileData.country || '');
+  // TODO: Add country
+  let [major1, setMajor1] = useState(props.profileData.major1 || '');
+  let [major2, setMajor2] = useState(props.profileData.major2 || '');
+  let [minor, setMinor] = useState(props.profileData.minor || '');
+
+  useEffect(() => {
+    setFirstName(props.profileData.firstName || '');
+    setLastName(props.profileData.lastName || '');
+    setMajor1(props.profileData.major1 || '');
+    setMajor2(props.profileData.major2 || '');
+    setMinor(props.profileData.minor || '');
+  }, [props.profileData, props.open])
+
+  let getMajorList = () => {
+    let majorList = [];
+    if (major1 !== '') majorList.push({ title: major1 });
+    if (major2 !== '') majorList.push({ title: major2 });
+
+    return majorList;
+  }
+
+  let updateMajors = (value) => {
+    let valueLength = value.length;
+    if (valueLength >= 2) {
+      setMajor1(value[0].title);
+      setMajor2(value[1].title);
+    } else if (valueLength >= 1) {
+      setMajor1(value[0].title);
+      setMajor2('');
+    } else {
+      setMajor1('');
+      setMajor2('');
+    } 
+  }
+
+  let updateMinor = (value) => {
+    if (value.length >= 1) {
+      setMinor(value[0].title);
+    } else {
+      setMinor('');
+    }
+  }
+
+  let sendUpdate = () => {
+    if (major1 === '') {
+      props.showError('Cannot have empty major');
+      return;
+    }
+
+    props.handleClose();
+    props.handleChange({
+      firstName: firstName,
+      lastName: lastName,
+      major1: major1,
+      major2: major2,
+      minor: minor,
+    })
+  }
+
+  let handleClose = () => {
+    if (major1 === '') {
+      props.showError('Cannot have empty major');
+      return;
+    }
+    props.handleClose();
+  }
 
   return (
     <Dialog
       open={props.open}
-      onClose={props.handleClose}
+      onClose={handleClose}
       scroll="paper"
       aria-labelledby="scroll-dialog-title"
       aria-describedby="scroll-dialog-description"
-      maxWidth="lg"
+      maxWidth="xl"
     >
       <DialogTitle id="scroll-dialog-title">Edit Profile</DialogTitle>
       <DialogContent dividers={true}>
@@ -48,8 +116,8 @@ export default function EditDialog(props) {
                 label="First Name"
                 variant="outlined"
                 className={classes.textField}
-              // onChange={(event) => updateFirstName(event)}
-              // value={firstName}
+              onChange={(event) => setFirstName(event.target.value)}
+              value={firstName}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -58,8 +126,8 @@ export default function EditDialog(props) {
                 label="Last Name"
                 variant="outlined"
                 className={classes.textField}
-              // onChange={(event) => updateLastName(event)}
-              // value={lastName}
+              onChange={(event) => setLastName(event.target.value)}
+              value={lastName}
               />
             </Grid>
 
@@ -95,9 +163,9 @@ export default function EditDialog(props) {
                 className={classes.autoComplete}
                 options={Major}
                 getOptionLabel={(option) => option.title}
-                // getOptionSelected={(option) => major.map((element) => { return element.title }).includes(option.title)}
-                // onChange={(event, newValue) => updateMajor(event, newValue)}
-                // value={major}
+                getOptionSelected={(option) => getMajorList().map((element) => { return element.title }).includes(option.title)}
+                onChange={(event, newValue) => updateMajors(newValue)}
+                value={getMajorList()}
                 filterSelectedOptions
                 renderInput={
                   (params) => <TextField
@@ -119,9 +187,9 @@ export default function EditDialog(props) {
                 className={classes.autoComplete}
                 options={Minor}
                 getOptionLabel={(option) => option.title}
-                // getOptionSelected={(option) => minor.map((element) => { return element.title }).includes(option.title)}
-                // onChange={(event, newValue) => updateMinor(event, newValue)}
-                // value={minor}
+                getOptionSelected={(option) => minor.includes(option.title)}
+                onChange={(event, newValue) => updateMinor(newValue)}
+                value={(minor !== '')? [{ title: minor }] : []}
                 filterSelectedOptions
                 renderInput={
                   (params) => <TextField
@@ -211,7 +279,7 @@ export default function EditDialog(props) {
         <Button onClick={props.handleClose} color="primary">
           Cancel
           </Button>
-        <Button onClick={props.handleClose} color="primary">
+        <Button onClick={sendUpdate} color="primary">
           Update
           </Button>
       </DialogActions>
