@@ -22,6 +22,7 @@ import axios from 'axios';
 
 import Fade from '@material-ui/core/Fade';
 import Loading from './components/Loading';
+import { SnackbarProvider } from 'notistack';
 
 // Custom hook, acts like constructor
 const useConstructor = (callBack = () => { }) => {
@@ -82,7 +83,15 @@ function Index() {
                 <SignUp />
               </Route>
               <Route path="/search">
-                <Search />
+                <SnackbarProvider
+                  maxSnack={2}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'center',
+                  }}
+                >
+                  <Search />
+                </SnackbarProvider>
               </Route>
               <Route path="/recommendations">
                 <HomeLI />

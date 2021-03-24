@@ -1,15 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import { Link } from 'react-router-dom';
-
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
-
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import IconButton from '@material-ui/core/IconButton';
+import Checkbox from '@material-ui/core/Checkbox';
+import { useSnackbar } from 'notistack';
+import axios from 'axios';
 import pic from '../images/image.jpg';
 
 const useStyles = makeStyles((theme) => ({
@@ -48,13 +53,13 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 10,
     height: '100%',
     alignItems: 'center',
-    justify: 'center',
   },
   inputRoot: {
     color: 'inherit',
   },
   inputInput: {
-    marginLeft: 10
+    marginLeft: 20,
+    minWidth: 400,
   },
   separation: {
     width: "100%",
@@ -68,30 +73,71 @@ const useStyles = makeStyles((theme) => ({
     fontSize:'1.3em'
   },
   imageSize: {
-    width: theme.spacing(10), 
+    width: theme.spacing(10),
     height: theme.spacing(10),
     marginRight: 15
   }
-
 }));
 
-const searchResults = [
-  { 
-    name: "Nadim El Helou", 
-    major: "Computer Engineering" 
-  }, 
-  { 
-    name: "Hussain Albayat", 
-    major: "Computer Engineering" 
-  }, 
-  { 
-    name: "Artoo the Terrier", 
-    major: "T.L." 
-  }
-];
 
 export default function Search() {
   const classes = useStyles();
+  const [filters, setFilters] = useState({
+    class: false,
+    labs: false,
+    majors: false,
+    minors: false,
+    year: false,
+  });
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchQuery, setSearchQuery] = useState({searchFields: {}, searchTerm: ''});
+  const [searchResults, setSearchResults] = useState([]);
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
+  const setField = (newData) => {
+    let newDictionary = searchQuery;
+    for (let key of Object.keys(newData)) {
+      newDictionary[key] = newData[key];
+    }
+    setSearchQuery(newDictionary);
+  }
+
+  const handleFilterChange = (event) => {
+    setFilters({ ...filters, [event.target.name]: event.target.checked });
+    setField({searchFields: filters});
+  };
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+    setField({searchTerm: searchTerm})
+  };
+
+  const executeSearch = () => {
+    if (searchTerm === ''){
+      enqueueSnackbar('Please enter a term to search.', {variant: 'error'});
+      return;
+    }
+    else {
+      axios.post('http://localhost:5000/search', searchQuery)
+        .then((response) => {
+          const results = response.data.results;
+          const num_results = response.data.nohits;
+
+          const success_msg = `Your search returned ${num_results} results.`;
+          enqueueSnackbar(success_msg, {variant: 'info'});
+
+          if (num_results > 0){
+            setSearchResults(results);
+          }
+          console.log(response);
+        })
+        .catch((response) => {
+          const error_msg = 'There was an error processing your search request. Please try again later.';
+          enqueueSnackbar(error_msg, {variant: 'error'});
+          console.log(response);
+        })
+    }
+  };
 
   return (
 
@@ -110,6 +156,28 @@ export default function Search() {
 
         <Grid className={classes.box1}>
           <p>Filter by</p>
+          <FormGroup>
+            <FormControlLabel
+              control={<Checkbox checked={filters.class} onChange={handleFilterChange} name="class"/>}
+              label="Classes"
+            />
+            <FormControlLabel
+              control={<Checkbox checked={filters.labs} onChange={handleFilterChange} name="labs"/>}
+              label="Labs"
+            />
+            <FormControlLabel
+              control={<Checkbox checked={filters.majors} onChange={handleFilterChange} name="majors"/>}
+              label="Major"
+            />
+            <FormControlLabel
+              control={<Checkbox checked={filters.minors} onChange={handleFilterChange} name="minors"/>}
+              label="Minor"
+            />
+            <FormControlLabel
+              control={<Checkbox checked={filters.year} onChange={handleFilterChange} name="year"/>}
+              label="School Year"
+            />
+          </FormGroup>
         </Grid>
 
         <Grid className={classes.spaceMiddle}> </Grid>
@@ -117,21 +185,25 @@ export default function Search() {
         <Grid className={classes.box2}>
 
           <Grid container direction="row" className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase placeholder="Search…" classes={{ root: classes.inputRoot, input: classes.inputInput, }} />
+              <InputBase
+                placeholder="Search…"
+                classes={{ root: classes.inputRoot, input: classes.inputInput, }}
+                onChange={(event) => handleSearchChange(event)}
+              />
+              <IconButton type="submit" className={classes.searchIcon} onClick={() => executeSearch()}>
+                <SearchIcon />
+              </IconButton>
           </Grid>
 
           <Grid className={classes.resultBox}>
             <h3>Results</h3>
             <Grid className={classes.separation}></Grid>
             {searchResults.map((item) => (
-              <ListItem button key={item.name} component={Link} to={"/profile"}>
+              <ListItem button key={item._source.name} component={Link} to={"/profile"}>
                 <ListItemAvatar>
                   <Avatar src={pic} className={classes.imageSize} />
                 </ListItemAvatar>
-                <ListItemText classes={{primary:classes.listItemText}} primary={item.name} secondary={item.major} />
+                <ListItemText classes={{primary:classes.listItemText}} primary={item._source.name} secondary={item._source.majors} />
               </ListItem>
             ))}
           </Grid>
