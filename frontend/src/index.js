@@ -64,53 +64,53 @@ function Index() {
           <div><Loading message="" /></div>
         </Fade>
         :
-        <Provider store={store}>
-          <Router>
-            <NavBar />
-            <Switch>
-              <Route exact path="/">
-                <Fade in={!isLoading}>
-                  <div><App /></div>
-                </Fade>
-              </Route>
-              <Route path="/login">
-                <Login />
-              </Route>
-              <Route path="/support">
-                <Support />
-              </Route>
-              <Route path="/signup">
-                <SignUp />
-              </Route>
-              <Route path="/search">
-                <SnackbarProvider
-                  maxSnack={2}
-                  anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'center',
-                  }}
-                >
+        <SnackbarProvider
+          maxSnack={2}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+        >
+          <Provider store={store}>
+            <Router>
+              <NavBar />
+              <Switch>
+                <Route exact path="/">
+                  <Fade in={!isLoading}>
+                    <div><App /></div>
+                  </Fade>
+                </Route>
+                <Route path="/login">
+                  <Login />
+                </Route>
+                <Route path="/support">
+                  <Support />
+                </Route>
+                <Route path="/signup">
+                  <SignUp />
+                </Route>
+                <Route path="/search">
                   <Search />
-                </SnackbarProvider>
-              </Route>
-              <Route path="/recommendations">
-                <HomeLI />
-              </Route>
-              <Route path="/aboutus">
-                <AboutUs />
-              </Route>
-              <Route path="/chat">
-                <Chat />
-              </Route>
-              <Route path="/profile">
-                <Fade in={!isLoading}>
-                  <div><Profile /></div>
-                </Fade>
-              </Route>
-            </Switch>
-            <Footer />
-          </Router>
-        </Provider>
+                </Route>
+                <Route path="/recommendations">
+                  <HomeLI />
+                </Route>
+                <Route path="/aboutus">
+                  <AboutUs />
+                </Route>
+                <Route path="/chat">
+                  <Chat />
+                </Route>
+                <Route path="/profile">
+                  <Fade in={!isLoading}>
+                    <div><Profile /></div>
+                  </Fade>
+                </Route>
+              </Switch>
+              <Footer />
+            </Router>
+          </Provider>
+        </SnackbarProvider>
       }
     </div>
   )
