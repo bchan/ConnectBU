@@ -12,7 +12,7 @@ import Link from '@material-ui/core/Link';
 import EditDialog from '../components/EditDialog';
 import EditIcon from '@material-ui/icons/Edit';
 import IconButton from '@material-ui/core/IconButton';
-import Alert from '../components/Alert';
+import { useSnackbar } from 'notistack';
 
 import pic from '../images/image.jpg';
 import axios from 'axios';
@@ -88,6 +88,7 @@ export default function Profile() {
   const [open, setOpen] = useState(false);
   const [errorState, setErrorState] = React.useState({ isOpen: false, errorMessage: '' });
   const [successState, setSuccessState] = React.useState({ isOpen: false, successMessage: '' })
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   let email = useSelector(selectUserEmail);
   let [profileData, setProfileData] = useState({
     firstName: '',
@@ -138,26 +139,14 @@ export default function Profile() {
     axios.put('/user/' + email, newData)
       .then((res) => {
         setProfileData(newData);
-        setSuccessState({ isOpen: true, successMessage: 'Sucessfully updated profile data' });
+        let successMessage = 'Sucessfully updated profile data';
+        enqueueSnackbar(successMessage, { variant: 'success' });
       })
       .catch((err) => {
-        setErrorState({ isOpen: true, errorMessage: 'Unable to update profile data. Please try again.' });
+        let errorMessage = 'Unable to update profile data. Please try again.';
+        enqueueSnackbar(errorMessage, { variant: 'error' });
       })
   }
-
-  let handleErrorClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setErrorState({ isOpen: false, errorMessage: '' });
-  };
-
-  let handleSuccessClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setSuccessState({ isOpen: false, successMessage: '' });
-  };
 
   let handleIncompleteClose = () => {
     setIncomplete(false);
@@ -165,23 +154,11 @@ export default function Profile() {
   }
 
   let showErrorMessage = (message) => {
-    setErrorState({ isOpen: true, errorMessage: message });
+    enqueueSnackbar(message, { variant: 'error' });
   }
 
   return (
     <div className={classes.screen}>
-      <Alert
-        open={errorState.isOpen}
-        handleClose={handleErrorClose}
-        message={errorState.errorMessage}
-        type="error"
-      />
-      <Alert
-        open={successState.isOpen}
-        handleClose={handleSuccessClose}
-        message={successState.successMessage}
-        type="success"
-      />
       <EditDialog open={open} handleClose={handleClose} profileData={profileData} handleChange={setNewProfileData} showError={showErrorMessage} />
       <Breadcrumbs aria-label="breadcrumb">
         <Link component={RouterLink} to="/">Home</Link>
