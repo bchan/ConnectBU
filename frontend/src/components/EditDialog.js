@@ -10,7 +10,6 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import { makeStyles } from '@material-ui/core/styles';
 import { countries, Major, Minor, Club, Research } from './Lists';
@@ -28,6 +27,7 @@ export default function EditDialog(props) {
   const classes = useStyles();
   let [firstName, setFirstName] = useState(props.profileData.firstName || '');
   let [lastName, setLastName] = useState(props.profileData.lastName || '');
+  let [year, setYear] = useState(props.profileData.year || '');
   // let [country, setCountry] = useState(props.profileData.country || '');
   // TODO: Add country
   let [major1, setMajor1] = useState(props.profileData.major1 || '');
@@ -145,8 +145,8 @@ export default function EditDialog(props) {
                 <Select
                   labelId="yearLabel"
                   id="yearBox"
-                  // value={""}
-                  // onChange={handleChange}
+                  value={year}
+                  onChange={(event) => setYear(event.target.value)}
                   label="Year of Graduation"
                   // variant="outlined"
                   // displayEmpty
