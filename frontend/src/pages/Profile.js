@@ -1,154 +1,337 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import { Link } from 'react-router-dom';
+import Chip from '@material-ui/core/Chip';
+import Typography from '@material-ui/core/Typography';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import { Link as RouterLink } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
-import { useLocation } from 'react-router-dom';
+import Breadcrumbs from '@material-ui/core/Breadcrumbs';
+import Link from '@material-ui/core/Link';
+import EditDialog from '../components/EditDialog';
+import EditIcon from '@material-ui/icons/Edit';
+import IconButton from '@material-ui/core/IconButton';
+import Alert from '../components/Alert';
 
 import pic from '../images/image.jpg';
+import axios from 'axios';
+
+// Redux
+import { useSelector } from 'react-redux';
+import { selectUserEmail } from '../redux/loginSlice';
+import IncompleteDialog from '../components/IncompleteDialog';
+
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+}
 
 const useStyles = makeStyles((theme) => ({
   screen: {
-    paddingLeft: 50, 
-    backgroundColor: "rgb(240,240,240)"
+    paddingTop: '90px',
+    marginLeft: 50,
+    marginRight: 50
   },
   boxes: {
-    border: "1px solid grey", 
-    padding: 30, 
-    width: "70%",
-    borderRadius: 10, 
-    backgroundColor: "rgb(255,255,255)", 
-    marginBottom: 10,
-    marginTop: 10
+    padding: 30,
+    marginBottom: 30,
+    marginTop: 20,
+    backgroundColor: "#F4F4F4",
+    borderRadius: 10
   },
   image: {
-    width: '20%', 
-    borderRadius: '50%', 
+    width: '8%',
+    minWidth: 120,
     marginRight: 50
-  }, 
+  },
   separation: {
-    width: "100%", 
-    height: 0, 
-    borderTop: "1px solid grey", 
-    borderColor: "grey", 
-    marginTop: 10, 
+    width: "100%",
+    height: 0,
+    borderTop: "1px solid grey",
+    borderColor: "grey",
+    marginTop: 10,
     marginBottom: 20
   },
-  editButton: {
+  button: {
     backgroundColor: '#EB5757',
     color: 'white',
     '&:hover': {
       backgroundColor: '#B03E3E',
       color: 'white'
     },
-    marginLeft: 10
+    margin: '5px',
+  },
+  message: {
+    [theme.breakpoints.down('sm')]: {
+      justifyContent: 'center',
+    },
+    [theme.breakpoints.up('md')]: {
+      justifyContent: 'flex-end',
+    }
   }
 }));
 
-export default function Profile()  {
-  const classes = useStyles();
-  const location = useLocation();
-  let [name, setName] = React.useState('Artoo the Terrier');
-  let [major, setMajor] = React.useState('CAS - Human Anthropology - May 2021');
-  let [minor, setMinor] = React.useState('Specialization: T.L.');
+const useConstructor = (callBack = () => { }) => {
+  const [hasCalled, setCalled] = useState(false);
+  if (hasCalled) return;
+  callBack();
+  setCalled(true);
+}
 
-  if (typeof location.state !== 'undefined') {
-    // let userEmail = location.state.email;
-    // fetch('http://localhost:5000/profile/' + userEmail)
-    // .then((res) => {
-    //   return res.text();
-    // })
-    // .then((response) => {
-    //   let userData = JSON.parse(response);
-    //   setName(userData['first_name'] + ' ' + userData['last_name']);
-    //   setMajor(userData['major1'] + ' - ' + String(userData['year']));
-    //   setMinor(userData['minor']);
-    // })
+export default function Profile() {
+  const classes = useStyles();
+  const [value, setValue] = useState(0);
+  const [openIncomplete, setIncomplete] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [errorState, setErrorState] = React.useState({ isOpen: false, errorMessage: '' });
+  const [successState, setSuccessState] = React.useState({ isOpen: false, successMessage: '' })
+  let email = useSelector(selectUserEmail);
+  let [profileData, setProfileData] = useState({
+    firstName: '',
+    lastName: '',
+    major1: '',
+    major2: '',
+    minor: '',
+    year: ''
+  })
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  useConstructor(() => {
+    axios.get('/user/' + email)
+      .then((res) => {
+        let userData = res.data;
+        if (userData.major1 === '') {
+          setIncomplete(true);
+        }
+
+        setProfileData({
+          firstName: userData.first_name,
+          lastName: userData.last_name,
+          major1: userData.major1,
+          major2: userData.major2,
+          minor: userData.minor,
+          year: userData.year,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  })
+
+  let handleOpen = () => {
+    setOpen(true);
+  }
+
+  let handleClose = () => {
+    setOpen(false);
+  }
+
+  let setNewProfileData = (newData) => {
+    newData.schoolYear = 2021; // NEED TO TAKE OUT LATER
+    newData.hasIpad = 0; // NEED TO TAKE OUT LATER
+    axios.put('/user/' + email, newData)
+      .then((res) => {
+        setProfileData(newData);
+        setSuccessState({ isOpen: true, successMessage: 'Sucessfully updated profile data' });
+      })
+      .catch((err) => {
+        setErrorState({ isOpen: true, errorMessage: 'Unable to update profile data. Please try again.' });
+      })
+  }
+
+  let handleErrorClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setErrorState({ isOpen: false, errorMessage: '' });
+  };
+
+  let handleSuccessClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSuccessState({ isOpen: false, successMessage: '' });
+  };
+
+  let handleIncompleteClose = () => {
+    setIncomplete(false);
+    setOpen(true);
+  }
+
+  let showErrorMessage = (message) => {
+    setErrorState({ isOpen: true, errorMessage: message });
   }
 
   return (
+    <div className={classes.screen}>
+      <Alert
+        open={errorState.isOpen}
+        handleClose={handleErrorClose}
+        message={errorState.errorMessage}
+        type="error"
+      />
+      <Alert
+        open={successState.isOpen}
+        handleClose={handleSuccessClose}
+        message={successState.successMessage}
+        type="success"
+      />
+      <EditDialog open={open} handleClose={handleClose} profileData={profileData} handleChange={setNewProfileData} showError={showErrorMessage} />
+      <Breadcrumbs aria-label="breadcrumb">
+        <Link component={RouterLink} to="/">Home</Link>
+        <Typography color="textPrimary">Profile</Typography>
+      </Breadcrumbs>
 
-      <div className={classes.screen}>
-
-        <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
-        <p style={{'white-space': 'pre-wrap'}}>{"\n"}</p>
-
-        <Grid
-          container
-          direction="row"
-          justify="flex-start"
-          alignItems="center"
-          className={classes.boxes}>
-          
-          <img src={pic} alt="Logo" className={classes.image} />
-          <Grid justify="flex-start">
-            <h1>{name}</h1>
-            <p>{major}</p>
-            <p>{minor}</p>
+      <Grid
+        container
+        className={classes.boxes}
+        justify="center"
+        spacing={2}
+      >
+        <Grid item container spacing={2} sm={12} md={8} alignItems="center">
+          <Grid item>
+            <img style={{ width: 128, height: 128, borderRadius: '50%', }} alt="complex" src={pic} />
           </Grid>
-
+          <Grid item container xs={12} sm={12} md={10} spacing={2}>
+            <Grid item xs={12}>
+              <div style={{ fontSize: 36, fontWeight: 'bold' }}>{profileData.firstName + " " + profileData.lastName}</div>
+            </Grid>
+            <Grid item xs={12}>
+              {(profileData.major1 !== "") ?
+                <Chip label={profileData.major1} style={{ backgroundColor: "#C4C4C4", marginRight: '5px', marginBottom: '5px' }} />
+                :
+                <div></div>
+              }
+              {(profileData.major2 !== '' && profileData.major2 !== null) ?
+                <Chip label={profileData.major2} style={{ backgroundColor: "#C4C4C4", marginRight: '5px', marginBottom: '5px' }} />
+                :
+                <div></div>
+              }
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item container xs={12} sm={12} md={4} alignItems="center" className={classes.message}>
+          <Button className={classes.button}>Message</Button>
+          <IconButton onClick={handleOpen}>
+            <EditIcon />
+          </IconButton>
         </Grid>
 
-        <Button className={classes.editButton} component={Link}>
-          Edit Profile
-        </Button>
+      </Grid>
 
+      <Grid style={{ borderBottom: "1px solid grey" }}>
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          aria-label="tabs"
+          indicatorColor="secondary"
+          textColor="secondary"
+          variant="scrollable"
+          scrollButtons="auto"
+        >
+          <Tab label="About" {...a11yProps(0)} />
+          <Tab label="Activities" {...a11yProps(1)} />
+          <Tab label="Classes" {...a11yProps(2)} />
+          <Tab label="Interests (Coming Soon)" {...a11yProps(3)} disabled />
+        </Tabs>
+      </Grid>
 
-        <Grid
-          container
-          alignItems="center"
-          justify="flex-start"
-          className={classes.boxes}>
-          
-          <Grid>
-            <h2 style={{marginTop: 0}}>About</h2>
-            <p>I'm the new Rhett, get used to it</p>
+      <div
+        role="tabpanel"
+        hidden={value !== 0}
+        id={`simple-tabpanel-${0}`}
+        aria-labelledby={`simple-tab-${0}`}
+      >
+        {value === 0 && (
+          <Grid
+            container
+            // style={{
+            //   paddingLeft: 30, paddingRight: 30,
+            //   marginBottom: 30,
+            //   marginTop: 10,
+            //   backgroundColor: "#F4F4F4",
+            //   borderRadius: 10
+
+            // }}
+            // spacing={4}
+            className={classes.boxes}
+          >
+
+            <Grid item xs={12}>
+              <p style={{ fontWeight: "bold" }}>Year of Graduation</p>
+            </Grid>
+            <Grid item xs={12}>
+              <p>{(profileData.year !== 0) ? profileData.year : ''}</p>
+            </Grid>
+
           </Grid>
+        )}
+      </div>
 
-        </Grid>
+      <div
+        role="tabpanel"
+        hidden={value !== 1}
+        id={`simple-tabpanel-${1}`}
+        aria-labelledby={`simple-tab-${1}`}
+      >
+        {value === 1 && (
+          <Grid
+            container
+            direction="column"
+            className={classes.boxes}>
 
+            <Grid>
+              <h2 style={{ marginTop: 0 }}>Clubs</h2>
+              <p>Coming soon</p>
+            </Grid>
 
-        <Grid
-          container
-          direction="column"
-          className={classes.boxes}>
-          
-          <Grid>
-            <h2 style={{marginTop: 0}}>Extra-Curriculars</h2>
-            <p>Walking, sniffing, peeing</p>
+            <Grid className={classes.separation}></Grid>
+
+            <Grid>
+              <h2 style={{ marginTop: 0 }}>Labs</h2>
+              <p>Coming soon</p>
+            </Grid>
+
+            <Grid className={classes.separation}></Grid>
+
+            <Grid>
+              <h2 style={{ marginTop: 0 }}>On Campus Job</h2>
+              <p>Coming soon</p>
+            </Grid>
+
           </Grid>
+        )}
+      </div>
 
-          <Grid className={classes.separation}></Grid>
+      <div
+        role="tabpanel"
+        hidden={value !== 2}
+        id={`simple-tabpanel-${2}`}
+        aria-labelledby={`simple-tab-${2}`}
+      >
+        {value === 2 && (
+          <Grid
+            container
+            alignItems="center"
+            justify="flex-start"
+            className={classes.boxes}>
 
-          <Grid>
-            <h2 style={{marginTop: 0}}>Labs</h2>
-            <p>None</p>
+            <Grid>
+              <h2 style={{ marginTop: 0 }}>Classes</h2>
+              <p>Coming soon</p>
+            </Grid>
+
           </Grid>
-
-          <Grid className={classes.separation}></Grid>
-
-          <Grid>
-            <h2 style={{marginTop: 0}}>On Campus Job</h2>
-            <p>Being petted</p>
-          </Grid>
-
-        </Grid>
-
-
-        <Grid
-          container
-          alignItems="center"
-          justify="flex-start"
-          className={classes.boxes}>
-          
-          <Grid>
-            <h2 style={{marginTop: 0}}>Classes</h2>
-            <p>I don't do classes. Okay?</p>
-          </Grid>
-
-        </Grid>
-      
-      <div style={{height: 100}}></div>
+        )}
+      </div>
+      <IncompleteDialog open={openIncomplete} onClose={handleIncompleteClose} />
+      <div style={{ height: 100 }}></div>
 
     </div>
   );

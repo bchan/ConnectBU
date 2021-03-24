@@ -13,7 +13,7 @@ import { useLocation, useHistory } from 'react-router-dom';
 
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
-import { login, logout, selectLoginState } from '../redux/loginSlice';
+import { login, logout, selectLoginState, selectUserEmail } from '../redux/loginSlice';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -42,6 +42,7 @@ export default function SignUp() {
   const [completed, setCompleted] = React.useState({});
   const [formData, setFormData] = React.useState({has_ipad: false});
   const numSteps = steps.length;
+  let email = useSelector(selectUserEmail);
 
   const handleNext = () => {
     if (currentStep !== numSteps - 1) {
@@ -51,7 +52,7 @@ export default function SignUp() {
         return;
       }
       
-      formData['email'] = location.state.email;
+      formData['email'] = email;
       formData['school_year'] = 2021;
 
       // Send request to backend
@@ -67,7 +68,7 @@ export default function SignUp() {
       .then(data => {
         if (data.response === 'User data inserted successfully') {
           dispatch(login(''));
-          history.push('/profile', { email: location.state.email });
+          history.push('/profile', { email: email });
         }
       })
       .catch((error) => {

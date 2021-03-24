@@ -39,6 +39,11 @@ export default function NavMenuList(props) {
       icon: <BlockIcon />,
       path: '/signup',
     },
+    {
+      title: 'Chat',
+      icon: <BlockIcon />,
+      path: '/chat',
+    },
 
   ]
 

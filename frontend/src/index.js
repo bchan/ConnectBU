@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './pages/App';
@@ -11,6 +11,7 @@ import HomeLI from './pages/Home_LI'
 import Search from './pages/Search'
 import AboutUs from './pages/AboutUs'
 import SignUp from './pages/SignUp';
+import Chat from './pages/Chat';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 // import BotBar from './components/BotBar'
@@ -98,8 +99,13 @@ function Index() {
               <Route path="/aboutus">
                 <AboutUs />
               </Route>
+              <Route path="/chat">
+                <Chat />
+              </Route>
               <Route path="/profile">
-                <Profile />
+                <Fade in={!isLoading}>
+                  <div><Profile /></div>
+                </Fade>
               </Route>
             </Switch>
             <Footer />

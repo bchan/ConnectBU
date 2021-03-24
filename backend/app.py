@@ -17,9 +17,6 @@ app.config.from_pyfile('config.py')
 db.init_app(app)
 
 
-TEMP_SECRET = 'supersecretkey'
-
-
 ##### Helper functions for Authentication #####
 
 # Checks Google SSO token from the frontend
@@ -34,7 +31,7 @@ def checkGoogleToken(token):
 
 # Creates JWT for the frontend
 def createToken(tokenDict):
-    return jwt.encode(tokenDict, TEMP_SECRET, algorithm='HS256')
+    return jwt.encode(tokenDict, app.config['JWT_SECRET_KEY'], algorithm='HS256')
 
 
 # Checks if JWT is blacklisted
@@ -68,13 +65,11 @@ def jwt_required(func):
             return 'Not authorized', 401
 
         try:
-            token = jwt.decode(encodedToken, TEMP_SECRET, algorithms=['HS256'])
+            token = jwt.decode(encodedToken, app.config['JWT_SECRET_KEY'], algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
             return 'Expired token', 401
         except:
             return 'Invalid token', 401
-
-        print(token)
 
         if checkToken(encodedToken):
             return 'Logged out', 401
@@ -154,6 +149,34 @@ class User(Resource):
         else:
             return {'error': 'Error creating user.'}, 404
 
+    # Updates an existing user
+    @jwt_required
+    def put(self, email):
+        json_data = request.get_json(force=True)
+        encodedToken = request.cookies.get('token')
+        token = jwt.decode(encodedToken, app.config['JWT_SECRET_KEY'], algorithms=['HS256'])
+
+        if email != token['email']:
+            return 'Cannot update other user\'s profile', 401
+
+        # Updating user tuple in database
+        try: 
+            s = Student.query.filter_by(email=email).first()
+            s.first_name = json_data['firstName']
+            s.last_name = json_data['lastName']
+            s.major1 = json_data['major1']
+            s.major2 = json_data['major2'] if json_data['major2'] != '' else None
+            s.minor = json_data['minor'] if json_data['minor'] != '' else None
+            s.school_year = json_data['schoolYear']
+            s.has_ipad = json_data['hasIpad']
+
+            db.session.commit()
+        except:
+            return 'Unable to complete update', 503
+
+        return 'User data updated successfully', 200
+
+
 class Course(Resource):
     def get(self):
         class_query = Class.query.all()
@@ -189,7 +212,33 @@ class Login(Resource):
         if 'hd' not in googleInfo or googleInfo['hd'] != 'bu.edu':
             return 'Invalid email', 401
 
-        print(googleInfo)
+
+        email = googleInfo['email']
+        firstName = googleInfo['given_name']
+        lastName = googleInfo['family_name']
+
+        # Checks if user is in database
+        res = Student.query.filter_by(email=email).first()
+
+        # Adds user if not in database
+        if res is None:
+            new_student = Student(
+                email = email,
+                first_name = firstName,
+                last_name = lastName,
+                major1 = '',
+                major2 = None,
+                minor = None,
+                school_year = 0,
+                has_ipad = 0
+            )
+            db.session.add(new_student)
+            db.session.commit()
+
+            resp = Student.query.filter_by(email=email).first()
+
+            if resp is None:
+                return 'Error creating user profile', 501
 
         # Issues JWT
         td = timedelta(hours=12, seconds=0)
@@ -204,7 +253,7 @@ class Login(Resource):
     @jwt_required
     def get(self):
         encodedToken = request.cookies.get('token')
-        token = jwt.decode(encodedToken, TEMP_SECRET, algorithms=['HS256'])
+        token = jwt.decode(encodedToken, app.config['JWT_SECRET_KEY'], algorithms=['HS256'])
         return token['email'], 200
 
 
