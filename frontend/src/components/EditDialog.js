@@ -7,6 +7,11 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
 import { makeStyles } from '@material-ui/core/styles';
 import { countries, Major, Minor, Club, Research } from './Lists';
 
@@ -56,7 +61,7 @@ export default function EditDialog(props) {
     } else {
       setMajor1('');
       setMajor2('');
-    } 
+    }
   }
 
   let updateMinor = (value) => {
@@ -116,8 +121,8 @@ export default function EditDialog(props) {
                 label="First Name"
                 variant="outlined"
                 className={classes.textField}
-              onChange={(event) => setFirstName(event.target.value)}
-              value={firstName}
+                onChange={(event) => setFirstName(event.target.value)}
+                value={firstName}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -126,11 +131,34 @@ export default function EditDialog(props) {
                 label="Last Name"
                 variant="outlined"
                 className={classes.textField}
-              onChange={(event) => setLastName(event.target.value)}
-              value={lastName}
+                onChange={(event) => setLastName(event.target.value)}
+                value={lastName}
               />
             </Grid>
 
+          </Grid>
+
+          <Grid item container xs={12} spacing={1}>
+            <Grid item xs={12}>
+              <FormControl variant="outlined" style={{width: '100%'}}>
+                <InputLabel id="yearLabel">Year of Graduation</InputLabel>
+                <Select
+                  labelId="yearLabel"
+                  id="yearBox"
+                  // value={""}
+                  // onChange={handleChange}
+                  label="Year of Graduation"
+                  // variant="outlined"
+                  // displayEmpty
+                  // style={{ width: '100%' }}
+                >
+                  <MenuItem value={2021}>2021</MenuItem>
+                  <MenuItem value={2022}>2022</MenuItem>
+                  <MenuItem value={2023}>2023</MenuItem>
+                  <MenuItem value={2024}>2024</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
           </Grid>
 
           <Grid item container xs={12} spacing={1}>
@@ -189,7 +217,7 @@ export default function EditDialog(props) {
                 getOptionLabel={(option) => option.title}
                 getOptionSelected={(option) => minor.includes(option.title)}
                 onChange={(event, newValue) => updateMinor(newValue)}
-                value={(minor !== '')? [{ title: minor }] : []}
+                value={(minor !== '') ? [{ title: minor }] : []}
                 filterSelectedOptions
                 renderInput={
                   (params) => <TextField
@@ -276,7 +304,7 @@ export default function EditDialog(props) {
         </Grid>
       </DialogContent>
       <DialogActions>
-        <Button onClick={props.handleClose} color="primary">
+        <Button onClick={handleClose} color="primary">
           Cancel
           </Button>
         <Button onClick={sendUpdate} color="primary">
