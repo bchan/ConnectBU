@@ -17,14 +17,14 @@ class Club(db.Model):
 class Lab(db.Model):
     __table__ = db.Model.metadata.tables['lab']
 
-class CampusJob(db.Model):
-    __table__ = db.Model.metadata.tables['campus_job']
+class Interest(db.Model):
+    __table__ = db.Model.metadata.tables['interest']
 
 class TakesClass(db.Model):
     __table__ = db.Model.metadata.tables['takes_class']
 
-class TakesJob(db.Model):
-    __table__ = db.Model.metadata.tables['takes_job']
+class HasInterest(db.Model):
+    __table__ = db.Model.metadata.tables['has_interest']
 
 class JoinsClub(db.Model):
     __table__ = db.Model.metadata.tables['joins_club']

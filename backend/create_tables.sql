@@ -2,6 +2,7 @@ USE connectbudb;
 
 CREATE TABLE student (
     email VARCHAR (40) PRIMARY KEY,
+    unique_id VARCHAR (36) NOT NULL,
     first_name TEXT NOT NULL,
     last_name TEXT NOT NULL,
     major1 TEXT NOT NULL,
@@ -27,10 +28,8 @@ CREATE TABLE lab (
     department TEXT
 );
 
-CREATE TABLE campus_job (
-    job_name VARCHAR (40) PRIMARY KEY,
-    company TEXT,
-    building TEXT
+CREATE TABLE interest (
+    interest_name VARCHAR (40) PRIMARY KEY,
 );
 
 CREATE TABLE takes_class (
@@ -57,12 +56,12 @@ CREATE TABLE joins_lab (
     FOREIGN KEY (lab_name) REFERENCES lab(lab_name) ON DELETE CASCADE
 );
 
-CREATE TABLE takes_job (
+CREATE TABLE has_interest (
     email VARCHAR (40),
-    job_name VARCHAR (40),
-    PRIMARY KEY (email, job_name),
+    interest_name VARCHAR (40),
+    PRIMARY KEY (email, interest_name),
     FOREIGN KEY (email) REFERENCES student(email) ON DELETE CASCADE,
-    FOREIGN KEY (job_name) REFERENCES campus_job(job_name) ON DELETE CASCADE
+    FOREIGN KEY (interest_name) REFERENCES interest(interest_name) ON DELETE CASCADE
 );
 
 SHOW TABLES;
