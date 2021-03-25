@@ -84,6 +84,26 @@ class Search(Resource):
 
         return search_results, 200
 
+    def put(self, email):
+        json_data = request.get_json(force=True)
+
+        if json_data['hasIpad']:
+            ipd = 'yes'
+        else:
+            ipd = 'no'
+        doc = {
+        "name": json_data['firstName'] + ' ' + json_data['lastName'], 
+        "majors": [json_data['major1'], json_data['major2']], 
+        "minors": [json_data['minor']], 
+        "year": json['schoolYear'], 
+        "ipad?": ipd
+        }
+
+        #in reality, convert id string from DB into UUID 
+        res = es.index(index="profiles", id=json_data['index'], body=doc1)
+        
+        return 'User data updated successfully', 200
+
 
 api.add_resource(Search, '/search')
 
