@@ -2,13 +2,14 @@ from flask import Flask, jsonify, request, make_response
 from flask_restful import Resource, Api
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from models import db, Student, Class, Club, Lab, CampusJob, TakesClass, TakesJob, JoinsClub, JoinsLab
+from models import db, Student, Class, Major, Minor, Club, Lab, Interest, TakesClass, JoinsClub, JoinsLab, HasInterest
 import jwt
 from google.oauth2 import id_token
 from google.auth.transport import requests
 from datetime import datetime, timedelta
 from functools import wraps
 import requests as r
+import uuid
 
 app = Flask(__name__)
 CORS(app)
@@ -102,13 +103,14 @@ class User(Resource):
             return user_info, 200
 
     # create a new user
-    def post(self):
+    def post(self, email):
 
         json_data = request.get_json(force=True)
         print(json_data)
 
         new_student = Student(
-            email = json_data['email'],
+            email = email,
+            unique_id = str(uuid.uuid4()),
             first_name = json_data['first_name'],
             last_name =json_data['last_name'],
             major1 = json_data['major'][0],
@@ -160,7 +162,7 @@ class User(Resource):
             return 'Cannot update other user\'s profile', 401
 
         # Updating user tuple in database
-        try: 
+        try:
             s = Student.query.filter_by(email=email).first()
             s.first_name = json_data['firstName']
             s.last_name = json_data['lastName']
