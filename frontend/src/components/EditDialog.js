@@ -12,7 +12,8 @@ import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import { makeStyles } from '@material-ui/core/styles';
-import { countries, Major, Minor, Club, Research } from './Lists';
+import { countries } from './Lists';
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
   textField: {
@@ -25,6 +26,13 @@ const useStyles = makeStyles((theme) => ({
 
 export default function EditDialog(props) {
   const classes = useStyles();
+
+  // Lists of Stuff
+  let [Major, setMajorList] = useState([]);
+  let [Minor, setMinorList] = useState([]);
+  let [Club, setClubList] = useState([]);
+  let [Research, setResearchList] = useState([]);
+
   let [firstName, setFirstName] = useState(props.profileData.firstName || '');
   let [lastName, setLastName] = useState(props.profileData.lastName || '');
   let [year, setYear] = useState(props.profileData.year || '');
@@ -34,7 +42,40 @@ export default function EditDialog(props) {
   let [major2, setMajor2] = useState(props.profileData.major2 || '');
   let [minor, setMinor] = useState(props.profileData.minor || '');
 
+  let getAllLists = () => {
+    axios.get('/majors')
+      .then((res) => {
+        setMajorList(res.data.major_list.map((element) => { return { 'title': element } }));
+      })
+      .catch((err) => {
+        props.showError('Unable to retrieve majors. Please try again later.')
+      })
+    axios.get('/minors')
+      .then((res) => {
+        setMinorList(res.data.minor_list.map((element) => { return { 'title': element } }));
+      })
+      .catch((err) => {
+        props.showError('Unable to retrieve minors. Please try again later.')
+      })
+    axios.get('/clubs')
+      .then((res) => {
+        setClubList(res.data.club_list.map((element) => { return { 'title': element } }));
+      })
+      .catch((err) => {
+        props.showError('Unable to retrieve clubs. Please try again later.')
+      })
+    axios.get('/labs')
+      .then((res) => {
+        setResearchList(res.data.lab_list.map((element) => { return { 'title': element } }));
+      })
+      .catch((err) => {
+        props.showError('Unable to retrieve labs. Please try again later.')
+      })
+
+  }
+
   useEffect(() => {
+    getAllLists();
     setFirstName(props.profileData.firstName || '');
     setLastName(props.profileData.lastName || '');
     setMajor1(props.profileData.major1 || '');
@@ -140,7 +181,7 @@ export default function EditDialog(props) {
 
           <Grid item container xs={12} spacing={1}>
             <Grid item xs={12}>
-              <FormControl variant="outlined" style={{width: '100%'}}>
+              <FormControl variant="outlined" style={{ width: '100%' }}>
                 <InputLabel id="yearLabel">Year of Graduation</InputLabel>
                 <Select
                   labelId="yearLabel"
@@ -148,9 +189,9 @@ export default function EditDialog(props) {
                   value={year}
                   onChange={(event) => setYear(event.target.value)}
                   label="Year of Graduation"
-                  // variant="outlined"
-                  // displayEmpty
-                  // style={{ width: '100%' }}
+                // variant="outlined"
+                // displayEmpty
+                // style={{ width: '100%' }}
                 >
                   <MenuItem value={2021}>2021</MenuItem>
                   <MenuItem value={2022}>2022</MenuItem>
