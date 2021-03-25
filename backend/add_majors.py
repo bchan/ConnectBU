@@ -6,8 +6,12 @@ from models import db, Major
 engine = db.create_engine(SQLALCHEMY_DATABASE_URI, {})
 session = Session(engine)
 
+filename = 'majors.txt'
+list_dir = 'lists/'
+filepath = list_dir + filename
+
 def add_majors():
-    with open('majors.txt', 'r') as file:
+    with open(filepath, 'r') as file:
         for line in file:
             if line == "\n":
                 continue
