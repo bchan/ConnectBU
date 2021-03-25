@@ -192,6 +192,71 @@ class Course(Resource):
             return {'class_list': class_list}, 200
 
 
+class Majors(Resource):
+    def get(self):
+        major_query = Major.query.all()
+        major_list = []
+
+        if (major_query == []):
+            return {'error': 'Majors could not be retrieved'}, 404
+        else:
+            for elem in major_query:
+                major_list.append(elem.major_name)
+            return {'major_list': major_list}, 200
+
+
+class Minors(Resource):
+    def get(self):
+        minor_query = Minor.query.all()
+        minor_list = []
+
+        if (minor_query == []):
+            return {'error': 'Minors could not be retrieved'}, 404
+        else:
+            for elem in minor_query:
+                minor_list.append(elem.minor_name)
+            return {'minor_list': minor_list}, 200
+
+
+class Clubs(Resource):
+    def get(self):
+        club_query = Club.query.all()
+        club_list = []
+
+        if (club_query == []):
+            return {'error': 'Clubs could not be retrieved'}, 404
+        else:
+            for elem in club_query:
+                club_list.append(elem.club_name)
+            return {'club_list': club_list}, 200
+
+
+class Labs(Resource):
+    def get(self):
+        lab_query = Lab.query.all()
+        lab_list = []
+
+        if (lab_query == []):
+            return {'error': 'Labs could not be retrieved'}, 404
+        else:
+            for elem in lab_query:
+                lab_list.append(elem.lab_name)
+            return {'lab_list': lab_list}, 200
+
+
+class Interests(Resource):
+    def get(self):
+        interest_query = Interest.query.all()
+        interest_list = []
+
+        if (interest_query == []):
+            return {'error': 'Interests could not be retrieved'}, 404
+        else:
+            for elem in interest_query:
+                interest_list.append(elem.interest_name)
+            return {'interest_list': interest_list}, 200
+
+
 class Login(Resource):
     def post(self):
         data = request.get_json(force=True)
@@ -275,6 +340,11 @@ class Logout(Resource):
 # API Routes
 api.add_resource(User, '/user/<string:email>')
 api.add_resource(Course, '/courses')
+api.add_resource(Majors, '/majors')
+api.add_resource(Minors, '/minors')
+api.add_resource(Clubs, '/clubs')
+api.add_resource(Labs, '/labs')
+api.add_resource(Interests, '/interests')
 api.add_resource(Login, '/api/login')
 api.add_resource(Logout, '/api/logout')
 
