@@ -7,8 +7,12 @@ import json
 engine = db.create_engine(SQLALCHEMY_DATABASE_URI, {})
 session = Session(engine)
 
+filename = 'courses.json'
+list_dir = 'lists/'
+filepath = list_dir + filename
+
 def add_classes():
-    with open('courses.json', 'r') as read_file:
+    with open(filepath, 'r') as read_file:
         data = json.load(read_file)
         print(len(data))
 
