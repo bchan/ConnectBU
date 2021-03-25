@@ -5,11 +5,22 @@ CREATE TABLE student (
     unique_id VARCHAR (36) NOT NULL,
     first_name TEXT NOT NULL,
     last_name TEXT NOT NULL,
-    major1 TEXT NOT NULL,
-    major2 TEXT,
-    minor TEXT,
+    major1 VARCHAR (80) NOT NULL,
+    major2 VARCHAR (80),
+    minor VARCHAR (80),
     school_year INT NOT NULL,
-    has_ipad TEXT
+    has_ipad INT,
+    FOREIGN KEY (major1) REFERENCES major(major_name),
+    FOREIGN KEY (major2) REFERENCES major(major_name),
+    FOREIGN KEY (minor) REFERENCES minor(minor_name)
+);
+
+CREATE TABLE major (
+    major_name VARCHAR (80) NOT NULL PRIMARY KEY
+);
+
+CREATE TABLE minor (
+    minor_name VARCHAR (80) NOT NULL PRIMARY KEY
 );
 
 CREATE TABLE class (
@@ -29,7 +40,7 @@ CREATE TABLE lab (
 );
 
 CREATE TABLE interest (
-    interest_name VARCHAR (40) PRIMARY KEY,
+    interest_name VARCHAR (40) PRIMARY KEY
 );
 
 CREATE TABLE takes_class (

@@ -11,6 +11,12 @@ class Student(db.Model):
 class Class(db.Model):
     __table__ = db.Model.metadata.tables['class']
 
+class Major(db.Model):
+    __table__ = db.Model.metadata.tables['major']
+
+class Minor(db.Model):
+    __table__ = db.Model.metadata.tables['minor']
+
 class Club(db.Model):
     __table__ = db.Model.metadata.tables['club']
 
