@@ -7,9 +7,8 @@ import Link from '@material-ui/core/Link';
 import "sendbird-uikit/dist/index.css";
 
 import "../styles/Chat.styles.css";
-import { BrowserRouter as Redirect, Router, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
-import { login, logout, selectLoginState } from '../redux/loginSlice';
+import { selectLoginState } from '../redux/loginSlice';
 
 const appID = "APP ID";
 const userID = "USER EMAIL";

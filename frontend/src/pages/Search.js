@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import ListItem from '@material-ui/core/ListItem';
@@ -16,6 +16,8 @@ import Checkbox from '@material-ui/core/Checkbox';
 import { useSnackbar } from 'notistack';
 import axios from 'axios';
 import pic from '../images/image.jpg';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectLoginState } from '../redux/loginSlice';
 
 const useStyles = makeStyles((theme) => ({
   screen: {
@@ -81,6 +83,12 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function Search() {
+  const history = useHistory();
+
+  const isLoggedIn = useSelector(selectLoginState);
+  if(!isLoggedIn){
+    history.push("/")
+  }
   const classes = useStyles();
   const [filters, setFilters] = useState({
     class: false,
@@ -141,6 +149,7 @@ export default function Search() {
 
   return (
 
+    
     <div className={classes.screen}>
 
       <p style={{ 'white-space': 'pre-wrap' }}>{"\n"}</p>
