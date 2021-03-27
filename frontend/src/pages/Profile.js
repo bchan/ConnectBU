@@ -139,7 +139,7 @@ export default function Profile() {
   let setNewProfileData = (newData) => {
     newData.schoolYear = 2021; // NEED TO TAKE OUT LATER
     newData.hasIpad = 0; // NEED TO TAKE OUT LATER
-    axios.put('/user/' + email, newData)
+    axios.put('/user/' + email, {oldData: profileData, newData: newData})
       .then((res) => {
         setProfileData(newData);
         let successMessage = 'Sucessfully updated profile data';

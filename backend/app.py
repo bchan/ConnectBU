@@ -155,22 +155,39 @@ class User(Resource):
     @jwt_required
     def put(self, email):
         json_data = request.get_json(force=True)
+        oldData = json_data['oldData']
+        newData = json_data['newData']
         encodedToken = request.cookies.get('token')
         token = jwt.decode(encodedToken, app.config['JWT_SECRET_KEY'], algorithms=['HS256'])
 
         if email != token['email']:
             return 'Cannot update other user\'s profile', 401
 
+        clubsRemove = filter(lambda x: x not in newData['club'], oldData['club'])
+        clubsAdd = filter(lambda x: x not in oldData['club'], newData['club'])
+
+        labsRemove = filter(lambda x: x not in newData['research'], oldData['research'])
+        labsAdd = filter(lambda x: x not in oldData['research'], newData['research'])
+
+        interestRemove = filter(lambda x: x not in newData['interests'], oldData['interests'])
+        interestAdd = filter(lambda x: x not in oldData['interests'], newData['interests'])
+
         # Updating user tuple in database
         try:
             s = Student.query.filter_by(email=email).first()
-            s.first_name = json_data['firstName']
-            s.last_name = json_data['lastName']
-            s.major1 = json_data['major1']
-            s.major2 = json_data['major2'] if json_data['major2'] != '' else None
-            s.minor = json_data['minor'] if json_data['minor'] != '' else None
-            s.school_year = json_data['schoolYear']
-            s.has_ipad = json_data['hasIpad']
+            s.first_name = newData['firstName']
+            s.last_name = newData['lastName']
+            s.major1 = newData['major1']
+            s.major2 = newData['major2'] if newData['major2'] != '' else None
+            s.minor = newData['minor'] if newData['minor'] != '' else None
+            s.school_year = newData['schoolYear']
+            s.has_ipad = newData['hasIpad']
+
+            if len(clubsRemove) != 0:
+                JoinsClub.query.filter_by(email=email).filter(JoinsClub.club_name.in_(clubsRemove)).delete()
+            
+            if len(clubsAdd) != 0:
+                db.session.add_all([JoinsClub(email=email, club_name=club) for club in clubsAdd])
 
             db.session.commit()
         except:

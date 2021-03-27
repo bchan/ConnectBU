@@ -53,8 +53,6 @@ export default function EditDialog(props) {
   let [club, setClub] = useState(props.profileData.club || []);
   let [interests, setInterests] = useState(props.profileData.interests || []);
 
-  console.log(club);
-
   let getAllLists = () => {
     axios.get('/profileoptions')
       .then((res) => {
