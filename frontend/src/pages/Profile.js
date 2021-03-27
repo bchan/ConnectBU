@@ -118,6 +118,9 @@ export default function Profile() {
           major2: userData.major2,
           minor: userData.minor,
           year: userData.year,
+          research: userData.research,
+          club: userData.club,
+          interests: userData.interests
         });
       })
       .catch((err) => {

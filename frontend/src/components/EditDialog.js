@@ -12,7 +12,7 @@ import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import { makeStyles } from '@material-ui/core/styles';
-import { countries } from './Lists';
+// import { countries } from './Lists';
 import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
@@ -24,63 +24,64 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+// Custom hook, acts like constructor
+const useConstructor = (callBack = () => { }) => {
+  const [hasCalled, setCalled] = useState(false);
+  if (hasCalled) return;
+  callBack();
+  setCalled(true);
+}
+
 export default function EditDialog(props) {
   const classes = useStyles();
 
-  // Lists of Stuff
+  // Lists of majors, minors, clubs, labs, and interests
   let [Major, setMajorList] = useState([]);
   let [Minor, setMinorList] = useState([]);
   let [Club, setClubList] = useState([]);
   let [Research, setResearchList] = useState([]);
+  let [Interest, setInterestList] = useState([]);
 
   let [firstName, setFirstName] = useState(props.profileData.firstName || '');
   let [lastName, setLastName] = useState(props.profileData.lastName || '');
   let [year, setYear] = useState(props.profileData.year || '');
   // let [country, setCountry] = useState(props.profileData.country || '');
-  // TODO: Add country
   let [major1, setMajor1] = useState(props.profileData.major1 || '');
   let [major2, setMajor2] = useState(props.profileData.major2 || '');
   let [minor, setMinor] = useState(props.profileData.minor || '');
+  let [research, setResearch] = useState(props.profileData.research || []);
+  let [club, setClub] = useState(props.profileData.club || []);
+  let [interests, setInterests] = useState(props.profileData.interests || []);
+
+  console.log(club);
 
   let getAllLists = () => {
-    axios.get('/majors')
+    axios.get('/profileoptions')
       .then((res) => {
         setMajorList(res.data.major_list.map((element) => { return { 'title': element } }));
-      })
-      .catch((err) => {
-        props.showError('Unable to retrieve majors. Please try again later.')
-      })
-    axios.get('/minors')
-      .then((res) => {
         setMinorList(res.data.minor_list.map((element) => { return { 'title': element } }));
-      })
-      .catch((err) => {
-        props.showError('Unable to retrieve minors. Please try again later.')
-      })
-    axios.get('/clubs')
-      .then((res) => {
         setClubList(res.data.club_list.map((element) => { return { 'title': element } }));
-      })
-      .catch((err) => {
-        props.showError('Unable to retrieve clubs. Please try again later.')
-      })
-    axios.get('/labs')
-      .then((res) => {
         setResearchList(res.data.lab_list.map((element) => { return { 'title': element } }));
+        setInterestList(res.data.interest_list.map((element) => { return { 'title': element } }));
       })
       .catch((err) => {
-        props.showError('Unable to retrieve labs. Please try again later.')
+        props.showError('Unable to retrieve information. Please try again later.')
       })
-
   }
 
-  useEffect(() => {
+  useConstructor(() => {
     getAllLists();
+  })
+
+  useEffect(() => {
     setFirstName(props.profileData.firstName || '');
     setLastName(props.profileData.lastName || '');
     setMajor1(props.profileData.major1 || '');
     setMajor2(props.profileData.major2 || '');
     setMinor(props.profileData.minor || '');
+    setResearch(props.profileData.research || []);
+    setClub(props.profileData.club || []);
+    setInterests(props.profileData.interests || []);
   }, [props.profileData, props.open])
 
   let getMajorList = () => {
@@ -126,11 +127,14 @@ export default function EditDialog(props) {
       major1: major1,
       major2: major2,
       minor: minor,
+      research: research,
+      club: club,
+      interests: interests,
     })
   }
 
   let handleClose = () => {
-    if (major1 === '') {
+    if (major1 === '' || props.profileData.major1 === '') {
       props.showError('Cannot have empty major');
       return;
     }
@@ -202,7 +206,7 @@ export default function EditDialog(props) {
             </Grid>
           </Grid>
 
-          <Grid item container xs={12} spacing={1}>
+          {/* <Grid item container xs={12} spacing={1}>
             <Grid item xs={12}>
               <Autocomplete
                 id="countryBox"
@@ -222,7 +226,7 @@ export default function EditDialog(props) {
                 }
               />
             </Grid>
-          </Grid>
+          </Grid> */}
 
           <Grid item container xs={12} spacing={1}>
             <Grid item xs={12}>
@@ -303,9 +307,9 @@ export default function EditDialog(props) {
                 className={classes.autoComplete}
                 options={Club}
                 getOptionLabel={(option) => option.title}
-                // getOptionSelected={(option) => club.map((element) => { return element.title }).includes(option.title)}
-                // onChange={(event, newValue) => updateClub(event, newValue)}
-                // value={club}
+                getOptionSelected={(option) => club.includes(option.title)}
+                onChange={(event, newValue) => setClub(newValue.map((element) => element.title))}
+                value={club.map((element) => { return { title: element }})}
                 filterSelectedOptions
                 renderInput={
                   (params) => <TextField
@@ -327,9 +331,9 @@ export default function EditDialog(props) {
                 className={classes.autoComplete}
                 options={Research}
                 getOptionLabel={(option) => option.title}
-                // getOptionSelected={(option) => research.map((element) => { return element.title }).includes(option.title)}
-                // onChange={(event, newValue) => updateResearch(event, newValue)}
-                // value={research}
+                getOptionSelected={(option) => research.includes(option.title)}
+                onChange={(event, newValue) => setResearch(newValue.map((element) => element.title))}
+                value={research.map((element) => { return { title: element }})}
                 filterSelectedOptions
                 renderInput={
                   (params) => <TextField
@@ -342,6 +346,31 @@ export default function EditDialog(props) {
               />
             </Grid>
           </Grid>
+
+          <Grid item container xs={12} spacing={1}>
+            <Grid item xs={12}>
+              <Autocomplete
+                multiple
+                id="interestBox"
+                className={classes.autoComplete}
+                options={Interest}
+                getOptionLabel={(option) => option.title}
+                getOptionSelected={(option) => interests.includes(option.title)}
+                onChange={(event, newValue) => setInterests(newValue.map((element) => element.title))}
+                value={interests.map((element) => { return { title: element }})}
+                filterSelectedOptions
+                renderInput={
+                  (params) => <TextField
+                    {...params}
+                    label="Interests?"
+                    // margin="normal"
+                    variant="outlined"
+                  />
+                }
+              />
+            </Grid>
+          </Grid>
+
         </Grid>
       </DialogContent>
       <DialogActions>
