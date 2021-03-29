@@ -37,7 +37,7 @@ def createToken(tokenDict):
 
 # Checks if JWT is blacklisted
 def checkToken(token):
-    url = 'http://ec2-3-95-148-186.compute-1.amazonaws.com:5000/checkToken'
+    url = 'http://ec2-54-210-164-211.compute-1.amazonaws.com:5000/checkToken'
     res = r.post(url, json={'token': token})
 
     if res.status_code == 200 and res.text == 'Exists':
@@ -48,7 +48,7 @@ def checkToken(token):
 
 # Expires JWT
 def expireToken(token):
-    url = 'http://ec2-3-95-148-186.compute-1.amazonaws.com:5000/expireToken'
+    url = 'http://ec2-54-210-164-211.compute-1.amazonaws.com:5000/expireToken'
     res = r.post(url, json={'token': token})
 
     if res.status_code == 200 and res.text == 'Success':
@@ -72,8 +72,8 @@ def jwt_required(func):
         except:
             return 'Invalid token', 401
 
-        if checkToken(encodedToken):
-            return 'Logged out', 401
+        # if checkToken(encodedToken):
+        #     return 'Logged out', 401
 
         return func(*args, **kwargs)
 
@@ -90,6 +90,10 @@ class User(Resource):
         if (user is None):
             return {'error': 'User could not be found.'}, 404
         else:
+            clubs = JoinsClub.query.filter_by(email=email).all()
+            labs = JoinsLab.query.filter_by(email=email).all()
+            interests = HasInterest.query.filter_by(email=email).all()
+
             user_info = {
                 'email': user.email,
                 'first_name': user.first_name,
@@ -98,7 +102,10 @@ class User(Resource):
                 'major2': user.major2,
                 'minor': user.minor,
                 'year': user.school_year,
-                'has_ipad': user.has_ipad
+                'has_ipad': user.has_ipad,
+                'club': [club.club_name for club in clubs],
+                'research': [lab.lab_name for lab in labs],
+                'interests': [interest.interest_name for interest in interests]
             }
             return user_info, 200
 
@@ -160,17 +167,20 @@ class User(Resource):
         encodedToken = request.cookies.get('token')
         token = jwt.decode(encodedToken, app.config['JWT_SECRET_KEY'], algorithms=['HS256'])
 
+        print(oldData)
+        print(newData)
+
         if email != token['email']:
             return 'Cannot update other user\'s profile', 401
 
-        clubsRemove = filter(lambda x: x not in newData['club'], oldData['club'])
-        clubsAdd = filter(lambda x: x not in oldData['club'], newData['club'])
+        clubsRemove = list(filter(lambda x: x not in newData['club'], oldData['club']))
+        clubsAdd = list(filter(lambda x: x not in oldData['club'], newData['club']))
 
-        labsRemove = filter(lambda x: x not in newData['research'], oldData['research'])
-        labsAdd = filter(lambda x: x not in oldData['research'], newData['research'])
+        labsRemove = list(filter(lambda x: x not in newData['research'], oldData['research']))
+        labsAdd = list(filter(lambda x: x not in oldData['research'], newData['research']))
 
-        interestRemove = filter(lambda x: x not in newData['interests'], oldData['interests'])
-        interestAdd = filter(lambda x: x not in oldData['interests'], newData['interests'])
+        interestRemove = list(filter(lambda x: x not in newData['interests'], oldData['interests']))
+        interestAdd = list(filter(lambda x: x not in oldData['interests'], newData['interests']))
 
         # Updating user tuple in database
         try:
@@ -184,13 +194,26 @@ class User(Resource):
             s.has_ipad = newData['hasIpad']
 
             if len(clubsRemove) != 0:
-                JoinsClub.query.filter_by(email=email).filter(JoinsClub.club_name.in_(clubsRemove)).delete()
+                JoinsClub.query.filter_by(email=email).filter(JoinsClub.club_name.in_(clubsRemove)).delete(synchronize_session=False)
             
             if len(clubsAdd) != 0:
                 db.session.add_all([JoinsClub(email=email, club_name=club) for club in clubsAdd])
 
+            if len(labsRemove) != 0:
+                JoinsLab.query.filter_by(email=email).filter(JoinsLab.lab_name.in_(labsRemove)).delete(synchronize_session=False)
+            
+            if len(labsAdd) != 0:
+                db.session.add_all([JoinsLab(email=email, lab_name=lab) for lab in labsAdd])
+
+            if len(interestRemove) != 0:
+                HasInterest.query.filter_by(email=email).filter(HasInterest.interest_name.in_(interestRemove)).delete(synchronize_session=False)
+
+            if len(interestAdd) != 0:
+                db.session.add_all([HasInterest(email=email, interest_name=interest) for interest in interestAdd])
+
             db.session.commit()
-        except:
+        except Exception as e:
+            print(e)
             return 'Unable to complete update', 503
 
         return 'User data updated successfully', 200
@@ -260,9 +283,10 @@ class Login(Resource):
         if res is None:
             new_student = Student(
                 email = email,
+                unique_id = email,
                 first_name = firstName,
                 last_name = lastName,
-                major1 = '',
+                major1 = 'Undecided',
                 major2 = None,
                 minor = None,
                 school_year = 0,
