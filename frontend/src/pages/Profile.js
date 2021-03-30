@@ -135,9 +135,8 @@ export default function Profile() {
   }
 
   let setNewProfileData = (newData) => {
-    newData.schoolYear = 2021; // NEED TO TAKE OUT LATER
     newData.hasIpad = 0; // NEED TO TAKE OUT LATER
-    axios.put('/user/' + email, {oldData: profileData, newData: newData})
+    axios.put('/user/' + email, { oldData: profileData, newData: newData })
       .then((res) => {
         setProfileData(newData);
         let successMessage = 'Sucessfully updated profile data';
@@ -216,7 +215,7 @@ export default function Profile() {
           <Tab label="About" {...a11yProps(0)} />
           <Tab label="Activities" {...a11yProps(1)} />
           <Tab label="Classes" {...a11yProps(2)} />
-          <Tab label="Interests (Coming Soon)" {...a11yProps(3)} disabled />
+          <Tab label="Interests" {...a11yProps(3)} />
         </Tabs>
       </Grid>
 
@@ -266,21 +265,31 @@ export default function Profile() {
 
             <Grid>
               <h2 style={{ marginTop: 0 }}>Clubs</h2>
-              <p>Coming soon</p>
+              {(profileData.club.length !== 0) ?
+                <ul>
+                  {profileData.clubs.map((element) => {
+                    return <li>{element}</li>;
+                  })}
+                </ul>
+                :
+                <p>No clubs listed.</p>
+              }
             </Grid>
 
             <Grid className={classes.separation}></Grid>
 
             <Grid>
               <h2 style={{ marginTop: 0 }}>Labs</h2>
-              <p>Coming soon</p>
-            </Grid>
+              {(profileData.research.length !== 0) ?
+                <ul>
+                  {profileData.research.map((element) => {
+                    return <li>{element}</li>;
+                  })}
+                </ul>
+                :
+                <p>No labs listed.</p>
+              }
 
-            <Grid className={classes.separation}></Grid>
-
-            <Grid>
-              <h2 style={{ marginTop: 0 }}>On Campus Job</h2>
-              <p>Coming soon</p>
             </Grid>
 
           </Grid>
@@ -308,6 +317,35 @@ export default function Profile() {
           </Grid>
         )}
       </div>
+
+      <div
+        role="tabpanel"
+        hidden={value !== 3}
+        id={`simple-tabpanel-${3}`}
+        aria-labelledby={`simple-tab-${3}`}
+      >
+        {value === 3 && (
+          <Grid
+            container
+            alignItems="center"
+            justify="flex-start"
+            className={classes.boxes}>
+            <Grid>
+              <h2 style={{ marginTop: 0 }}>Interests</h2>
+              {(profileData.interests.length !== 0) ?
+                <ul>
+                  {profileData.interests.map((element) => {
+                    return <li>{element}</li>;
+                  })}
+                </ul>
+                :
+                <p>No interests listed.</p>
+              }
+            </Grid>
+          </Grid>
+        )}
+      </div>
+
       <IncompleteDialog open={openIncomplete} onClose={handleIncompleteClose} />
       <div style={{ height: 100 }}></div>
 

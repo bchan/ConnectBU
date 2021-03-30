@@ -74,6 +74,7 @@ export default function EditDialog(props) {
   useEffect(() => {
     setFirstName(props.profileData.firstName || '');
     setLastName(props.profileData.lastName || '');
+    setYear(props.profileData.year || '');
     setMajor1(props.profileData.major1 || '');
     setMajor2(props.profileData.major2 || '');
     setMinor(props.profileData.minor || '');
@@ -122,6 +123,7 @@ export default function EditDialog(props) {
     props.handleChange({
       firstName: firstName,
       lastName: lastName,
+      year: year,
       major1: major1,
       major2: major2,
       minor: minor,
