@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request, make_response
 from flask_restful import Resource, Api
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from models import db, Student, Class, Major, Minor, Club, Lab, Interest, TakesClass, JoinsClub, JoinsLab, HasInterest
 from requests_aws4auth import AWS4Auth
 import boto3
 from elasticsearch import Elasticsearch, RequestsHttpConnection
@@ -11,6 +12,9 @@ from requests_aws4auth import AWS4Auth
 app = Flask(__name__)
 CORS(app)
 api = Api(app)
+engine = db.create_engine(SQLALCHEMY_DATABASE_URI, {})
+session = Session(engine)
+
 
 host = 'search-yokesearch-piqsgtzhu2fnekcw4jpegeuobe.us-east-1.es.amazonaws.com' # For example, my-test-domain.us-east-1.es.amazonaws.com
 region = 'us-east-1' # e.g. us-west-1
@@ -30,6 +34,8 @@ es = Elasticsearch(
         connection_class = RequestsHttpConnection
     )
 print('ES is active')
+
+
 
 #sample profiles for elasticsearch
 # doc1 = {
@@ -109,6 +115,7 @@ class Search(Resource):
         res = es.index(index="profiles", id=json_data['index'], body=doc1)
         
         return 'User data updated successfully', 200
+
 
 api.add_resource(Search, '/search')
 
