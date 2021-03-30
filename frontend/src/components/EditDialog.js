@@ -132,7 +132,7 @@ export default function EditDialog(props) {
   }
 
   let handleClose = () => {
-    if (major1 === '' || props.profileData.major1 === '') {
+    if (props.profileData.major1 === '') {
       props.showError('Cannot have empty major');
       return;
     }
