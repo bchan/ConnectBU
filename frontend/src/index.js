@@ -11,9 +11,10 @@ import HomeLI from './pages/Home_LI'
 import Search from './pages/Search'
 import AboutUs from './pages/AboutUs'
 import SignUp from './pages/SignUp';
+import User from './pages/User';
 import Chat from './pages/Chat';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, useHistory } from "react-router-dom";
 // import BotBar from './components/BotBar'
 import store from './redux/store';
 import { Provider } from 'react-redux';
@@ -35,6 +36,7 @@ const useConstructor = (callBack = () => { }) => {
 function Index() {
   // Handles loading
   const [isLoading, setLoading] = useState(true);
+  const history = useHistory();
 
   useConstructor(() => {
     axios.get('/api/login')
@@ -90,6 +92,12 @@ function Index() {
                   <SignUp />
                 </Route>
                 <Route path="/search">
+                  <Search />
+                </Route>
+                <Route path="/user/:id">
+                  <User />
+                </Route>
+                <Route exact path="/user">
                   <Search />
                 </Route>
                 <Route path="/recommendations">

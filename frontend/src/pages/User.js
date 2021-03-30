@@ -5,7 +5,7 @@ import Chip from '@material-ui/core/Chip';
 import Typography from '@material-ui/core/Typography';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useParams, useHistory } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Link from '@material-ui/core/Link';
@@ -81,13 +81,15 @@ const useConstructor = (callBack = () => { }) => {
   setCalled(true);
 }
 
-export default function Profile() {
+export default function User() {
+  const history = useHistory();
   const classes = useStyles();
   const [value, setValue] = useState(0);
   const [openIncomplete, setIncomplete] = useState(false);
   const [open, setOpen] = useState(false);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  let email = useSelector(selectUserEmail);
+  const { id } = useParams();
+  let email = id + "@bu.edu"
   let [profileData, setProfileData] = useState({
     firstName: '',
     lastName: '',
@@ -134,21 +136,6 @@ export default function Profile() {
     setOpen(false);
   }
 
-  let setNewProfileData = (newData) => {
-    newData.schoolYear = 2021; // NEED TO TAKE OUT LATER
-    newData.hasIpad = 0; // NEED TO TAKE OUT LATER
-    axios.put('/user/' + email, {oldData: profileData, newData: newData})
-      .then((res) => {
-        setProfileData(newData);
-        let successMessage = 'Sucessfully updated profile data';
-        enqueueSnackbar(successMessage, { variant: 'success' });
-      })
-      .catch((err) => {
-        let errorMessage = 'Unable to update profile data. Please try again.';
-        enqueueSnackbar(errorMessage, { variant: 'error' });
-      })
-  }
-
   let handleIncompleteClose = () => {
     setIncomplete(false);
     setOpen(true);
@@ -160,10 +147,9 @@ export default function Profile() {
 
   return (
     <div className={classes.screen}>
-      <EditDialog open={open} handleClose={handleClose} profileData={profileData} handleChange={setNewProfileData} showError={showErrorMessage} />
       <Breadcrumbs aria-label="breadcrumb">
         <Link component={RouterLink} to="/">Home</Link>
-        <Typography color="textPrimary">Profile</Typography>
+        <Typography color="textPrimary">User</Typography>
       </Breadcrumbs>
 
       <Grid
@@ -195,10 +181,7 @@ export default function Profile() {
           </Grid>
         </Grid>
         <Grid item container xs={12} sm={12} md={4} alignItems="center" className={classes.message}>
-          <Button className={classes.button}>Message</Button>
-          <IconButton onClick={handleOpen}>
-            <EditIcon />
-          </IconButton>
+          <Button className={classes.button} onClick={() => {history.push('/chat')}}>Message</Button>
         </Grid>
 
       </Grid>
@@ -308,7 +291,6 @@ export default function Profile() {
           </Grid>
         )}
       </div>
-      <IncompleteDialog open={openIncomplete} onClose={handleIncompleteClose} />
       <div style={{ height: 100 }}></div>
 
     </div>

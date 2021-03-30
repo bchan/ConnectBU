@@ -26,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: 20,
     paddingRight: 20,
     borderRadius: 5,
+    paddingBottom: 50,
     backgroundColor: "rgb(255,255,255)",
     flex: 10
   },
@@ -43,10 +44,12 @@ const useStyles = makeStyles((theme) => ({
   spaceLeft: { flex: 8 }, spaceMiddle: { flex: 1 }, spaceRight: { flex: 8 },
   search: {
     padding: 5,
+    paddingRight: 30,
     borderRadius: 5,
     backgroundColor: "rgb(255,255,255)",
     width: "100%",
-    marginBottom: 20
+    marginBottom: 20,
+    justifyContent: "space-between"
   },
   searchIcon: {
     padding: 5,
