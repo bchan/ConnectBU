@@ -72,8 +72,8 @@ def jwt_required(func):
         except:
             return 'Invalid token', 401
 
-        # if checkToken(encodedToken):
-        #     return 'Logged out', 401
+        if checkToken(encodedToken):
+            return 'Logged out', 401
 
         return func(*args, **kwargs)
 
@@ -162,17 +162,17 @@ class User(Resource):
     @jwt_required
     def put(self, email):
         json_data = request.get_json(force=True)
-        oldData = json_data['oldData']
-        newData = json_data['newData']
         encodedToken = request.cookies.get('token')
         token = jwt.decode(encodedToken, app.config['JWT_SECRET_KEY'], algorithms=['HS256'])
-
-        print(oldData)
-        print(newData)
 
         if email != token['email']:
             return 'Cannot update other user\'s profile', 401
 
+        # Current/Old Data and New Data
+        oldData = json_data['oldData']
+        newData = json_data['newData']
+
+        # Finding which items must be removed and added
         clubsRemove = list(filter(lambda x: x not in newData['club'], oldData['club']))
         clubsAdd = list(filter(lambda x: x not in oldData['club'], newData['club']))
 
@@ -193,6 +193,7 @@ class User(Resource):
             s.school_year = newData['schoolYear']
             s.has_ipad = newData['hasIpad']
 
+            # Removes and adds rows if needed
             if len(clubsRemove) != 0:
                 JoinsClub.query.filter_by(email=email).filter(JoinsClub.club_name.in_(clubsRemove)).delete(synchronize_session=False)
             
