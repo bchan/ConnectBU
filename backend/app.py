@@ -10,10 +10,6 @@ from datetime import datetime, timedelta
 from functools import wraps
 import requests as r
 import uuid
-from requests_aws4auth import AWS4Auth
-import boto3
-from elasticsearch import Elasticsearch, RequestsHttpConnection
-from requests_aws4auth import AWS4Auth
 
 app = Flask(__name__)
 CORS(app)
@@ -194,7 +190,7 @@ class User(Resource):
             s.major1 = newData['major1']
             s.major2 = newData['major2'] if newData['major2'] != '' else None
             s.minor = newData['minor'] if newData['minor'] != '' else None
-            s.school_year = newData['schoolYear']
+            s.school_year = int(newData['year']) if newData['year'] != '' else 0
             s.has_ipad = newData['hasIpad']
 
             # Removes and adds rows if needed
@@ -344,7 +340,6 @@ api.add_resource(Course, '/courses')
 api.add_resource(ProfileOptions, '/profileoptions')
 api.add_resource(Login, '/api/login')
 api.add_resource(Logout, '/api/logout')
-api.add_resource(Search, '/search')
 
 if __name__ == '__main__':
     app.run(debug=True)
