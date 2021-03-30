@@ -10,6 +10,10 @@ from datetime import datetime, timedelta
 from functools import wraps
 import requests as r
 import uuid
+from requests_aws4auth import AWS4Auth
+import boto3
+from elasticsearch import Elasticsearch, RequestsHttpConnection
+from requests_aws4auth import AWS4Auth
 
 app = Flask(__name__)
 CORS(app)
