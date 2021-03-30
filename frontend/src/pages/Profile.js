@@ -94,7 +94,10 @@ export default function Profile() {
     major1: '',
     major2: '',
     minor: '',
-    year: ''
+    year: '',
+    research: [],
+    club: [],
+    interests: []
   })
 
   const handleChange = (event, newValue) => {
@@ -194,7 +197,6 @@ export default function Profile() {
           </Grid>
         </Grid>
         <Grid item container xs={12} sm={12} md={4} alignItems="center" className={classes.message}>
-          <Button className={classes.button}>Message</Button>
           <IconButton onClick={handleOpen}>
             <EditIcon />
           </IconButton>
@@ -241,10 +243,10 @@ export default function Profile() {
           >
 
             <Grid item xs={12}>
-              <p style={{ fontWeight: "bold" }}>Year of Graduation</p>
+              <h2 style={{ marginTop: 0 }}>Year of Graduation</h2>
             </Grid>
             <Grid item xs={12}>
-              <p>{(profileData.year !== 0) ? profileData.year : ''}</p>
+              <p>{(profileData.year !== 0 && profileData.year !== '') ? profileData.year : 'Unspecified.'}</p>
             </Grid>
 
           </Grid>
