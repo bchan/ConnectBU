@@ -186,12 +186,17 @@ export default function Profile() {
               {(profileData.major1 !== "") ?
                 <Chip label={profileData.major1} style={{ backgroundColor: "#C4C4C4", marginRight: '5px', marginBottom: '5px' }} />
                 :
-                <div></div>
+                ''
               }
               {(profileData.major2 !== '' && profileData.major2 !== null) ?
                 <Chip label={profileData.major2} style={{ backgroundColor: "#C4C4C4", marginRight: '5px', marginBottom: '5px' }} />
                 :
-                <div></div>
+                ''
+              }
+              {(profileData.minor !== "" && profileData.minor !== null) ?
+                <Chip label={'Minor: ' + profileData.minor} style={{ backgroundColor: "#C4C4C4", marginRight: '5px', marginBottom: '5px' }} />
+                :
+                ''
               }
             </Grid>
           </Grid>
