@@ -320,7 +320,15 @@ export default function Profile() {
 
             <Grid>
               <h2 style={{ marginTop: 0 }}>Classes</h2>
-              <p>Coming soon</p>
+              {(profileData.classes.length !== 0) ?
+                <ul>
+                  {profileData.classes.map((element) => {
+                    return <li key={element}>{element}</li>;
+                  })}
+                </ul>
+                :
+                <p>No classes listed.</p>
+              }
             </Grid>
 
           </Grid>

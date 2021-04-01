@@ -93,6 +93,7 @@ class User(Resource):
             clubs = JoinsClub.query.filter_by(email=email).all()
             labs = JoinsLab.query.filter_by(email=email).all()
             interests = HasInterest.query.filter_by(email=email).all()
+            classes = TakesClass.query.filter_by(email=email).all()
 
             user_info = {
                 'email': user.email,
@@ -105,7 +106,8 @@ class User(Resource):
                 'has_ipad': user.has_ipad,
                 'club': [club.club_name for club in clubs],
                 'research': [lab.lab_name for lab in labs],
-                'interests': [interest.interest_name for interest in interests]
+                'interests': [interest.interest_name for interest in interests],
+                'classes': [course.class_name for course in classes]
             }
             return user_info, 200
 
