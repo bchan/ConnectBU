@@ -14,12 +14,12 @@ import EditIcon from '@material-ui/icons/Edit';
 import IconButton from '@material-ui/core/IconButton';
 import { useSnackbar } from 'notistack';
 
-import pic from '../images/image.jpg';
+import default_pic from '../images/image.jpg';
 import axios from 'axios';
 
 // Redux
 import { useSelector } from 'react-redux';
-import { selectUserEmail } from '../redux/loginSlice';
+import { selectUserEmail, selectProfilePic } from '../redux/loginSlice';
 import IncompleteDialog from '../components/IncompleteDialog';
 
 function a11yProps(index) {
@@ -88,6 +88,8 @@ export default function Profile() {
   const [open, setOpen] = useState(false);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   let email = useSelector(selectUserEmail);
+  let pic = useSelector(selectProfilePic);
+  if (pic.length === 0) pic = default_pic;
   let [profileData, setProfileData] = useState({
     firstName: '',
     lastName: '',

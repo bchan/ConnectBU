@@ -41,8 +41,9 @@ function Index() {
   useConstructor(() => {
     axios.get('/api/login')
       .then((res) => {
+        console.log(res);
         if (res.status === 200) {
-          store.dispatch(login(res.data))
+          store.dispatch(login({'email': res.data, 'pic': ''})) // TODO: grab profile pic url after reloading page
         }
 
         setTimeout(() => {
