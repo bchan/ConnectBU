@@ -41,6 +41,7 @@ export default function EditDialog(props) {
   let [Club, setClubList] = useState([]);
   let [Research, setResearchList] = useState([]);
   let [Interest, setInterestList] = useState([]);
+  let [Classes, setClassList] = useState([]);
 
   let [firstName, setFirstName] = useState(props.profileData.firstName || '');
   let [lastName, setLastName] = useState(props.profileData.lastName || '');
@@ -52,6 +53,7 @@ export default function EditDialog(props) {
   let [research, setResearch] = useState(props.profileData.research || []);
   let [club, setClub] = useState(props.profileData.club || []);
   let [interests, setInterests] = useState(props.profileData.interests || []);
+  let [courses, setCourses] = useState(props.profileData.classes || []);
 
   let getAllLists = () => {
     axios.get('/profileoptions')
@@ -61,6 +63,7 @@ export default function EditDialog(props) {
         setClubList(res.data.club_list.map((element) => { return { 'title': element } }));
         setResearchList(res.data.lab_list.map((element) => { return { 'title': element } }));
         setInterestList(res.data.interest_list.map((element) => { return { 'title': element } }));
+        setClassList(res.data.class_list.map((element) => { return { 'title': element } }));
       })
       .catch((err) => {
         props.showError('Unable to retrieve information. Please try again later.')
@@ -81,6 +84,7 @@ export default function EditDialog(props) {
     setResearch(props.profileData.research || []);
     setClub(props.profileData.club || []);
     setInterests(props.profileData.interests || []);
+    setCourses(props.profileData.classes || []);
   }, [props.profileData, props.open])
 
   let getMajorList = () => {
@@ -130,6 +134,7 @@ export default function EditDialog(props) {
       research: research,
       club: club,
       interests: interests,
+      classes: courses,
     })
   }
 
@@ -277,27 +282,29 @@ export default function EditDialog(props) {
           </Grid>
 
 
-          {/* <Grid item xs={12} className={classes.element}>
+          <Grid item container xs={12} spacing={1}>
+            <Grid item xs={12}>
               <Autocomplete
-                multiple
                 id="classBox"
+                multiple
                 className={classes.autoComplete}
-                // options={class_list.current}
-                getOptionLabel={(option) => option}
-                // getOptionSelected={(option) => class_options.map((element) => { return element }).includes(option)}
-                // onChange={(event, newValue) => updateClass_options(event, newValue)}
-                // value={class_options}
+                options={Classes}
+                getOptionLabel={(option) => option.title}
+                getOptionSelected={(option) => courses.includes(option.title)}
+                onChange={(event, newValue) => setCourses(newValue.map((element) => element.title))}
+                value={courses.map((element) => { return { title: element } })}
                 filterSelectedOptions
                 renderInput={
                   (params) => <TextField
                     {...params}
                     label="Classes?"
-                    margin="normal"
+                    // margin="normal"
                     variant="outlined"
                   />
                 }
               />
-            </Grid> */}
+            </Grid>
+          </Grid>
 
           <Grid item container xs={12} spacing={1}>
             <Grid item xs={12}>
@@ -309,7 +316,7 @@ export default function EditDialog(props) {
                 getOptionLabel={(option) => option.title}
                 getOptionSelected={(option) => club.includes(option.title)}
                 onChange={(event, newValue) => setClub(newValue.map((element) => element.title))}
-                value={club.map((element) => { return { title: element }})}
+                value={club.map((element) => { return { title: element } })}
                 filterSelectedOptions
                 renderInput={
                   (params) => <TextField
@@ -333,7 +340,7 @@ export default function EditDialog(props) {
                 getOptionLabel={(option) => option.title}
                 getOptionSelected={(option) => research.includes(option.title)}
                 onChange={(event, newValue) => setResearch(newValue.map((element) => element.title))}
-                value={research.map((element) => { return { title: element }})}
+                value={research.map((element) => { return { title: element } })}
                 filterSelectedOptions
                 renderInput={
                   (params) => <TextField
@@ -357,7 +364,7 @@ export default function EditDialog(props) {
                 getOptionLabel={(option) => option.title}
                 getOptionSelected={(option) => interests.includes(option.title)}
                 onChange={(event, newValue) => setInterests(newValue.map((element) => element.title))}
-                value={interests.map((element) => { return { title: element }})}
+                value={interests.map((element) => { return { title: element } })}
                 filterSelectedOptions
                 renderInput={
                   (params) => <TextField

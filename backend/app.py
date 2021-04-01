@@ -182,6 +182,9 @@ class User(Resource):
         interestRemove = list(filter(lambda x: x not in newData['interests'], oldData['interests']))
         interestAdd = list(filter(lambda x: x not in oldData['interests'], newData['interests']))
 
+        classesRemove = list(filter(lambda x: x not in newData['classes'], oldData['classes']))
+        classesAdd = list(filter(lambda x: x not in oldData['classes'], newData['classes']))
+
         # Updating user tuple in database
         try:
             s = Student.query.filter_by(email=email).first()
@@ -211,6 +214,12 @@ class User(Resource):
 
             if len(interestAdd) != 0:
                 db.session.add_all([HasInterest(email=email, interest_name=interest) for interest in interestAdd])
+
+            if len(classesRemove) != 0:
+                TakesClass.query.filter_by(email=email).filter(TakesClass.class_name.in_(classesRemove)).delete(synchronize_session=False)
+
+            if len(classesAdd) != 0:
+                db.session.add_all([TakesClass(email=email, class_name=course) for course in classesAdd])
 
             db.session.commit()
         except Exception as e:
@@ -246,7 +255,8 @@ class ProfileOptions(Resource):
             'minor_list': [elem.minor_name for elem in minor_query],
             'club_list': [elem.club_name for elem in club_query],
             'lab_list': [elem.lab_name for elem in lab_query],
-            'interest_list': [elem.interest_name for elem in interest_query]
+            'interest_list': [elem.interest_name for elem in interest_query],
+            'class_list': [elem.class_name for elem in class_query]
         }
 
 

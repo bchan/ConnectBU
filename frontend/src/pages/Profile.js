@@ -97,7 +97,8 @@ export default function Profile() {
     year: '',
     research: [],
     club: [],
-    interests: []
+    interests: [],
+    classes: [],
   })
 
   const handleChange = (event, newValue) => {
@@ -121,7 +122,8 @@ export default function Profile() {
           year: userData.year,
           research: userData.research,
           club: userData.club,
-          interests: userData.interests
+          interests: userData.interests,
+          classes: userData.classes,
         });
       })
       .catch((err) => {
@@ -275,7 +277,7 @@ export default function Profile() {
               {(profileData.club.length !== 0) ?
                 <ul>
                   {profileData.clubs.map((element) => {
-                    return <li>{element}</li>;
+                    return <li key={element}>{element}</li>;
                   })}
                 </ul>
                 :
@@ -290,7 +292,7 @@ export default function Profile() {
               {(profileData.research.length !== 0) ?
                 <ul>
                   {profileData.research.map((element) => {
-                    return <li>{element}</li>;
+                    return <li key={element}>{element}</li>;
                   })}
                 </ul>
                 :
@@ -342,7 +344,7 @@ export default function Profile() {
               {(profileData.interests.length !== 0) ?
                 <ul>
                   {profileData.interests.map((element) => {
-                    return <li>{element}</li>;
+                    return <li key={element}>{element}</li>;
                   })}
                 </ul>
                 :
