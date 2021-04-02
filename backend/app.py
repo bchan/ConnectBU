@@ -201,13 +201,13 @@ class User(Resource):
             # Removes and adds rows if needed
             if len(clubsRemove) != 0:
                 JoinsClub.query.filter_by(email=email).filter(JoinsClub.club_name.in_(clubsRemove)).delete(synchronize_session=False)
-            
+
             if len(clubsAdd) != 0:
                 db.session.add_all([JoinsClub(email=email, club_name=club) for club in clubsAdd])
 
             if len(labsRemove) != 0:
                 JoinsLab.query.filter_by(email=email).filter(JoinsLab.lab_name.in_(labsRemove)).delete(synchronize_session=False)
-            
+
             if len(labsAdd) != 0:
                 db.session.add_all([JoinsLab(email=email, lab_name=lab) for lab in labsAdd])
 
@@ -288,6 +288,8 @@ class Login(Resource):
         email = googleInfo['email']
         firstName = googleInfo['given_name']
         lastName = googleInfo['family_name']
+        profilePicURL = googleInfo['picture']
+        print(googleInfo)
 
         # Checks if user is in database
         res = Student.query.filter_by(email=email).first()
@@ -296,7 +298,8 @@ class Login(Resource):
         if res is None:
             new_student = Student(
                 email = email,
-                unique_id = email,
+                unique_id = str(uuid.uuid4()),
+                profile_pic_url = profilePicURL,
                 first_name = firstName,
                 last_name = lastName,
                 major1 = 'Undecided',
@@ -327,7 +330,17 @@ class Login(Resource):
     def get(self):
         encodedToken = request.cookies.get('token')
         token = jwt.decode(encodedToken, app.config['JWT_SECRET_KEY'], algorithms=['HS256'])
-        return token['email'], 200
+        email = token['email']
+
+        user = Student.query.filter_by(email=email).first()
+
+        if user is None:
+            return 'User not found', 404
+
+        profile_pic_url = user.profile_pic_url
+        resp = {'email': email, 'pic': profile_pic_url}
+
+        return resp, 200
 
 
 class Logout(Resource):
@@ -341,7 +354,7 @@ class Logout(Resource):
         expireToken(encodedToken)
 
         return res
-   
+
 
 
 
