@@ -5,7 +5,7 @@ import Chip from '@material-ui/core/Chip';
 import Typography from '@material-ui/core/Typography';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink,useHistory } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Link from '@material-ui/core/Link';
@@ -82,6 +82,12 @@ const useConstructor = (callBack = () => { }) => {
 }
 
 export default function Profile() {
+  const history = useHistory();
+
+  const isLoggedIn = useSelector(selectLoginState);
+  if(!isLoggedIn){
+    history.push("/")
+  }
   const classes = useStyles();
   const [value, setValue] = useState(0);
   const [openIncomplete, setIncomplete] = useState(false);
