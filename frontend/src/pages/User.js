@@ -19,7 +19,7 @@ import axios from 'axios';
 
 // Redux
 import { useSelector } from 'react-redux';
-import { selectUserEmail } from '../redux/loginSlice';
+import { selectLoginState, selectUserEmail, selectProfilePic } from '../redux/loginSlice';
 import IncompleteDialog from '../components/IncompleteDialog';
 
 function a11yProps(index) {
@@ -83,12 +83,20 @@ const useConstructor = (callBack = () => { }) => {
 
 export default function User() {
   const history = useHistory();
+  const { id } = useParams();
+  const isLoggedIn = useSelector(selectLoginState);
+  const logged_in_email = useSelector(selectUserEmail);
+  if(isLoggedIn){
+    if(logged_in_email == id + "@bu.edu") {
+      history.push("/profile")
+    }
+  }
+
   const classes = useStyles();
   const [value, setValue] = useState(0);
   const [openIncomplete, setIncomplete] = useState(false);
   const [open, setOpen] = useState(false);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  const { id } = useParams();
   let email = id + "@bu.edu"
   let [profileData, setProfileData] = useState({
     firstName: '',
