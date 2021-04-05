@@ -19,7 +19,7 @@ import axios from 'axios';
 
 // Redux
 import { useSelector } from 'react-redux';
-import { selectUserEmail, selectProfilePic } from '../redux/loginSlice';
+import { selectLoginState, selectUserEmail, selectProfilePic } from '../redux/loginSlice';
 import IncompleteDialog from '../components/IncompleteDialog';
 
 function a11yProps(index) {

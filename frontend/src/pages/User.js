@@ -96,7 +96,11 @@ export default function User() {
     major1: '',
     major2: '',
     minor: '',
-    year: ''
+    year: '',
+    research: [],
+    club: [],
+    interests: [],
+    classes: [],
   })
 
   const handleChange = (event, newValue) => {
@@ -120,7 +124,8 @@ export default function User() {
           year: userData.year,
           research: userData.research,
           club: userData.club,
-          interests: userData.interests
+          interests: userData.interests,
+          classes: userData.classes,
         });
       })
       .catch((err) => {
@@ -170,18 +175,23 @@ export default function User() {
               {(profileData.major1 !== "") ?
                 <Chip label={profileData.major1} style={{ backgroundColor: "#C4C4C4", marginRight: '5px', marginBottom: '5px' }} />
                 :
-                <div></div>
+                ''
               }
               {(profileData.major2 !== '' && profileData.major2 !== null) ?
                 <Chip label={profileData.major2} style={{ backgroundColor: "#C4C4C4", marginRight: '5px', marginBottom: '5px' }} />
                 :
-                <div></div>
+                ''
+              }
+              {(profileData.minor !== "" && profileData.minor !== null) ?
+                <Chip label={'Minor: ' + profileData.minor} style={{ backgroundColor: "#C4C4C4", marginRight: '5px', marginBottom: '5px' }} />
+                :
+                ''
               }
             </Grid>
           </Grid>
         </Grid>
         <Grid item container xs={12} sm={12} md={4} alignItems="center" className={classes.message}>
-          <Button className={classes.button} onClick={() => {history.push('/chat')}}>Message</Button>
+          <Button className={classes.button} onClick={() => { history.push('/chat') }}>Message</Button>
         </Grid>
 
       </Grid>
@@ -199,7 +209,7 @@ export default function User() {
           <Tab label="About" {...a11yProps(0)} />
           <Tab label="Activities" {...a11yProps(1)} />
           <Tab label="Classes" {...a11yProps(2)} />
-          <Tab label="Interests (Coming Soon)" {...a11yProps(3)} disabled />
+          <Tab label="Interests" {...a11yProps(3)} />
         </Tabs>
       </Grid>
 
@@ -225,10 +235,10 @@ export default function User() {
           >
 
             <Grid item xs={12}>
-              <p style={{ fontWeight: "bold" }}>Year of Graduation</p>
+              <h2 style={{ marginTop: 0 }}>Year of Graduation</h2>
             </Grid>
             <Grid item xs={12}>
-              <p>{(profileData.year !== 0) ? profileData.year : ''}</p>
+              <p>{(profileData.year !== 0 && profileData.year !== '') ? profileData.year : 'Unspecified.'}</p>
             </Grid>
 
           </Grid>
@@ -249,21 +259,31 @@ export default function User() {
 
             <Grid>
               <h2 style={{ marginTop: 0 }}>Clubs</h2>
-              <p>Coming soon</p>
+              {(profileData.club.length !== 0) ?
+                <ul>
+                  {profileData.club.map((element) => {
+                    return <li key={element}>{element}</li>;
+                  })}
+                </ul>
+                :
+                <p>No clubs listed.</p>
+              }
             </Grid>
 
             <Grid className={classes.separation}></Grid>
 
             <Grid>
               <h2 style={{ marginTop: 0 }}>Labs</h2>
-              <p>Coming soon</p>
-            </Grid>
+              {(profileData.research.length !== 0) ?
+                <ul>
+                  {profileData.research.map((element) => {
+                    return <li key={element}>{element}</li>;
+                  })}
+                </ul>
+                :
+                <p>No labs listed.</p>
+              }
 
-            <Grid className={classes.separation}></Grid>
-
-            <Grid>
-              <h2 style={{ marginTop: 0 }}>On Campus Job</h2>
-              <p>Coming soon</p>
             </Grid>
 
           </Grid>
@@ -285,9 +305,45 @@ export default function User() {
 
             <Grid>
               <h2 style={{ marginTop: 0 }}>Classes</h2>
-              <p>Coming soon</p>
+              {(profileData.classes.length !== 0) ?
+                <ul>
+                  {profileData.classes.map((element) => {
+                    return <li key={element}>{element}</li>;
+                  })}
+                </ul>
+                :
+                <p>No classes listed.</p>
+              }
             </Grid>
 
+          </Grid>
+        )}
+      </div>
+
+      <div
+        role="tabpanel"
+        hidden={value !== 3}
+        id={`simple-tabpanel-${3}`}
+        aria-labelledby={`simple-tab-${3}`}
+      >
+        {value === 3 && (
+          <Grid
+            container
+            alignItems="center"
+            justify="flex-start"
+            className={classes.boxes}>
+            <Grid>
+              <h2 style={{ marginTop: 0 }}>Interests</h2>
+              {(profileData.interests.length !== 0) ?
+                <ul>
+                  {profileData.interests.map((element) => {
+                    return <li key={element}>{element}</li>;
+                  })}
+                </ul>
+                :
+                <p>No interests listed.</p>
+              }
+            </Grid>
           </Grid>
         )}
       </div>
