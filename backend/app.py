@@ -37,7 +37,7 @@ def createToken(tokenDict):
 
 # Checks if JWT is blacklisted
 def checkToken(token):
-    url = 'http://ec2-3-95-148-186.compute-1.amazonaws.com:5000/checkToken'
+    url = 'http://ec2-54-210-164-211.compute-1.amazonaws.com:5000/checkToken'
     res = r.post(url, json={'token': token})
 
     if res.status_code == 200 and res.text == 'Exists':
@@ -48,7 +48,7 @@ def checkToken(token):
 
 # Expires JWT
 def expireToken(token):
-    url = 'http://ec2-3-95-148-186.compute-1.amazonaws.com:5000/expireToken'
+    url = 'http://ec2-54-210-164-211.compute-1.amazonaws.com:5000/expireToken'
     res = r.post(url, json={'token': token})
 
     if res.status_code == 200 and res.text == 'Success':
@@ -90,6 +90,11 @@ class User(Resource):
         if (user is None):
             return {'error': 'User could not be found.'}, 404
         else:
+            clubs = JoinsClub.query.filter_by(email=email).all()
+            labs = JoinsLab.query.filter_by(email=email).all()
+            interests = HasInterest.query.filter_by(email=email).all()
+            classes = TakesClass.query.filter_by(email=email).all()
+
             user_info = {
                 'email': user.email,
                 'first_name': user.first_name,
@@ -98,7 +103,11 @@ class User(Resource):
                 'major2': user.major2,
                 'minor': user.minor,
                 'year': user.school_year,
-                'has_ipad': user.has_ipad
+                'has_ipad': user.has_ipad,
+                'club': [club.club_name for club in clubs],
+                'research': [lab.lab_name for lab in labs],
+                'interests': [interest.interest_name for interest in interests],
+                'classes': [course.class_name for course in classes]
             }
             return user_info, 200
 
@@ -161,19 +170,62 @@ class User(Resource):
         if email != token['email']:
             return 'Cannot update other user\'s profile', 401
 
+        # Current/Old Data and New Data
+        oldData = json_data['oldData']
+        newData = json_data['newData']
+
+        # Finding which items must be removed and added
+        clubsRemove = list(filter(lambda x: x not in newData['club'], oldData['club']))
+        clubsAdd = list(filter(lambda x: x not in oldData['club'], newData['club']))
+
+        labsRemove = list(filter(lambda x: x not in newData['research'], oldData['research']))
+        labsAdd = list(filter(lambda x: x not in oldData['research'], newData['research']))
+
+        interestRemove = list(filter(lambda x: x not in newData['interests'], oldData['interests']))
+        interestAdd = list(filter(lambda x: x not in oldData['interests'], newData['interests']))
+
+        classesRemove = list(filter(lambda x: x not in newData['classes'], oldData['classes']))
+        classesAdd = list(filter(lambda x: x not in oldData['classes'], newData['classes']))
+
         # Updating user tuple in database
         try:
             s = Student.query.filter_by(email=email).first()
-            s.first_name = json_data['firstName']
-            s.last_name = json_data['lastName']
-            s.major1 = json_data['major1']
-            s.major2 = json_data['major2'] if json_data['major2'] != '' else None
-            s.minor = json_data['minor'] if json_data['minor'] != '' else None
-            s.school_year = json_data['schoolYear']
-            s.has_ipad = json_data['hasIpad']
+            s.first_name = newData['firstName']
+            s.last_name = newData['lastName']
+            s.major1 = newData['major1']
+            s.major2 = newData['major2'] if newData['major2'] != '' else None
+            s.minor = newData['minor'] if newData['minor'] != '' else None
+            s.school_year = int(newData['year']) if newData['year'] != '' else 0
+            s.has_ipad = newData['hasIpad']
+
+            # Removes and adds rows if needed
+            if len(clubsRemove) != 0:
+                JoinsClub.query.filter_by(email=email).filter(JoinsClub.club_name.in_(clubsRemove)).delete(synchronize_session=False)
+
+            if len(clubsAdd) != 0:
+                db.session.add_all([JoinsClub(email=email, club_name=club) for club in clubsAdd])
+
+            if len(labsRemove) != 0:
+                JoinsLab.query.filter_by(email=email).filter(JoinsLab.lab_name.in_(labsRemove)).delete(synchronize_session=False)
+
+            if len(labsAdd) != 0:
+                db.session.add_all([JoinsLab(email=email, lab_name=lab) for lab in labsAdd])
+
+            if len(interestRemove) != 0:
+                HasInterest.query.filter_by(email=email).filter(HasInterest.interest_name.in_(interestRemove)).delete(synchronize_session=False)
+
+            if len(interestAdd) != 0:
+                db.session.add_all([HasInterest(email=email, interest_name=interest) for interest in interestAdd])
+
+            if len(classesRemove) != 0:
+                TakesClass.query.filter_by(email=email).filter(TakesClass.class_name.in_(classesRemove)).delete(synchronize_session=False)
+
+            if len(classesAdd) != 0:
+                db.session.add_all([TakesClass(email=email, class_name=course) for course in classesAdd])
 
             db.session.commit()
-        except:
+        except Exception as e:
+            print(e)
             return 'Unable to complete update', 503
 
         return 'User data updated successfully', 200
@@ -190,6 +242,24 @@ class Course(Resource):
             for elem in class_query:
                 class_list.append(elem.class_name)
             return {'class_list': class_list}, 200
+
+class ProfileOptions(Resource):
+    def get(self):
+        class_query = Class.query.all()
+        major_query = Major.query.all()
+        minor_query = Minor.query.all()
+        club_query = Club.query.all()
+        lab_query = Lab.query.all()
+        interest_query = Interest.query.all()
+
+        return {
+            'major_list': [elem.major_name for elem in major_query],
+            'minor_list': [elem.minor_name for elem in minor_query],
+            'club_list': [elem.club_name for elem in club_query],
+            'lab_list': [elem.lab_name for elem in lab_query],
+            'interest_list': [elem.interest_name for elem in interest_query],
+            'class_list': [elem.class_name for elem in class_query]
+        }
 
 
 class Login(Resource):
@@ -218,6 +288,8 @@ class Login(Resource):
         email = googleInfo['email']
         firstName = googleInfo['given_name']
         lastName = googleInfo['family_name']
+        profilePicURL = googleInfo['picture']
+        print(googleInfo)
 
         # Checks if user is in database
         res = Student.query.filter_by(email=email).first()
@@ -226,9 +298,11 @@ class Login(Resource):
         if res is None:
             new_student = Student(
                 email = email,
+                unique_id = str(uuid.uuid4()),
+                profile_pic_url = profilePicURL,
                 first_name = firstName,
                 last_name = lastName,
-                major1 = '',
+                major1 = 'Undecided',
                 major2 = None,
                 minor = None,
                 school_year = 0,
@@ -256,7 +330,17 @@ class Login(Resource):
     def get(self):
         encodedToken = request.cookies.get('token')
         token = jwt.decode(encodedToken, app.config['JWT_SECRET_KEY'], algorithms=['HS256'])
-        return token['email'], 200
+        email = token['email']
+
+        user = Student.query.filter_by(email=email).first()
+
+        if user is None:
+            return 'User not found', 404
+
+        profile_pic_url = user.profile_pic_url
+        resp = {'email': email, 'pic': profile_pic_url}
+
+        return resp, 200
 
 
 class Logout(Resource):
@@ -272,9 +356,13 @@ class Logout(Resource):
         return res
 
 
+
+
+
 # API Routes
 api.add_resource(User, '/user/<string:email>')
 api.add_resource(Course, '/courses')
+api.add_resource(ProfileOptions, '/profileoptions')
 api.add_resource(Login, '/api/login')
 api.add_resource(Logout, '/api/logout')
 

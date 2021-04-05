@@ -5,7 +5,7 @@ import Chip from '@material-ui/core/Chip';
 import Typography from '@material-ui/core/Typography';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import { Link as RouterLink,useHistory } from 'react-router-dom';
+import { Link as RouterLink, useParams, useHistory } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Link from '@material-ui/core/Link';
@@ -14,12 +14,12 @@ import EditIcon from '@material-ui/icons/Edit';
 import IconButton from '@material-ui/core/IconButton';
 import { useSnackbar } from 'notistack';
 
-import default_pic from '../images/image.jpg';
+import pic from '../images/image.jpg';
 import axios from 'axios';
 
 // Redux
 import { useSelector } from 'react-redux';
-import { selectUserEmail, selectProfilePic } from '../redux/loginSlice';
+import { selectUserEmail } from '../redux/loginSlice';
 import IncompleteDialog from '../components/IncompleteDialog';
 
 function a11yProps(index) {
@@ -81,32 +81,22 @@ const useConstructor = (callBack = () => { }) => {
   setCalled(true);
 }
 
-export default function Profile() {
+export default function User() {
   const history = useHistory();
-
-  const isLoggedIn = useSelector(selectLoginState);
-  if(!isLoggedIn){
-    history.push("/")
-  }
   const classes = useStyles();
   const [value, setValue] = useState(0);
   const [openIncomplete, setIncomplete] = useState(false);
   const [open, setOpen] = useState(false);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  let email = useSelector(selectUserEmail);
-  let pic = useSelector(selectProfilePic);
-  if (pic.length === 0) pic = default_pic;
+  const { id } = useParams();
+  let email = id + "@bu.edu"
   let [profileData, setProfileData] = useState({
     firstName: '',
     lastName: '',
     major1: '',
     major2: '',
     minor: '',
-    year: '',
-    research: [],
-    club: [],
-    interests: [],
-    classes: [],
+    year: ''
   })
 
   const handleChange = (event, newValue) => {
@@ -130,8 +120,7 @@ export default function Profile() {
           year: userData.year,
           research: userData.research,
           club: userData.club,
-          interests: userData.interests,
-          classes: userData.classes,
+          interests: userData.interests
         });
       })
       .catch((err) => {
@@ -147,20 +136,6 @@ export default function Profile() {
     setOpen(false);
   }
 
-  let setNewProfileData = (newData) => {
-    newData.hasIpad = 0; // NEED TO TAKE OUT LATER
-    axios.put('/user/' + email, { oldData: profileData, newData: newData })
-      .then((res) => {
-        setProfileData(newData);
-        let successMessage = 'Sucessfully updated profile data';
-        enqueueSnackbar(successMessage, { variant: 'success' });
-      })
-      .catch((err) => {
-        let errorMessage = 'Unable to update profile data. Please try again.';
-        enqueueSnackbar(errorMessage, { variant: 'error' });
-      })
-  }
-
   let handleIncompleteClose = () => {
     setIncomplete(false);
     setOpen(true);
@@ -172,10 +147,9 @@ export default function Profile() {
 
   return (
     <div className={classes.screen}>
-      <EditDialog open={open} handleClose={handleClose} profileData={profileData} handleChange={setNewProfileData} showError={showErrorMessage} />
       <Breadcrumbs aria-label="breadcrumb">
         <Link component={RouterLink} to="/">Home</Link>
-        <Typography color="textPrimary">Profile</Typography>
+        <Typography color="textPrimary">User</Typography>
       </Breadcrumbs>
 
       <Grid
@@ -196,25 +170,18 @@ export default function Profile() {
               {(profileData.major1 !== "") ?
                 <Chip label={profileData.major1} style={{ backgroundColor: "#C4C4C4", marginRight: '5px', marginBottom: '5px' }} />
                 :
-                ''
+                <div></div>
               }
               {(profileData.major2 !== '' && profileData.major2 !== null) ?
                 <Chip label={profileData.major2} style={{ backgroundColor: "#C4C4C4", marginRight: '5px', marginBottom: '5px' }} />
                 :
-                ''
-              }
-              {(profileData.minor !== "" && profileData.minor !== null) ?
-                <Chip label={'Minor: ' + profileData.minor} style={{ backgroundColor: "#C4C4C4", marginRight: '5px', marginBottom: '5px' }} />
-                :
-                ''
+                <div></div>
               }
             </Grid>
           </Grid>
         </Grid>
         <Grid item container xs={12} sm={12} md={4} alignItems="center" className={classes.message}>
-          <IconButton onClick={handleOpen}>
-            <EditIcon />
-          </IconButton>
+          <Button className={classes.button} onClick={() => {history.push('/chat')}}>Message</Button>
         </Grid>
 
       </Grid>
@@ -232,7 +199,7 @@ export default function Profile() {
           <Tab label="About" {...a11yProps(0)} />
           <Tab label="Activities" {...a11yProps(1)} />
           <Tab label="Classes" {...a11yProps(2)} />
-          <Tab label="Interests" {...a11yProps(3)} />
+          <Tab label="Interests (Coming Soon)" {...a11yProps(3)} disabled />
         </Tabs>
       </Grid>
 
@@ -258,10 +225,10 @@ export default function Profile() {
           >
 
             <Grid item xs={12}>
-              <h2 style={{ marginTop: 0 }}>Year of Graduation</h2>
+              <p style={{ fontWeight: "bold" }}>Year of Graduation</p>
             </Grid>
             <Grid item xs={12}>
-              <p>{(profileData.year !== 0 && profileData.year !== '') ? profileData.year : 'Unspecified.'}</p>
+              <p>{(profileData.year !== 0) ? profileData.year : ''}</p>
             </Grid>
 
           </Grid>
@@ -282,31 +249,21 @@ export default function Profile() {
 
             <Grid>
               <h2 style={{ marginTop: 0 }}>Clubs</h2>
-              {(profileData.club.length !== 0) ?
-                <ul>
-                  {profileData.club.map((element) => {
-                    return <li key={element}>{element}</li>;
-                  })}
-                </ul>
-                :
-                <p>No clubs listed.</p>
-              }
+              <p>Coming soon</p>
             </Grid>
 
             <Grid className={classes.separation}></Grid>
 
             <Grid>
               <h2 style={{ marginTop: 0 }}>Labs</h2>
-              {(profileData.research.length !== 0) ?
-                <ul>
-                  {profileData.research.map((element) => {
-                    return <li key={element}>{element}</li>;
-                  })}
-                </ul>
-                :
-                <p>No labs listed.</p>
-              }
+              <p>Coming soon</p>
+            </Grid>
 
+            <Grid className={classes.separation}></Grid>
+
+            <Grid>
+              <h2 style={{ marginTop: 0 }}>On Campus Job</h2>
+              <p>Coming soon</p>
             </Grid>
 
           </Grid>
@@ -328,50 +285,12 @@ export default function Profile() {
 
             <Grid>
               <h2 style={{ marginTop: 0 }}>Classes</h2>
-              {(profileData.classes.length !== 0) ?
-                <ul>
-                  {profileData.classes.map((element) => {
-                    return <li key={element}>{element}</li>;
-                  })}
-                </ul>
-                :
-                <p>No classes listed.</p>
-              }
+              <p>Coming soon</p>
             </Grid>
 
           </Grid>
         )}
       </div>
-
-      <div
-        role="tabpanel"
-        hidden={value !== 3}
-        id={`simple-tabpanel-${3}`}
-        aria-labelledby={`simple-tab-${3}`}
-      >
-        {value === 3 && (
-          <Grid
-            container
-            alignItems="center"
-            justify="flex-start"
-            className={classes.boxes}>
-            <Grid>
-              <h2 style={{ marginTop: 0 }}>Interests</h2>
-              {(profileData.interests.length !== 0) ?
-                <ul>
-                  {profileData.interests.map((element) => {
-                    return <li key={element}>{element}</li>;
-                  })}
-                </ul>
-                :
-                <p>No interests listed.</p>
-              }
-            </Grid>
-          </Grid>
-        )}
-      </div>
-
-      <IncompleteDialog open={openIncomplete} onClose={handleIncompleteClose} />
       <div style={{ height: 100 }}></div>
 
     </div>

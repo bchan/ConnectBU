@@ -14,7 +14,6 @@ filepath = list_dir + filename
 def add_classes():
     with open(filepath, 'r') as read_file:
         data = json.load(read_file)
-        print(len(data))
 
     for elem in data:
         class_code = elem['code'].replace(' ', '')

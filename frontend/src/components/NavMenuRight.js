@@ -26,10 +26,11 @@ export default function NavMenuRight() {
   let responseSuccess = (event) => {
     let userEmail = event.profileObj.email;
     let token = event.tokenId;
+    let profilePic = event.profileObj.imageUrl;
 
     axios.post('/api/login', { tokenId: token })
       .then((res) => {
-        dispatch(login(userEmail));
+        dispatch(login({'email': userEmail, 'pic': profilePic}));
         history.push('/profile');
         setSuccessState({ isOpen: true, successMessage: 'Sucessfully logged in' });
       })
@@ -144,14 +145,14 @@ export default function NavMenuRight() {
         />
       }
 
-      <Alert 
+      <Alert
         open={errorState.isOpen}
         handleClose={handleErrorClose}
         message={errorState.errorMessage}
         type="error"
       />
 
-      <Alert 
+      <Alert
         open={successState.isOpen}
         handleClose={handleSuccessClose}
         message={successState.successMessage}

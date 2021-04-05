@@ -9,6 +9,7 @@ CREATE TABLE student (
     major2 VARCHAR (80),
     minor VARCHAR (80),
     school_year INT NOT NULL,
+    profile_pic_url TEXT,
     has_ipad INT,
     FOREIGN KEY (major1) REFERENCES major(major_name),
     FOREIGN KEY (major2) REFERENCES major(major_name),
