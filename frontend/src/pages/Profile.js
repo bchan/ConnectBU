@@ -278,7 +278,7 @@ export default function Profile() {
               <h2 style={{ marginTop: 0 }}>Clubs</h2>
               {(profileData.club.length !== 0) ?
                 <ul>
-                  {profileData.clubs.map((element) => {
+                  {profileData.club.map((element) => {
                     return <li key={element}>{element}</li>;
                   })}
                 </ul>
