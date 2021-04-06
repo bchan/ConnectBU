@@ -24,6 +24,7 @@ import axios from 'axios';
 import Fade from '@material-ui/core/Fade';
 import Loading from './components/Loading';
 import { SnackbarProvider } from 'notistack';
+import NotFound from './pages/NotFound';
 
 // Custom hook, acts like constructor
 const useConstructor = (callBack = () => { }) => {
@@ -113,6 +114,9 @@ function Index() {
                   <Fade in={!isLoading}>
                     <div><Profile /></div>
                   </Fade>
+                </Route>
+                <Route path="*">
+                  <NotFound />
                 </Route>
               </Switch>
               <Footer />

@@ -9,7 +9,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 // import MoreVertIcon from '@material-ui/icons/MoreVert';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import Alert from './Alert';
+import { useSnackbar } from 'notistack';
 
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
@@ -20,8 +20,7 @@ export default function NavMenuRight() {
   const isLoggedIn = useSelector(selectLoginState);
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [errorState, setErrorState] = React.useState({ isOpen: false, errorMessage: '' });
-  const [successState, setSuccessState] = React.useState({ isOpen: false, successMessage: '' });
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   let responseSuccess = (event) => {
     let userEmail = event.profileObj.email;
@@ -32,11 +31,13 @@ export default function NavMenuRight() {
       .then((res) => {
         dispatch(login({'email': userEmail, 'pic': profilePic}));
         history.push('/profile');
-        setSuccessState({ isOpen: true, successMessage: 'Sucessfully logged in' });
+        let successMessage = 'Sucessfully logged in';
+        enqueueSnackbar(successMessage, { variant: 'success' });
       })
       .catch((error) => {
         if (error.response.data === 'Invalid email') {
-          setErrorState({ isOpen: true, errorMessage: 'You must use a BU email to sign in/up' });
+          let errorMessage = 'You must use a BU email to sign in/up';
+          enqueueSnackbar(errorMessage, { variant: 'error' });
         }
       })
   }
@@ -61,27 +62,14 @@ export default function NavMenuRight() {
     axios.get('/api/logout')
       .then((res) => {
         history.push('/');
-        setSuccessState({ isOpen: true, successMessage: 'Sucessfully logged out' });
+        let successMessage = 'Sucessfully logged out';
+        enqueueSnackbar(successMessage, { variant: 'success' });
       })
       .catch((err) => {
         console.log('ERROR');
         console.log(err);
       })
   }
-
-  let handleErrorClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setErrorState({ isOpen: false, errorMessage: '' });
-  };
-
-  let handleSuccessClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setSuccessState({ isOpen: false, successMessage: '' });
-  };
 
   return (
     <div>
@@ -144,20 +132,6 @@ export default function NavMenuRight() {
           )}
         />
       }
-
-      <Alert
-        open={errorState.isOpen}
-        handleClose={handleErrorClose}
-        message={errorState.errorMessage}
-        type="error"
-      />
-
-      <Alert
-        open={successState.isOpen}
-        handleClose={handleSuccessClose}
-        message={successState.successMessage}
-        type="success"
-      />
     </div>
   )
 
