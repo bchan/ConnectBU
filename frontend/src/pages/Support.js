@@ -18,15 +18,15 @@ export default function Support() {
     {
       question: 'How much will it cost me to join ConnectBU?',
       answer: 'BU students are allowed to join the ConnectBU website for free.',
-    }
+    },
     {
       question: 'Would ConnectBU require a student to upload a transcript to join?',
       answer: 'ConnectBU would not require any inforamtion to sign up other than a valid BU email.',
-    }
+    },
     {
       question: 'Can international stusents sign up as well?',
       answer: 'Any one can sign up as long as you use a valid BU email.',
-    }
+    },
     {
       question: 'How can I build my profile on ConnectBU if I am a freshman and do not have so many things to put in my profile?',
       answer: 'No need to worry, you can update your profile whenever you want over and over. ',
