@@ -86,8 +86,8 @@ export default function User() {
   const { id } = useParams();
   const isLoggedIn = useSelector(selectLoginState);
   const logged_in_email = useSelector(selectUserEmail);
-  if(isLoggedIn){
-    if(logged_in_email == id + "@bu.edu") {
+  if (isLoggedIn) {
+    if (logged_in_email == id + "@bu.edu") {
       history.push("/profile")
     }
   }
@@ -118,6 +118,7 @@ export default function User() {
   useConstructor(() => {
     axios.get('/user/' + email)
       .then((res) => {
+        console.log(res);
         let userData = res.data;
         if (userData.major1 === '') {
           setIncomplete(true);
@@ -137,7 +138,11 @@ export default function User() {
         });
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err.response.status);
+        if(err.response.status === 404){
+          enqueueSnackbar('User Not Found.', { variant: 'error' });
+          history.goBack();
+        }
       })
   })
 
