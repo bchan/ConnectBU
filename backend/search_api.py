@@ -1,17 +1,20 @@
 from flask import Flask, jsonify, request, make_response
 from flask_restful import Resource, Api
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import Session
 from flask_cors import CORS
 from models import db, Student, Class, Major, Minor, Club, Lab, Interest, TakesClass, JoinsClub, JoinsLab, HasInterest
 from requests_aws4auth import AWS4Auth
 import boto3
 from elasticsearch import Elasticsearch, RequestsHttpConnection
 from requests_aws4auth import AWS4Auth
+from config import SQLALCHEMY_DATABASE_URI
 
 
 app = Flask(__name__)
 CORS(app)
 api = Api(app)
+app.config.from_pyfile('config.py')
 engine = db.create_engine(SQLALCHEMY_DATABASE_URI, {})
 session = Session(engine)
 
@@ -35,28 +38,33 @@ es = Elasticsearch(
     )
 print('ES is active')
 
+try:
+    student_list = session.query(Student).all()
+    for student in student_list:
+        email = student.email
+        clubs = session.query(JoinsClub).filter_by(email=email).all()
+        labs = session.query(JoinsLab).filter_by(email=email).all()
+        interests = session.query(HasInterest).filter_by(email=email).all()
+        classes = session.query(TakesClass).filter_by(email=email).all()
 
+        profile = {
+            'name': student.first_name + student.last_name,
+            'majors': [student.major1, student.major2],
+            'minors': student.minor,
+            'year': student.school_year,
+            'ipad': student.has_ipad,
+            'clubs': [club.club_name for club in clubs],
+            'research': [lab.lab_name for lab in labs],
+            'interests': [interest.interest_name for interest in interests],
+            'classes': [course.class_name for course in classes]
+        }
 
-#sample profiles for elasticsearch
-# doc1 = {
-#     "name": 'Damani Philip',
-#     "majors": 'ENG Computer Engineering',
-#     "minors": 'CAS Astronomy',
-#     "year": '2021',
-#     "ipad?": 'no'
-#     }
+        res = es.index(index='profiles', id=student.unique_id, body=profile)
 
-# doc2 = {
-#     "name": 'Nadim El Helou',
-#     "majors": ['ENG Computer Engineering', "CAS Pyschology"],
-#     "minors": 'CAS Ancient Greek',
-#     "year": '2021',
-#     "ipad?": 'no'
-#     }
+    print('Profiles ingested into ES')
 
-# res = es.index(index="profiles", id=1, body=doc1)
-# res2 = es.index(index="profiles", id=2, body=doc2)
-# print('\ndocument ingested...BUUUUUURP\n')
+except Exception as e:
+    print('Exception occured: ', e)
 
 class Search(Resource):
     #search request
@@ -111,9 +119,9 @@ class Search(Resource):
                 'research': [lab.lab_name for lab in labs],
                 'interests': [interest.interest_name for interest in interests]
             }
-        #in reality, convert id string from DB into UUID 
+        #in reality, convert id string from DB into UUID
         res = es.index(index="profiles", id=json_data['index'], body=doc1)
-        
+
         return 'User data updated successfully', 200
 
 
