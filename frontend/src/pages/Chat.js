@@ -8,19 +8,18 @@ import "sendbird-uikit/dist/index.css";
 
 import "../styles/Chat.styles.css";
 import { useSelector, useDispatch } from 'react-redux';
-import { selectLoginState } from '../redux/loginSlice';
-
-const appID = "APP ID";
-const userID = "USER EMAIL";
-const nickname = "USER'S FULL NAME";
+import { selectLoginState, selectUserEmail, selectProfilePic } from '../redux/loginSlice';
 
 export default function Chat() {
   const history = useHistory();
-
   const isLoggedIn = useSelector(selectLoginState);
   if(!isLoggedIn){
     history.push("/")
   }
+
+  const appID = "APP ID";
+  const userID = useSelector(selectUserEmail);
+  const nickname = "USER'S FULL NAME";
 
   return (
     <div>
