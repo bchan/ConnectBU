@@ -9,18 +9,14 @@ import { Link as RouterLink, useParams, useHistory } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Link from '@material-ui/core/Link';
-import EditDialog from '../components/EditDialog';
-import EditIcon from '@material-ui/icons/Edit';
-import IconButton from '@material-ui/core/IconButton';
 import { useSnackbar } from 'notistack';
 
-import pic from '../images/image.jpg';
+import default_pic from '../images/image.jpg';
 import axios from 'axios';
 
 // Redux
 import { useSelector } from 'react-redux';
 import { selectLoginState, selectUserEmail, selectProfilePic } from '../redux/loginSlice';
-import IncompleteDialog from '../components/IncompleteDialog';
 
 function a11yProps(index) {
   return {
@@ -87,16 +83,14 @@ export default function User() {
   const isLoggedIn = useSelector(selectLoginState);
   const logged_in_email = useSelector(selectUserEmail);
   if (isLoggedIn) {
-    if (logged_in_email == id + "@bu.edu") {
+    if (logged_in_email === id + "@bu.edu") {
       history.push("/profile")
     }
   }
 
   const classes = useStyles();
   const [value, setValue] = useState(0);
-  const [openIncomplete, setIncomplete] = useState(false);
-  const [open, setOpen] = useState(false);
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
   let email = id + "@bu.edu"
   let [profileData, setProfileData] = useState({
     firstName: '',
@@ -111,6 +105,9 @@ export default function User() {
     classes: [],
   })
 
+  let pic = useSelector(selectProfilePic);
+  if (pic.length === 0) pic = default_pic;
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -118,12 +115,7 @@ export default function User() {
   useConstructor(() => {
     axios.get('/user/' + email)
       .then((res) => {
-        console.log(res);
         let userData = res.data;
-        if (userData.major1 === '') {
-          setIncomplete(true);
-        }
-
         setProfileData({
           firstName: userData.first_name,
           lastName: userData.last_name,
@@ -145,23 +137,6 @@ export default function User() {
         }
       })
   })
-
-  let handleOpen = () => {
-    setOpen(true);
-  }
-
-  let handleClose = () => {
-    setOpen(false);
-  }
-
-  let handleIncompleteClose = () => {
-    setIncomplete(false);
-    setOpen(true);
-  }
-
-  let showErrorMessage = (message) => {
-    enqueueSnackbar(message, { variant: 'error' });
-  }
 
   return (
     <div className={classes.screen}>

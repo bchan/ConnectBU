@@ -20,7 +20,7 @@ export default function NavMenuRight() {
   const isLoggedIn = useSelector(selectLoginState);
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
 
   let responseSuccess = (event) => {
     let userEmail = event.profileObj.email;

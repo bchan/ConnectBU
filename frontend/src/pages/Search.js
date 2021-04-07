@@ -9,14 +9,13 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import FormGroup from '@material-ui/core/FormGroup';
-import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import IconButton from '@material-ui/core/IconButton';
 import Checkbox from '@material-ui/core/Checkbox';
 import { useSnackbar } from 'notistack';
 import axios from 'axios';
 import pic from '../images/image.jpg';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { selectLoginState } from '../redux/loginSlice';
 
 const useStyles = makeStyles((theme) => ({
@@ -103,7 +102,7 @@ export default function Search() {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchQuery, setSearchQuery] = useState({searchFields: {}, searchTerm: ''});
   const [searchResults, setSearchResults] = useState([]);
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
 
   const setField = (newData) => {
     let newDictionary = searchQuery;

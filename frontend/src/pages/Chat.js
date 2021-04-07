@@ -8,8 +8,8 @@ import "sendbird-uikit/dist/index.css";
 import axios from 'axios';
 
 import "../styles/Chat.styles.css";
-import { useSelector, useDispatch } from 'react-redux';
-import { selectLoginState, selectUserEmail, selectProfilePic } from '../redux/loginSlice';
+import { useSelector } from 'react-redux';
+import { selectLoginState, selectUserEmail } from '../redux/loginSlice';
 
 export default function Chat() {
   const history = useHistory();
@@ -19,14 +19,14 @@ export default function Chat() {
   }
 
   const appID = "APP ID";
-  const [userID, setUserID] = useState(useSelector(selectUserEmail));
+  const userID = useSelector(selectUserEmail);
   const [nickname, setNickname] = useState('');
 
   useEffect(() => {
     axios.get('/user/' + userID)
       .then((res) => {
         let userData = res.data;
-        setNickname(userData.first_name + ' ' + userData.last_name)
+        setNickname(userData.first_name + ' ' + userData.last_name);
       })
       .catch((err) => {
         console.log(err);

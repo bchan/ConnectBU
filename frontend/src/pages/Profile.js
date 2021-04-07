@@ -6,7 +6,6 @@ import Typography from '@material-ui/core/Typography';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { Link as RouterLink,useHistory } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Link from '@material-ui/core/Link';
 import EditDialog from '../components/EditDialog';
@@ -92,7 +91,7 @@ export default function Profile() {
   const [value, setValue] = useState(0);
   const [openIncomplete, setIncomplete] = useState(false);
   const [open, setOpen] = useState(false);
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
   let email = useSelector(selectUserEmail);
   let pic = useSelector(selectProfilePic);
   if (pic.length === 0) pic = default_pic;
