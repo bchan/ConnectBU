@@ -37,7 +37,7 @@ export default function Footer() {
               <div className={classes.heading}>About Us</div>
             </Grid>
             <Grid item xs={12}>
-              <div>Consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam.</div>
+              <div>ConnectBU is a platform that seeks to democratize access to personalized advising by centralizing many support and networking resources into a single place. Through ConnectBU, you can search for and connect with other students based on club affiliation, class history, research, and interests!</div>
             </Grid>
           </Grid>
 
