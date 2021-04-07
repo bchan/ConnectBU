@@ -36,7 +36,6 @@ export default function Chat() {
   return (
     <div>
       <div className="Chat">
-        <p style={{ 'white-space': 'pre-wrap' }}>{"\n"}</p>
         <Breadcrumbs aria-label="breadcrumb" style={{ marginBottom: 10 }}>
           <Link component={RouterLink} to="/">Home</Link>
           <Link component={RouterLink} to="/profile">Profile</Link>
