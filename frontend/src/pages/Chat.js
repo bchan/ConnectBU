@@ -23,7 +23,7 @@ export default function Chat() {
   const [nickname, setNickname] = useState('');
 
   useEffect(() => {
-    axios.get('/user/' + userID)
+    axios.get('/api/user/' + userID)
       .then((res) => {
         let userData = res.data;
         setNickname(userData.first_name + ' ' + userData.last_name);
