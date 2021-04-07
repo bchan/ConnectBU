@@ -49,16 +49,14 @@ function App() {
           <div className={classes.paper}>
             <h3>Interests</h3>
             <p>
-              Consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam.
-            </p>
+            For those that don’t find what they need in clubs, or prefer a more person to person approach, connectBU allows you to find others to share your interests with! From ham radio operation to theory crafting space stations: you’re bound to find others like you!            </p>
           </div>
         </Grid>
         <Grid item xs={10} sm={5}>
           <div className={classes.paper}>
             <h3>Research</h3>
             <p>
-              Eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora.
-            </p>
+            BU is one of the worlds forefront private research institutions, but navigating through all those labs and their foci can be difficult! ConnectBU allows you to search for labs and connect directly with members for whatever questions you may have!            </p>
           </div>
         </Grid>
         <Grid item xs={12} sm={12}>
