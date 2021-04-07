@@ -360,9 +360,9 @@ class Logout(Resource):
 
 
 # API Routes
-api.add_resource(User, '/user/<string:email>')
-api.add_resource(Course, '/courses')
-api.add_resource(ProfileOptions, '/profileoptions')
+api.add_resource(User, '/api/user/<string:email>')
+api.add_resource(Course, '/api/courses')
+api.add_resource(ProfileOptions, '/api/profileoptions')
 api.add_resource(Login, '/api/login')
 api.add_resource(Logout, '/api/logout')
 

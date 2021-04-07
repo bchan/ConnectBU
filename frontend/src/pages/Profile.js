@@ -113,7 +113,7 @@ export default function Profile() {
   };
 
   useConstructor(() => {
-    axios.get('/user/' + email)
+    axios.get('/api/user/' + email)
       .then((res) => {
         let userData = res.data;
         if (userData.major1 === '') {
@@ -148,7 +148,7 @@ export default function Profile() {
 
   let setNewProfileData = (newData) => {
     newData.hasIpad = 0; // NEED TO TAKE OUT LATER
-    axios.put('/user/' + email, { oldData: profileData, newData: newData })
+    axios.put('/api/user/' + email, { oldData: profileData, newData: newData })
       .then((res) => {
         setProfileData(newData);
         let successMessage = 'Sucessfully updated profile data';

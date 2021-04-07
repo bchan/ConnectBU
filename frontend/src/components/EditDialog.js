@@ -56,7 +56,7 @@ export default function EditDialog(props) {
   let [courses, setCourses] = useState(props.profileData.classes || []);
 
   let getAllLists = () => {
-    axios.get('/profileoptions')
+    axios.get('/api/profileoptions')
       .then((res) => {
         setMajorList(res.data.major_list.map((element) => { return { 'title': element } }));
         setMinorList(res.data.minor_list.map((element) => { return { 'title': element } }));

@@ -113,7 +113,7 @@ export default function User() {
   };
 
   useConstructor(() => {
-    axios.get('/user/' + email)
+    axios.get('/api/user/' + email)
       .then((res) => {
         let userData = res.data;
         setProfileData({
