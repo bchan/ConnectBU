@@ -111,9 +111,6 @@ export default function NavMenuRight() {
             <MenuItem onClick={handleSettingsClose} component={Link} to="/profile">
               {"Profile"}
             </MenuItem>
-            <MenuItem onClick={handleSettingsClose}>
-              {"Settings"}
-            </MenuItem>
             <MenuItem onClick={() => handleLogout()}>
               {"Logout"}
             </MenuItem>
