@@ -119,8 +119,8 @@ class Search(Resource):
                 'year': user.school_year,
                 'clubs': [club for club in user.clubs],
                 'research': [lab in user.labs],
-                'interests': [interest in club.interests],
-                'classes': [class in class.classes]
+                'interests': [interest in user.interests],
+                'classes': [class_name in user.classes]
             }
         except:
             return "Error retrieving request data", 400
