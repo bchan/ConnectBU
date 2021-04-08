@@ -225,6 +225,25 @@ class User(Resource):
                 db.session.add_all([TakesClass(email=email, class_name=course) for course in classesAdd])
 
             db.session.commit()
+
+            url = 'http://ec2-3-80-169-54.compute-1.amazonaws.com:4000/search'
+            data = {
+                'email': email,
+                'profile_pic': s.profile_pic_url,
+                'first_name': s.first_name,
+                'last_name': s.last_name,
+                'major1': s.major1,
+                'major2': s.major2,
+                'minor': s.minor,
+                'year': s.school_year,
+                'has_ipad': s.has_ipad,
+                'club': newData['club'],
+                'research': newData['research'],
+                'interests': newData['interests'],
+                'unique_id': s.unique_id
+            }
+            res = r.put(url, data=data)
+
         except Exception as e:
             print(e)
             return 'Unable to complete update', 503

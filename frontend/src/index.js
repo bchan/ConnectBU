@@ -39,7 +39,6 @@ function Index() {
   useConstructor(() => {
     axios.get('/api/login')
       .then((res) => {
-        console.log(res);
         if (res.status === 200) {
           store.dispatch(login({'email': res.data.email, 'pic': res.data.pic}));
         }
@@ -50,7 +49,6 @@ function Index() {
 
       })
       .catch((error) => {
-        console.log(error);
         store.dispatch(logout());
 
         setTimeout(() => {
