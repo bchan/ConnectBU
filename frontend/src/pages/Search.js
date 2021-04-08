@@ -128,7 +128,7 @@ export default function Search() {
       return;
     }
     else {
-      axios.post('http://ec2-3-80-169-54.compute-1.amazonaws.com:4000/search', searchQuery)
+      axios.post('/api/search', searchQuery)
         .then((response) => {
           const results = response.data.results;
           const num_results = response.data.nohits;
