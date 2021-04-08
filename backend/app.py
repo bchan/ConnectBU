@@ -357,6 +357,17 @@ class Logout(Resource):
         return res
 
 
+class Search(Resource):
+    def post(self):
+        json_data = request.get_json(force=True)
+        url = 'http://ec2-3-80-169-54.compute-1.amazonaws.com:4000/search'
+        res = r.post(url, json=json_data)
+        return res.json(), 200
+
+
+class HealthCheck(Resource):
+    def get(self):
+        return 200
 
 
 
@@ -366,6 +377,8 @@ api.add_resource(Course, '/api/courses')
 api.add_resource(ProfileOptions, '/api/profileoptions')
 api.add_resource(Login, '/api/login')
 api.add_resource(Logout, '/api/logout')
+api.add_resource(Search, '/api/search')
+api.add_resource(HealthCheck, '/')
 
 if __name__ == '__main__':
     app.run(debug=True)

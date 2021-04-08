@@ -125,7 +125,7 @@ export default function NavMenuRight() {
           cookiePolicy={'single_host_origin'}
           style={{ disabled: 'false' }}
           render={(renderProps) => (
-            <Button color="inherit" onClick={renderProps.onClick}>Login</Button>
+            <Button id="loginButton" color="inherit" onClick={renderProps.onClick}>Login</Button>
           )}
         />
       }

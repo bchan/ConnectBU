@@ -14,13 +14,13 @@ import IconButton from '@material-ui/core/IconButton';
 import Checkbox from '@material-ui/core/Checkbox';
 import { useSnackbar } from 'notistack';
 import axios from 'axios';
-import pic from '../images/image.jpg';
 import { useSelector } from 'react-redux';
 import { selectLoginState } from '../redux/loginSlice';
 
 const useStyles = makeStyles((theme) => ({
   screen: {
-    backgroundColor: "rgb(240,240,240)"
+    backgroundColor: "rgb(240,240,240)",
+    paddingTop: '90px',
   },
   box1: {
     border: "1px solid grey",
@@ -119,7 +119,7 @@ export default function Search() {
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
-    setField({searchTerm: searchTerm})
+    setField({searchTerm: event.target.value})
   };
 
   const executeSearch = () => {
@@ -128,7 +128,7 @@ export default function Search() {
       return;
     }
     else {
-      axios.post('http://localhost:5000/search', searchQuery)
+      axios.post('/api/search', searchQuery)
         .then((response) => {
           const results = response.data.results;
           const num_results = response.data.nohits;
@@ -153,10 +153,6 @@ export default function Search() {
 
 
     <div className={classes.screen}>
-
-      <p style={{ 'white-space': 'pre-wrap' }}>{"\n"}</p>
-      <p style={{ 'white-space': 'pre-wrap' }}>{"\n"}</p>
-
       <Grid
         container
         direction="row"
@@ -210,7 +206,7 @@ export default function Search() {
             <h3>Results</h3>
             <Grid className={classes.separation}></Grid>
             {searchResults.map((item) => (
-              <ListItem button key={item._source.name} component={Link} to={item._source.email.split('@')[0]}>
+              <ListItem button key={item._source.name} component={Link} to={'/user/' + item._source.email.split('@')[0]}>
                 <ListItemAvatar>
                   <Avatar src={item._source.profile_pic} className={classes.imageSize} />
                 </ListItemAvatar>
