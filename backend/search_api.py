@@ -61,6 +61,10 @@ try:
             'classes': [course.class_name for course in classes]
         }
 
+        doc_exists = es.exists(index='profiles', id=student.unique_id)
+        if (doc_exists):
+            es.delete(index='profiles', id=student.unique_id)
+            # res = es.update(index='profiles', id=student.unique_id, body=profile)
         res = es.index(index='profiles', id=student.unique_id, body=profile)
 
     print('Profiles ingested into ES')
