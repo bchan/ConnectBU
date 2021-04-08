@@ -19,7 +19,8 @@ import { selectLoginState } from '../redux/loginSlice';
 
 const useStyles = makeStyles((theme) => ({
   screen: {
-    backgroundColor: "rgb(240,240,240)"
+    backgroundColor: "rgb(240,240,240)",
+    paddingTop: '90px',
   },
   box1: {
     border: "1px solid grey",
@@ -152,10 +153,6 @@ export default function Search() {
 
 
     <div className={classes.screen}>
-
-      <p style={{ 'white-space': 'pre-wrap' }}>{"\n"}</p>
-      <p style={{ 'white-space': 'pre-wrap' }}>{"\n"}</p>
-
       <Grid
         container
         direction="row"
