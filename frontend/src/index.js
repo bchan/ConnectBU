@@ -67,7 +67,7 @@ function Index() {
         <SnackbarProvider
           maxSnack={2}
           anchorOrigin={{
-            vertical: 'top',
+            vertical: 'bottom',
             horizontal: 'center',
           }}
         >

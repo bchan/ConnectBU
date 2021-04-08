@@ -141,12 +141,12 @@ export default function Search() {
           } else {
             setSearchResults([]);
           }
-          console.log(response);
+          // console.log(response);
         })
         .catch((response) => {
           const error_msg = 'There was an error processing your search request. Please try again later.';
           enqueueSnackbar(error_msg, {variant: 'error'});
-          console.log(response);
+          // console.log(response);
         })
     }
   };
