@@ -114,7 +114,7 @@ export default function Search() {
 
   const handleFilterChange = (event) => {
     setFilters({ ...filters, [event.target.name]: event.target.checked });
-    setField({searchFields: filters});
+    setField({searchFields: { ...filters, [event.target.name]: event.target.checked }});
   };
 
   const handleSearchChange = (event) => {
@@ -210,7 +210,7 @@ export default function Search() {
                 <ListItemAvatar>
                   <Avatar src={item._source.profile_pic} className={classes.imageSize} />
                 </ListItemAvatar>
-                <ListItemText classes={{primary:classes.listItemText}} primary={item._source.name} secondary={item._source.majors} />
+                <ListItemText classes={{primary:classes.listItemText}} primary={item._source.name} secondary={item._source.majors.join(' ')} />
               </ListItem>
             ))}
           </Grid>

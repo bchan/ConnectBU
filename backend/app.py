@@ -243,7 +243,7 @@ class User(Resource):
                 'classes': newData['classes'],
                 'unique_id': s.unique_id
             }
-            res = r.put(url, data=data)
+            res = r.put(url, json=data)
 
         except Exception as e:
             print(e)
