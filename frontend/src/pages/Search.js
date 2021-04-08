@@ -15,7 +15,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import { useSnackbar } from 'notistack';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
-import { selectLoginState } from '../redux/loginSlice';
+import { selectLoginState, selectUserEmail } from '../redux/loginSlice';
 
 const useStyles = makeStyles((theme) => ({
   screen: {
@@ -88,6 +88,7 @@ export default function Search() {
   const history = useHistory();
 
   const isLoggedIn = useSelector(selectLoginState);
+  const userEmail = useSelector(selectUserEmail);
   if(!isLoggedIn){
     history.push("/")
   }
@@ -130,8 +131,16 @@ export default function Search() {
     else {
       axios.post('/api/search', searchQuery)
         .then((response) => {
-          const results = response.data.results;
-          const num_results = response.data.nohits;
+          let results = [];
+          let num_results = response.data.nohits;
+
+          response.data.results.forEach((item) => {
+            if (userEmail === item._source.email) {
+              num_results--;
+            } else {
+              results.push(item);
+            }
+          })
 
           const success_msg = `Your search returned ${num_results} results.`;
           enqueueSnackbar(success_msg, {variant: 'info'});
