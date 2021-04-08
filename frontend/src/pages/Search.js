@@ -93,8 +93,8 @@ export default function Search() {
   }
   const classes = useStyles();
   const [filters, setFilters] = useState({
-    class: false,
-    labs: false,
+    classes: false,
+    research: false,
     majors: false,
     minors: false,
     year: false,
@@ -138,6 +138,8 @@ export default function Search() {
 
           if (num_results > 0){
             setSearchResults(results);
+          } else {
+            setSearchResults([]);
           }
           console.log(response);
         })
@@ -165,11 +167,11 @@ export default function Search() {
           <p>Filter by</p>
           <FormGroup>
             <FormControlLabel
-              control={<Checkbox checked={filters.class} onChange={handleFilterChange} name="class"/>}
+              control={<Checkbox checked={filters.class} onChange={handleFilterChange} name="classes"/>}
               label="Classes"
             />
             <FormControlLabel
-              control={<Checkbox checked={filters.labs} onChange={handleFilterChange} name="labs"/>}
+              control={<Checkbox checked={filters.labs} onChange={handleFilterChange} name="research"/>}
               label="Labs"
             />
             <FormControlLabel
