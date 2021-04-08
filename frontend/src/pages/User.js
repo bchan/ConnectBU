@@ -163,17 +163,17 @@ export default function User() {
             </Grid>
             <Grid item xs={12}>
               {(profileData.major1 !== "") ?
-                <Chip label={profileData.major1} style={{ backgroundColor: "#C4C4C4", marginRight: '5px', marginBottom: '5px' }} />
+                <Chip label={profileData.major1} style={{ backgroundColor: "#C4C4C4", marginRight: '5px', marginBottom: '5px', maxWidth: '100%' }} />
                 :
                 ''
               }
               {(profileData.major2 !== '' && profileData.major2 !== null) ?
-                <Chip label={profileData.major2} style={{ backgroundColor: "#C4C4C4", marginRight: '5px', marginBottom: '5px' }} />
+                <Chip label={profileData.major2} style={{ backgroundColor: "#C4C4C4", marginRight: '5px', marginBottom: '5px', maxWidth: '100%' }} />
                 :
                 ''
               }
               {(profileData.minor !== "" && profileData.minor !== null) ?
-                <Chip label={'Minor: ' + profileData.minor} style={{ backgroundColor: "#C4C4C4", marginRight: '5px', marginBottom: '5px' }} />
+                <Chip label={'Minor: ' + profileData.minor} style={{ backgroundColor: "#C4C4C4", marginRight: '5px', marginBottom: '5px', maxWidth: '100%' }} />
                 :
                 ''
               }
