@@ -63,6 +63,8 @@ try:
 
         doc_exists = es.exists(index='profiles', id=student.unique_id)
         if (doc_exists):
+            prof = es.get(index='profiles', id=student.unique_id)
+            print(prof)
             es.delete(index='profiles', id=student.unique_id)
             # res = es.update(index='profiles', id=student.unique_id, body=profile)
         res = es.index(index='profiles', id=student.unique_id, body=profile)
@@ -105,28 +107,28 @@ class Search(Resource):
         return search_results, 200
 
     #update profile
-    def put(self, email):
-        user = request.get_json(force=True)
-
-        if user['hasIpad']:
-            ipd = 'yes'
-        else:
-            ipd = 'no'
+    def put(self):
+        try:
+            user = request.get_json(force=True)
+            unique_id = user.unique_id
             user_info = {
-                'email': user.email,
-                'first_name': user.first_name,
-                'last_name': user.last_name,
-                'major1': user.major1,
-                'major2': user.major2,
-                'minor': user.minor,
+                'profile_pic': user.profile_pic_url,
+                'name': user.first_name + " " + user.last_name,
+                'majors': [user.major1, user.major2],
+                'minors': user.minor,
                 'year': user.school_year,
-                'has_ipad': user.has_ipad,
-                'club': [club.club_name for club in clubs],
-                'research': [lab.lab_name for lab in labs],
-                'interests': [interest.interest_name for interest in interests]
+                'clubs': [club for club in user.clubs],
+                'research': [lab in user.labs],
+                'interests': [interest in club.interests],
+                'classes': [class in class.classes]
             }
-        #in reality, convert id string from DB into UUID
-        res = es.index(index="profiles", id=json_data['index'], body=doc1)
+        except:
+            return "Error retrieving request data", 400
+
+        try:
+            res = es.update(index="profiles", id=unique_id, body=user_info)
+        except:
+            return "Error updating user data", 500
 
         return 'User data updated successfully', 200
 
