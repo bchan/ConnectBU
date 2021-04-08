@@ -103,10 +103,11 @@ export default function User() {
     club: [],
     interests: [],
     classes: [],
+    profile_pic_url: '',
   })
 
-  let pic = useSelector(selectProfilePic);
-  if (pic.length === 0) pic = default_pic;
+  let pic = profileData.profile_pic_url;
+  if (profileData.profile_pic_url === '') pic = default_pic;
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -127,6 +128,7 @@ export default function User() {
           club: userData.club,
           interests: userData.interests,
           classes: userData.classes,
+          profile_pic_url: userData.profile_pic_url,
         });
       })
       .catch((err) => {

@@ -107,7 +107,8 @@ class User(Resource):
                 'club': [club.club_name for club in clubs],
                 'research': [lab.lab_name for lab in labs],
                 'interests': [interest.interest_name for interest in interests],
-                'classes': [course.class_name for course in classes]
+                'classes': [course.class_name for course in classes],
+                'profile_pic_url': user.profile_pic_url
             }
             return user_info, 200
 
