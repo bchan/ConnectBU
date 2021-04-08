@@ -122,12 +122,14 @@ class Search(Resource):
                 'interests': [interest in user.interests],
                 'classes': [class_name in user.classes]
             }
-        except:
+        except Exception as e:
+            print(e)
             return "Error retrieving request data", 400
 
         try:
             res = es.update(index="profiles", id=unique_id, body=user_info)
-        except:
+        except Exception as e:
+            print(e)
             return "Error updating user data", 500
 
         return 'User data updated successfully', 200
