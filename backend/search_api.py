@@ -110,17 +110,17 @@ class Search(Resource):
     def put(self):
         try:
             user = request.get_json(force=True)
-            unique_id = user.unique_id
+            unique_id = user['unique_id']
             user_info = {
-                'profile_pic': user.profile_pic_url,
-                'name': user.first_name + " " + user.last_name,
-                'majors': [user.major1, user.major2],
-                'minors': user.minor,
-                'year': user.school_year,
-                'clubs': [club for club in user.clubs],
-                'research': [lab in user.labs],
-                'interests': [interest in user.interests],
-                'classes': [class_name in user.classes]
+                'profile_pic': user['profile_pic_url'],
+                'name': user['first_name'] + " " + user['last_name'],
+                'majors': [user['major1'], user['major2']],
+                'minors': user['minor'],
+                'year': user['school_year'],
+                'clubs': [club for club in user['clubs']],
+                'research': [lab in user['labs']],
+                'interests': [interest in user['interests']],
+                'classes': [class_name in user['classes']]
             }
         except Exception as e:
             print(e)
