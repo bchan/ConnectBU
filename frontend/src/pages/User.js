@@ -16,7 +16,7 @@ import axios from 'axios';
 
 // Redux
 import { useSelector } from 'react-redux';
-import { selectLoginState, selectUserEmail, selectProfilePic } from '../redux/loginSlice';
+import { selectLoginState, selectUserEmail } from '../redux/loginSlice';
 
 function a11yProps(index) {
   return {
