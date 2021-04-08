@@ -113,8 +113,9 @@ class Search(Resource):
             print(user)
             unique_id = user['unique_id']
             user_info = {
-                'profile_pic': user['profile_pic_url'],
+                'email': user['email'],
                 'name': user['first_name'] + " " + user['last_name'],
+                'profile_pic': user['profile_pic_url'],
                 'majors': [user['major1'], user['major2']],
                 'minors': user['minor'],
                 'year': user['school_year'],
@@ -128,7 +129,7 @@ class Search(Resource):
             return "Error retrieving request data", 400
 
         try:
-            res = es.update(index="profiles", id=unique_id, body=user_info)
+            res = es.index(index="profiles", id=unique_id, body=user_info)
         except Exception as e:
             print(e)
             return "Error updating user data", 500
