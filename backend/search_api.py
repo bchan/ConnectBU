@@ -86,9 +86,9 @@ class Search(Resource):
         for key in json_data["searchFields"]:
             if (filters[key]):
                 searchFields.append(str(key))
-        if not searchFields:
-            for key in json_data["searchFields"]:
-                searchFields.append(str(key))
+        #if not searchFields:
+         #   for key in json_data["searchFields"]:
+          #      searchFields.append(str(key))
 
         search_query = {
                         "query":
