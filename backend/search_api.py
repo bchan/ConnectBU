@@ -64,7 +64,7 @@ try:
         doc_exists = es.exists(index='profiles', id=student.unique_id)
         if (doc_exists):
             prof = es.get(index='profiles', id=student.unique_id)
-            print(prof)
+            # print(prof)
             es.delete(index='profiles', id=student.unique_id)
             # res = es.update(index='profiles', id=student.unique_id, body=profile)
         res = es.index(index='profiles', id=student.unique_id, body=profile)
@@ -110,6 +110,7 @@ class Search(Resource):
     def put(self):
         try:
             user = request.get_json(force=True)
+            print(user)
             unique_id = user['unique_id']
             user_info = {
                 'profile_pic': user['profile_pic_url'],
@@ -118,9 +119,9 @@ class Search(Resource):
                 'minors': user['minor'],
                 'year': user['school_year'],
                 'clubs': [club for club in user['clubs']],
-                'research': [lab in user['labs']],
-                'interests': [interest in user['interests']],
-                'classes': [class_name in user['classes']]
+                'research': [lab for lab in user['labs']],
+                'interests': [interest for interest in user['interests']],
+                'classes': [class_name for class_name in user['classes']]
             }
         except Exception as e:
             print(e)
