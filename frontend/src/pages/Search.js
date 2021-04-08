@@ -151,7 +151,7 @@ export default function Search() {
 
   return (
 
-    
+
     <div className={classes.screen}>
 
       <p style={{ 'white-space': 'pre-wrap' }}>{"\n"}</p>
@@ -210,9 +210,9 @@ export default function Search() {
             <h3>Results</h3>
             <Grid className={classes.separation}></Grid>
             {searchResults.map((item) => (
-              <ListItem button key={item._source.name} component={Link} to={"/profile"}>
+              <ListItem button key={item._source.name} component={Link} to={item._source.email.split('@')[0]}>
                 <ListItemAvatar>
-                  <Avatar src={pic} className={classes.imageSize} />
+                  <Avatar src={item._source.profile_pic} className={classes.imageSize} />
                 </ListItemAvatar>
                 <ListItemText classes={{primary:classes.listItemText}} primary={item._source.name} secondary={item._source.majors} />
               </ListItem>

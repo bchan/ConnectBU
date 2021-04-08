@@ -48,7 +48,9 @@ try:
         classes = session.query(TakesClass).filter_by(email=email).all()
 
         profile = {
-            'name': student.first_name + student.last_name,
+            'email': email,
+            'profile_pic': student.profile_pic_url,
+            'name': student.first_name + " " + student.last_name,
             'majors': [student.major1, student.major2],
             'minors': student.minor,
             'year': student.school_year,
