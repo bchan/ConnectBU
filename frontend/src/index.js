@@ -7,14 +7,13 @@ import Footer from './components/Footer';
 import Login from './pages/Login';
 import Profile from './pages/Profile';
 import Support from './pages/Support';
-import HomeLI from './pages/Home_LI'
+// import HomeLI from './pages/Home_LI'
 import Search from './pages/Search'
 import AboutUs from './pages/AboutUs'
-import SignUp from './pages/SignUp';
+import User from './pages/User';
 import Chat from './pages/Chat';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-// import BotBar from './components/BotBar'
 import store from './redux/store';
 import { Provider } from 'react-redux';
 import { login, logout } from './redux/loginSlice';
@@ -22,6 +21,8 @@ import axios from 'axios';
 
 import Fade from '@material-ui/core/Fade';
 import Loading from './components/Loading';
+import { SnackbarProvider } from 'notistack';
+import NotFound from './pages/NotFound';
 
 // Custom hook, acts like constructor
 const useConstructor = (callBack = () => { }) => {
@@ -39,7 +40,7 @@ function Index() {
     axios.get('/api/login')
       .then((res) => {
         if (res.status === 200) {
-          store.dispatch(login(res.data))
+          store.dispatch(login({'email': res.data.email, 'pic': res.data.pic}));
         }
 
         setTimeout(() => {
@@ -63,45 +64,56 @@ function Index() {
           <div><Loading message="" /></div>
         </Fade>
         :
-        <Provider store={store}>
-          <Router>
-            <NavBar />
-            <Switch>
-              <Route exact path="/">
-                <Fade in={!isLoading}>
-                  <div><App /></div>
-                </Fade>
-              </Route>
-              <Route path="/login">
-                <Login />
-              </Route>
-              <Route path="/support">
-                <Support />
-              </Route>
-              <Route path="/signup">
-                <SignUp />
-              </Route>
-              <Route path="/search">
-                <Search />
-              </Route>
-              <Route path="/recommendations">
-                <HomeLI />
-              </Route>
-              <Route path="/aboutus">
-                <AboutUs />
-              </Route>
-              <Route path="/chat">
-                <Chat />
-              </Route>
-              <Route path="/profile">
-                <Fade in={!isLoading}>
-                  <div><Profile /></div>
-                </Fade>
-              </Route>
-            </Switch>
-            <Footer />
-          </Router>
-        </Provider>
+        <SnackbarProvider
+          maxSnack={2}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center',
+          }}
+        >
+          <Provider store={store}>
+            <Router>
+              <NavBar />
+              <Switch>
+                <Route exact path="/">
+                  <Fade in={!isLoading}>
+                    <div><App /></div>
+                  </Fade>
+                </Route>
+                <Route path="/login">
+                  <Login />
+                </Route>
+                <Route path="/support">
+                  <Support />
+                </Route>
+                <Route path="/search">
+                  <Search />
+                </Route>
+                <Route path="/user/:id">
+                  <User />
+                </Route>
+                {/* <Route path="/recommendations">
+                  <HomeLI />
+                </Route> */}
+                <Route path="/aboutus">
+                  <AboutUs />
+                </Route>
+                <Route path="/chat">
+                  <Chat />
+                </Route>
+                <Route path="/profile">
+                  <Fade in={!isLoading}>
+                    <div><Profile /></div>
+                  </Fade>
+                </Route>
+                <Route path="*">
+                  <NotFound />
+                </Route>
+              </Switch>
+              <Footer />
+            </Router>
+          </Provider>
+        </SnackbarProvider>
       }
     </div>
   )

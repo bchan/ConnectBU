@@ -7,6 +7,7 @@ node_modules/
 
 # testing
 /coverage
+/backend/connectbu_venv
 /backend/connectbu
 /test_scripts/env
 

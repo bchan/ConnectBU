@@ -1,0 +1,50 @@
+Robotics lab
+IMB
+DBLab Databases and Data Mining
+BUSec BU Security Group
+BOSS BU Operating Systems and Services
+IVC Image and Video Computing
+NRG Networks Research Group
+TCS Theoretical Computer Science
+LISP Learning, Intelligence, + Signal Processing
+Beeler Research Group
+BU Dental Student Research Group
+Artificial Intelligence and Emerging Media (AIEM)
+IMAGE & VIDEO COMPUTING
+Social Learning Laboratory
+Porco Research Group
+Computational Electronics Lab
+Nanomaterials & Nanostructure Optics
+Nanostructured Fibers and Nonlinear Optics Lab
+OpticL Characteization & Nanophotonics Laboratory
+Paiella Research Group
+Quantum Communication, Computing, & Measurement Laboratory
+The Sharifzadeh Group
+Ultrafast Optics Laboratory
+VLSI and Neural Net Systems (VNNS) Laboratory
+Yang Research Laboratory
+Adaptive and Secure Computing Systems
+Computer Architecture and Automated Design Lab
+Dependable Computing Laboratory
+Integrated Circuits & System Group
+Multimedia Communications Lab
+Laboratory of Networking & Information Systems
+Performance & Energy-Aware Computing Laboratory
+Biomedical Optics Lab
+Chenge Group
+Computational Imaging Systems Lab
+Optical Characterization and Nanophotonics
+Semeter Space
+Signal Transformation and Information Representaion
+Ultrafast Optics
+Complex BioSignal Processing
+Computer Vision and Computational Neuroscience
+Data Science and Machine Learning
+Dependable Computing
+Multimedia Communications
+Network Optimization and Control
+Reliable Computing
+Cross-Disciplinary Integration of Design Automation Research
+Design, Automation, Manufacturing, and Prototyping
+Information and Data Sciences
+Visual Information Processing

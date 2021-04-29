@@ -8,7 +8,7 @@ CORS(app)
 
 TEMP_SECRET = 'supersecretkey'
 
-r = redis.Redis(host='connectburedis.g3bzla.0001.use1.cache.amazonaws.com', port=6379, db=0)
+r = redis.Redis(host='connectbu-redis.g3bzla.0001.use1.cache.amazonaws.com', port=6379, db=0)
 
 
 def checkJWT(encodedToken):
@@ -64,4 +64,4 @@ def checkToken():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0')

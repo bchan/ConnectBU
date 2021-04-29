@@ -5,12 +5,10 @@ import Chip from '@material-ui/core/Chip';
 import Typography from '@material-ui/core/Typography';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import { Link as RouterLink,useHistory } from 'react-router-dom';
+import { Link as RouterLink, useParams, useHistory } from 'react-router-dom';
+import Button from '@material-ui/core/Button';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Link from '@material-ui/core/Link';
-import EditDialog from '../components/EditDialog';
-import EditIcon from '@material-ui/icons/Edit';
-import IconButton from '@material-ui/core/IconButton';
 import { useSnackbar } from 'notistack';
 
 import default_pic from '../images/image.jpg';
@@ -18,8 +16,7 @@ import axios from 'axios';
 
 // Redux
 import { useSelector } from 'react-redux';
-import { selectLoginState, selectUserEmail, selectProfilePic } from '../redux/loginSlice';
-import IncompleteDialog from '../components/IncompleteDialog';
+import { selectLoginState, selectUserEmail } from '../redux/loginSlice';
 
 function a11yProps(index) {
   return {
@@ -80,21 +77,21 @@ const useConstructor = (callBack = () => { }) => {
   setCalled(true);
 }
 
-export default function Profile() {
+export default function User() {
   const history = useHistory();
-
+  const { id } = useParams();
   const isLoggedIn = useSelector(selectLoginState);
-  if(!isLoggedIn){
-    history.push("/")
+  const logged_in_email = useSelector(selectUserEmail);
+  if (isLoggedIn) {
+    if (logged_in_email === id + "@bu.edu") {
+      history.push("/profile")
+    }
   }
+
   const classes = useStyles();
   const [value, setValue] = useState(0);
-  const [openIncomplete, setIncomplete] = useState(false);
-  const [open, setOpen] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
-  let email = useSelector(selectUserEmail);
-  let pic = useSelector(selectProfilePic);
-  if (pic.length === 0) pic = default_pic;
+  let email = id + "@bu.edu"
   let [profileData, setProfileData] = useState({
     firstName: '',
     lastName: '',
@@ -106,7 +103,11 @@ export default function Profile() {
     club: [],
     interests: [],
     classes: [],
+    profile_pic_url: '',
   })
+
+  let pic = profileData.profile_pic_url;
+  if (profileData.profile_pic_url === '') pic = default_pic;
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -116,10 +117,6 @@ export default function Profile() {
     axios.get('/api/user/' + email)
       .then((res) => {
         let userData = res.data;
-        if (userData.major1 === '') {
-          setIncomplete(true);
-        }
-
         setProfileData({
           firstName: userData.first_name,
           lastName: userData.last_name,
@@ -131,50 +128,23 @@ export default function Profile() {
           club: userData.club,
           interests: userData.interests,
           classes: userData.classes,
+          profile_pic_url: userData.profile_pic_url,
         });
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err.response.status);
+        if(err.response.status === 404){
+          enqueueSnackbar('User Not Found.', { variant: 'error' });
+          history.goBack();
+        }
       })
   })
 
-  let handleOpen = () => {
-    setOpen(true);
-  }
-
-  let handleClose = () => {
-    setOpen(false);
-  }
-
-  let setNewProfileData = (newData) => {
-    newData.hasIpad = 0; // NEED TO TAKE OUT LATER
-    axios.put('/api/user/' + email, { oldData: profileData, newData: newData })
-      .then((res) => {
-        setProfileData(newData);
-        let successMessage = 'Sucessfully updated profile data';
-        enqueueSnackbar(successMessage, { variant: 'success' });
-      })
-      .catch((err) => {
-        let errorMessage = 'Unable to update profile data. Please try again.';
-        enqueueSnackbar(errorMessage, { variant: 'error' });
-      })
-  }
-
-  let handleIncompleteClose = () => {
-    setIncomplete(false);
-    setOpen(true);
-  }
-
-  let showErrorMessage = (message) => {
-    enqueueSnackbar(message, { variant: 'error' });
-  }
-
   return (
     <div className={classes.screen}>
-      <EditDialog open={open} handleClose={handleClose} profileData={profileData} handleChange={setNewProfileData} showError={showErrorMessage} />
       <Breadcrumbs aria-label="breadcrumb">
         <Link component={RouterLink} to="/">Home</Link>
-        <Typography color="textPrimary">Profile</Typography>
+        <Typography color="textPrimary">User</Typography>
       </Breadcrumbs>
 
       <Grid
@@ -211,9 +181,7 @@ export default function Profile() {
           </Grid>
         </Grid>
         <Grid item container xs={12} sm={12} md={4} alignItems="center" className={classes.message}>
-          <IconButton onClick={handleOpen}>
-            <EditIcon />
-          </IconButton>
+          <Button className={classes.button} onClick={() => { history.push('/chat') }}>Message</Button>
         </Grid>
 
       </Grid>
@@ -369,8 +337,6 @@ export default function Profile() {
           </Grid>
         )}
       </div>
-
-      <IncompleteDialog open={openIncomplete} onClose={handleIncompleteClose} />
       <div style={{ height: 100 }}></div>
 
     </div>

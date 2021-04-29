@@ -7,8 +7,13 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
 import { makeStyles } from '@material-ui/core/styles';
-import { countries, Major, Minor, Club, Research } from './Lists';
+// import { countries } from './Lists';
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
   textField: {
@@ -19,22 +24,67 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+// Custom hook, acts like constructor
+const useConstructor = (callBack = () => { }) => {
+  const [hasCalled, setCalled] = useState(false);
+  if (hasCalled) return;
+  callBack();
+  setCalled(true);
+}
+
 export default function EditDialog(props) {
   const classes = useStyles();
+
+  // Lists of majors, minors, clubs, labs, and interests
+  let [Major, setMajorList] = useState([]);
+  let [Minor, setMinorList] = useState([]);
+  let [Club, setClubList] = useState([]);
+  let [Research, setResearchList] = useState([]);
+  let [Interest, setInterestList] = useState([]);
+  let [Classes, setClassList] = useState([]);
+
   let [firstName, setFirstName] = useState(props.profileData.firstName || '');
   let [lastName, setLastName] = useState(props.profileData.lastName || '');
+  let [year, setYear] = useState(props.profileData.year || '');
   // let [country, setCountry] = useState(props.profileData.country || '');
-  // TODO: Add country
   let [major1, setMajor1] = useState(props.profileData.major1 || '');
   let [major2, setMajor2] = useState(props.profileData.major2 || '');
   let [minor, setMinor] = useState(props.profileData.minor || '');
+  let [research, setResearch] = useState(props.profileData.research || []);
+  let [club, setClub] = useState(props.profileData.club || []);
+  let [interests, setInterests] = useState(props.profileData.interests || []);
+  let [courses, setCourses] = useState(props.profileData.classes || []);
+
+  let getAllLists = () => {
+    axios.get('/api/profileoptions')
+      .then((res) => {
+        setMajorList(res.data.major_list.map((element) => { return { 'title': element } }));
+        setMinorList(res.data.minor_list.map((element) => { return { 'title': element } }));
+        setClubList(res.data.club_list.map((element) => { return { 'title': element } }));
+        setResearchList(res.data.lab_list.map((element) => { return { 'title': element } }));
+        setInterestList(res.data.interest_list.map((element) => { return { 'title': element } }));
+        setClassList(res.data.class_list.map((element) => { return { 'title': element } }));
+      })
+      .catch((err) => {
+        props.showError('Unable to retrieve information. Please try again later.')
+      })
+  }
+
+  useConstructor(() => {
+    getAllLists();
+  })
 
   useEffect(() => {
     setFirstName(props.profileData.firstName || '');
     setLastName(props.profileData.lastName || '');
+    setYear(props.profileData.year || '');
     setMajor1(props.profileData.major1 || '');
     setMajor2(props.profileData.major2 || '');
     setMinor(props.profileData.minor || '');
+    setResearch(props.profileData.research || []);
+    setClub(props.profileData.club || []);
+    setInterests(props.profileData.interests || []);
+    setCourses(props.profileData.classes || []);
   }, [props.profileData, props.open])
 
   let getMajorList = () => {
@@ -56,7 +106,7 @@ export default function EditDialog(props) {
     } else {
       setMajor1('');
       setMajor2('');
-    } 
+    }
   }
 
   let updateMinor = (value) => {
@@ -77,14 +127,19 @@ export default function EditDialog(props) {
     props.handleChange({
       firstName: firstName,
       lastName: lastName,
+      year: year,
       major1: major1,
       major2: major2,
       minor: minor,
+      research: research,
+      club: club,
+      interests: interests,
+      classes: courses,
     })
   }
 
   let handleClose = () => {
-    if (major1 === '') {
+    if (props.profileData.major1 === '') {
       props.showError('Cannot have empty major');
       return;
     }
@@ -116,8 +171,8 @@ export default function EditDialog(props) {
                 label="First Name"
                 variant="outlined"
                 className={classes.textField}
-              onChange={(event) => setFirstName(event.target.value)}
-              value={firstName}
+                onChange={(event) => setFirstName(event.target.value)}
+                value={firstName}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -126,14 +181,37 @@ export default function EditDialog(props) {
                 label="Last Name"
                 variant="outlined"
                 className={classes.textField}
-              onChange={(event) => setLastName(event.target.value)}
-              value={lastName}
+                onChange={(event) => setLastName(event.target.value)}
+                value={lastName}
               />
             </Grid>
 
           </Grid>
 
           <Grid item container xs={12} spacing={1}>
+            <Grid item xs={12}>
+              <FormControl variant="outlined" style={{ width: '100%' }}>
+                <InputLabel id="yearLabel">Year of Graduation</InputLabel>
+                <Select
+                  labelId="yearLabel"
+                  id="yearBox"
+                  value={year}
+                  onChange={(event) => setYear(event.target.value)}
+                  label="Year of Graduation"
+                // variant="outlined"
+                // displayEmpty
+                // style={{ width: '100%' }}
+                >
+                  <MenuItem value={2021}>2021</MenuItem>
+                  <MenuItem value={2022}>2022</MenuItem>
+                  <MenuItem value={2023}>2023</MenuItem>
+                  <MenuItem value={2024}>2024</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+          </Grid>
+
+          {/* <Grid item container xs={12} spacing={1}>
             <Grid item xs={12}>
               <Autocomplete
                 id="countryBox"
@@ -153,7 +231,7 @@ export default function EditDialog(props) {
                 }
               />
             </Grid>
-          </Grid>
+          </Grid> */}
 
           <Grid item container xs={12} spacing={1}>
             <Grid item xs={12}>
@@ -189,7 +267,7 @@ export default function EditDialog(props) {
                 getOptionLabel={(option) => option.title}
                 getOptionSelected={(option) => minor.includes(option.title)}
                 onChange={(event, newValue) => updateMinor(newValue)}
-                value={(minor !== '')? [{ title: minor }] : []}
+                value={(minor !== '') ? [{ title: minor }] : []}
                 filterSelectedOptions
                 renderInput={
                   (params) => <TextField
@@ -204,27 +282,29 @@ export default function EditDialog(props) {
           </Grid>
 
 
-          {/* <Grid item xs={12} className={classes.element}>
+          <Grid item container xs={12} spacing={1}>
+            <Grid item xs={12}>
               <Autocomplete
-                multiple
                 id="classBox"
+                multiple
                 className={classes.autoComplete}
-                // options={class_list.current}
-                getOptionLabel={(option) => option}
-                // getOptionSelected={(option) => class_options.map((element) => { return element }).includes(option)}
-                // onChange={(event, newValue) => updateClass_options(event, newValue)}
-                // value={class_options}
+                options={Classes}
+                getOptionLabel={(option) => option.title}
+                getOptionSelected={(option) => courses.includes(option.title)}
+                onChange={(event, newValue) => setCourses(newValue.map((element) => element.title))}
+                value={courses.map((element) => { return { title: element } })}
                 filterSelectedOptions
                 renderInput={
                   (params) => <TextField
                     {...params}
                     label="Classes?"
-                    margin="normal"
+                    // margin="normal"
                     variant="outlined"
                   />
                 }
               />
-            </Grid> */}
+            </Grid>
+          </Grid>
 
           <Grid item container xs={12} spacing={1}>
             <Grid item xs={12}>
@@ -234,9 +314,9 @@ export default function EditDialog(props) {
                 className={classes.autoComplete}
                 options={Club}
                 getOptionLabel={(option) => option.title}
-                // getOptionSelected={(option) => club.map((element) => { return element.title }).includes(option.title)}
-                // onChange={(event, newValue) => updateClub(event, newValue)}
-                // value={club}
+                getOptionSelected={(option) => club.includes(option.title)}
+                onChange={(event, newValue) => setClub(newValue.map((element) => element.title))}
+                value={club.map((element) => { return { title: element } })}
                 filterSelectedOptions
                 renderInput={
                   (params) => <TextField
@@ -258,9 +338,9 @@ export default function EditDialog(props) {
                 className={classes.autoComplete}
                 options={Research}
                 getOptionLabel={(option) => option.title}
-                // getOptionSelected={(option) => research.map((element) => { return element.title }).includes(option.title)}
-                // onChange={(event, newValue) => updateResearch(event, newValue)}
-                // value={research}
+                getOptionSelected={(option) => research.includes(option.title)}
+                onChange={(event, newValue) => setResearch(newValue.map((element) => element.title))}
+                value={research.map((element) => { return { title: element } })}
                 filterSelectedOptions
                 renderInput={
                   (params) => <TextField
@@ -273,10 +353,35 @@ export default function EditDialog(props) {
               />
             </Grid>
           </Grid>
+
+          <Grid item container xs={12} spacing={1}>
+            <Grid item xs={12}>
+              <Autocomplete
+                multiple
+                id="interestBox"
+                className={classes.autoComplete}
+                options={Interest}
+                getOptionLabel={(option) => option.title}
+                getOptionSelected={(option) => interests.includes(option.title)}
+                onChange={(event, newValue) => setInterests(newValue.map((element) => element.title))}
+                value={interests.map((element) => { return { title: element } })}
+                filterSelectedOptions
+                renderInput={
+                  (params) => <TextField
+                    {...params}
+                    label="Interests?"
+                    // margin="normal"
+                    variant="outlined"
+                  />
+                }
+              />
+            </Grid>
+          </Grid>
+
         </Grid>
       </DialogContent>
       <DialogActions>
-        <Button onClick={props.handleClose} color="primary">
+        <Button onClick={handleClose} color="primary">
           Cancel
           </Button>
         <Button onClick={sendUpdate} color="primary">

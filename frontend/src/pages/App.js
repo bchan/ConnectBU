@@ -5,9 +5,12 @@ import Box from '@material-ui/core/Box';
 import { useStyles } from '../styles/App.styles';
 import { Link } from 'react-router-dom';
 import '../styles/App.css';
+import { useSelector } from 'react-redux';
+import { selectLoginState } from '../redux/loginSlice';
 
 function App() {
   const classes = useStyles();
+  const isLoggedIn = useSelector(selectLoginState);
 
   return (
     <div className="App">
@@ -15,9 +18,15 @@ function App() {
         <p>
           A Fully Connected, Centralized BU.
         </p>
-        <Button className={classes.joinButton} component={Link} to={"/signup"}> 
-          Join Today 
-        </Button>
+        {
+          (!isLoggedIn)?
+            <Button className={classes.joinButton} onClick={() => document.getElementById('loginButton').click()}> 
+              Join Today 
+            </Button>
+          :
+          <div></div>
+        }
+
       </div>
 
       <br /><br />
@@ -49,22 +58,25 @@ function App() {
           <div className={classes.paper}>
             <h3>Interests</h3>
             <p>
-              Consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam.
-            </p>
+            For those that don’t find what they need in clubs, or prefer a more person to person approach, connectBU allows you to find others to share your interests with! From ham radio operation to theory crafting space stations: you’re bound to find others like you!            </p>
           </div>
         </Grid>
         <Grid item xs={10} sm={5}>
           <div className={classes.paper}>
             <h3>Research</h3>
             <p>
-              Eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora.
-            </p>
+            BU is one of the worlds forefront private research institutions, but navigating through all those labs and their foci can be difficult! ConnectBU allows you to search for labs and connect directly with members for whatever questions you may have!            </p>
           </div>
         </Grid>
         <Grid item xs={12} sm={12}>
-          <Button variant="outlined" color="secondary" component={Link} to={"/search"}>
-            Search
-          </Button>
+          {
+            (isLoggedIn)?
+              <Button variant="outlined" color="secondary" component={Link} to={"/search"}>
+                Search
+              </Button>
+            :
+            <div></div>
+          }
         </Grid>
       </Grid>
 
