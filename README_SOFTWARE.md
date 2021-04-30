@@ -5,12 +5,14 @@
   <ol>
     <li>
       <a href="#frontend">Frontend</a>
-      <ul><li><a href="#frontend-repo-structure">Frontend repo structure</a></li></ul>
+      <ul><li><a href="#frontend-repo-structure">Frontend Repo Structure</a></li></ul>
       <ul><li><a href="#sendbird">SendBird</a></li></ul>
+      <ul><li><a href="#frontend-flowchart">Frontend Flowchart</a></li></ul>
+      <ul><li><a href="#system-architecture">System Architecture</a></li></ul>    
     </li>
     <li>
       <a href="#backend">Backend</a>
-      <ul><li><a href="#backend-repo-structure">Backend repo structure</a></li></ul>
+      <ul><li><a href="#backend-repo-structure">Backend Repo Structure</a></li></ul>
       <ul><li><a href="#dependencies">Dependencies</a></li></ul>
       <ul><li><a href="#database">Database</a></li></ul>
       <ul><li><a href="#apis">APIs</a></li></ul>
@@ -123,6 +125,12 @@ SendBird is a third party microservice that we utilize for our chatting services
 
 
 You are all set! Your chat should now work on the web application
+
+### Frontend Flowchart
+![Frontend Flowchart](/docs/FrontendFlowchart.png)
+
+### System Architecture
+![System Architecture](/docs/SystemArchitecture.png)
 
 ## Backend
 ### Backend repo structure
