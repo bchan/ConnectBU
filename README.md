@@ -34,6 +34,9 @@ The file `search_api.py` contains code for running the search API and search hel
 
 That is largely all the information needed to get started with this project. As of now, there are no impending fixes or improvements, as those will largely come up based on user error testing and bug reports. The main changes to be made at the moment involve improving the UX/UI of the platform. In terms of adding new features, the next step for this project may be to implement a feed system for the homepage. This would require developing the UI/UX and API for the feed, as well as possibly interfacing with the AWS recognition service to provide automatic content moderation. Another potential imporvement would be to develop a React Native version of the web app to provide a better mobile performance.
 
+## Resources
+Previous reports submitted in Senior Design can be found in `previous_reports/`.
+
 ## Contributors
 - [Hussain Albayat](https://github.com/hussainb2030)
 - [Yousuf Baker](https://github.com/ybaker661)
