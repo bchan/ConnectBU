@@ -1,6 +1,6 @@
 # Software Report
 
-## Frontend docs
+## Frontend
 * Node Version: v14.4.0
 * NPM Version: v6.14.8
 
@@ -98,3 +98,37 @@ SendBird is a third party microservice that we utilize for our chatting services
   `const appID = "YOUR APP ID";`
 You are all set! Your chat should now work on the web application
 
+## Backend
+### Repo structure
+```
+backend
+├── README.md
+├── add_classes.py
+├── add_clubs.py
+├── add_interests.py
+├── add_labs.py
+├── add_majors.py
+├── add_minors.py
+├── app.py
+├── config.py
+├── create_tables.sql
+├── lists
+│   ├── clubs.txt
+│   ├── courses.json
+│   ├── interests.txt
+│   ├── labs.txt
+│   ├── majors.txt
+│   └── minors.txt
+├── models.py
+├── requirements.txt
+├── search.py
+└── search_api.py
+```
+
+### Dependencies
+
+### Database
+
+This is the database schema used for storing user information. The script used to create the tables is in `/backend/create_tables.sql`. The following tables were pre-populated before the API’s were initialized: ‘majors’, ‘minors’, ‘class’, ‘interests’, ‘club’, and ‘lab’. To populate them, we ran the following scripts: `add_majors.py`, `add_minors.py`, `add_classes.py`, `add_interests.py`, `add_clubs.py`, and `add_labs.py`. Each script follows the same basic structure; for the corresponding table, it ingests data from a text or JSON file (located in `backend/lists/`) that contains a list of names to populate the table with. For each name in that list, the script formats the data and creates a new entry in the corresponding table. These scripts and the API’s (link needed) are able to interface with the database through a library called SQLAlchemy; it allows us to abstract out the database schema and write database operations in a Pythonic manner.
+
+### APIs
