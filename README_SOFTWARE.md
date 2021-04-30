@@ -1,10 +1,34 @@
 # Software Report
 
+<details open="open">
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#frontend">Frontend</a>
+      <ul><li><a href="#frontend-repo-structure">Frontend repo structure</a></li></ul>
+      <ul><li><a href="#sendbird">SendBird</a></li></ul>
+    </li>
+    <li>
+      <a href="#backend">Backend</a>
+      <ul><li><a href="#backend-repo-structure">Backend repo structure</a></li></ul>
+      <ul><li><a href="#dependencies">Dependencies</a></li></ul>
+      <ul><li><a href="#database">Database</a></li></ul>
+      <ul><li><a href="#apis">APIs</a></li></ul>
+    </li>
+    <li>
+      <a href="#how-to-install-the-project-from-scratch">How to install the project from scratch</a>
+      <ul><li><a href="#on-your-personal-computer">On your personal computer</a></li></ul>
+      <ul><li><a href="#on-an-aws-cloud-instance">On an AWS cloud instance</a></li></ul>
+    </li>
+  </ol>
+</details>
+
+
 ## Frontend
 * Node Version: v14.4.0
 * NPM Version: v6.14.8
 
-### Repo structure
+### Frontend repo structure
 ```
 frontend
 ├── README.md
@@ -101,7 +125,7 @@ SendBird is a third party microservice that we utilize for our chatting services
 You are all set! Your chat should now work on the web application
 
 ## Backend
-### Repo structure
+### Backend repo structure
 ```
 backend
 ├── README.md
