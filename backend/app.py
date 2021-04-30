@@ -10,6 +10,7 @@ from datetime import datetime, timedelta
 from functools import wraps
 import requests as r
 import uuid
+import redis
 
 app = Flask(__name__)
 CORS(app)
@@ -17,6 +18,7 @@ api = Api(app)
 app.config.from_pyfile('config.py')
 db.init_app(app)
 
+rds = redis.Redis(host=app.config['REDIS_URL'], port=6379, db=0)
 
 ##### Helper functions for Authentication #####
 
@@ -35,12 +37,24 @@ def createToken(tokenDict):
     return jwt.encode(tokenDict, app.config['JWT_SECRET_KEY'], algorithm='HS256')
 
 
+# Checks if JWT is expired and decodes if not
+def decodeToken(encodedToken):
+    if encodedToken is None:
+        return None
+
+    try:
+        token = jwt.decode(encodedToken, TEMP_SECRET, algorithms=['HS256'])
+    except jwt.ExpiredSignatureError:
+        return None
+    except:
+        return None
+
+    return token
+
+
 # Checks if JWT is blacklisted
 def checkToken(token):
-    url = 'http://ec2-54-210-164-211.compute-1.amazonaws.com:5000/checkToken'
-    res = r.post(url, json={'token': token})
-
-    if res.status_code == 200 and res.text == 'Exists':
+    if rds.exists(token) == 1:
         return True
     else:
         return False
@@ -48,13 +62,17 @@ def checkToken(token):
 
 # Expires JWT
 def expireToken(token):
-    url = 'http://ec2-54-210-164-211.compute-1.amazonaws.com:5000/expireToken'
-    res = r.post(url, json={'token': token})
-
-    if res.status_code == 200 and res.text == 'Success':
-        return True
-    else:
+    decodedToken = decodeToken(token)
+    if decodedToken is None:
         return False
+
+    expirationTime = round(decodedToken['exp'] - datetime.utcnow().timestamp())
+    result = rds.setex(token, expirationTime, decodedToken['exp'])
+
+    if result != True:
+        return False
+
+    return True
 
 
 # Decorator for JWTs
@@ -84,6 +102,7 @@ def jwt_required(func):
 
 class User(Resource):
     # retrieve a user's profile info
+    @jwt_required
     def get(self, email):
         user = Student.query.filter_by(email=email).first()
 
@@ -113,6 +132,7 @@ class User(Resource):
             return user_info, 200
 
     # create a new user
+    @jwt_required
     def post(self, email):
 
         json_data = request.get_json(force=True)
@@ -253,6 +273,7 @@ class User(Resource):
 
 
 class Course(Resource):
+    @jwt_required
     def get(self):
         class_query = Class.query.all()
         class_list = []
@@ -265,6 +286,7 @@ class Course(Resource):
             return {'class_list': class_list}, 200
 
 class ProfileOptions(Resource):
+    @jwt_required
     def get(self):
         class_query = Class.query.all()
         major_query = Major.query.all()
@@ -378,6 +400,7 @@ class Logout(Resource):
 
 
 class Search(Resource):
+    @jwt_required
     def post(self):
         json_data = request.get_json(force=True)
         url = 'http://ec2-3-80-169-54.compute-1.amazonaws.com:4000/search'
@@ -401,4 +424,4 @@ api.add_resource(Search, '/api/search')
 api.add_resource(HealthCheck, '/')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=80)
