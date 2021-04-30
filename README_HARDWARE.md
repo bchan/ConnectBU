@@ -1,6 +1,6 @@
 # Hardware Report
 
-Our project is a software only project, so the only hardware components used are the cloud instances used to host the frontend and backend, servers to handle DNS, and the user’s own computer.
+Our project is a software only project, so the only hardware components used are the cloud instances used to host the frontend and backend, servers to handle DNS, and the user’s own computer. The following information describes the cloud instances used for this application.
 
 ### Route53
 Handles the routing for the DNS records for the domain (connectbu.com). This sends the web traffic from the user’s browser to the corresponding frontend or backend load balancer. This also handles the nameservers that are used for the DNS records.
