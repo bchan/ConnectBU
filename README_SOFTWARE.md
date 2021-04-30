@@ -128,6 +128,50 @@ backend
 ```
 
 ### Dependencies
+```
+aniso8601==8.0.0
+boto3==1.17.13
+botocore==1.20.13
+cachetools==4.2.1
+certifi==2020.12.5
+chardet==4.0.0
+click==7.1.2
+elasticsearch==7.11.0
+Flask==1.1.2
+Flask-Cors==3.0.9
+Flask-RESTful==0.3.8
+Flask-SQLAlchemy==2.4.4
+google-api-core==1.25.1
+google-api-python-client==1.12.8
+google-auth==1.24.0
+google-auth-httplib2==0.0.4
+googleapis-common-protos==1.52.0
+httplib2==0.18.1
+idna==2.10
+install==1.3.4
+itsdangerous==1.1.0
+Jinja2==2.11.2
+jmespath==0.10.0
+MarkupSafe==1.1.1
+mysql-connector==2.2.9
+protobuf==3.14.0
+pyasn1==0.4.8
+pyasn1-modules==0.2.8
+PyJWT==2.0.1
+PyMySQL==0.10.1
+python-dateutil==2.8.1
+pytz==2020.4
+redis==3.5.3
+requests==2.25.1
+requests-aws4auth==1.0.1
+rsa==4.7
+s3transfer==0.3.4
+six==1.15.0
+SQLAlchemy==1.3.20
+uritemplate==3.0.1
+urllib3==1.26.3
+Werkzeug==1.0.1
+```
 
 ### Database
 ![Database Schema](/docs/database.png)
@@ -196,7 +240,7 @@ The `Search` object interfaces with an Elasticsearch instance to handle incoming
 * `searchTerm` (string): specific term to search
 * `search_results` (JSON): user profiles that satisfy the requested searchFields and searchTerm
 
-## How to install the prject from scratch
+## How to install the project from scratch
 ### On your personal computer 
 1. Go to ConnectBU’s GitHub repository and clone the repository.
 2. Install or update npm if you haven’t already. 
