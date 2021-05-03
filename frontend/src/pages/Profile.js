@@ -12,7 +12,8 @@ import EditDialog from '../components/EditDialog';
 import EditIcon from '@material-ui/icons/Edit';
 import IconButton from '@material-ui/core/IconButton';
 import { useSnackbar } from 'notistack';
-
+import { App as SendbirdApp } from "sendbird-uikit";
+import "sendbird-uikit/dist/index.css";
 import default_pic from '../images/image.jpg';
 import axios from 'axios';
 
@@ -86,6 +87,13 @@ export default function Profile() {
   const isLoggedIn = useSelector(selectLoginState);
   if(!isLoggedIn){
     history.push("/")
+  }
+  const appID = "APP ID";
+  const userID = useSelector(selectUserEmail);
+  const [nickname, setNickname] = useState('');
+
+  if(isLoggedIn){
+    <SendbirdApp appId={appID} userId={userID} nickname={nickname}/>
   }
   const classes = useStyles();
   const [value, setValue] = useState(0);
